@@ -72,7 +72,6 @@ public class App {
             else if (input == '0') {
                 break;
             }
-
         }
     }
 }
