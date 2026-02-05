@@ -9,8 +9,8 @@
 
 [ Limitations ]
 - No Sound
-- No Config
-- No History
+- No Editable Config
+- No Score / Game History
 - Not accurate rotation system
 - Not accurate scoring system
 
