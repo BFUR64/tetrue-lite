@@ -4,6 +4,8 @@ package com.teic.trueris;
 import java.io.IOException;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
@@ -36,16 +38,41 @@ public class App {
     }
 
     private void startMenu() throws IOException {
-        terminal.resetColorAndSGR();
-        terminal.clearScreen();
-
-        textGraphics.putString(0, 0, "Hello World!");
-
         while (true) {
-            terminal.flush();
-            break;
-        }
+            terminal.resetColorAndSGR();
+            terminal.clearScreen();
 
-        terminal.readInput();
+            textGraphics.putString(2, 1, "Tetrue Lite");
+            textGraphics.putString(2, 3, "1. New Game");
+            textGraphics.putString(2, 4, "2. About");
+            textGraphics.putString(2, 5, "0. Exit");
+            textGraphics.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
+
+            KeyStroke keyStroke = terminal.readInput();
+
+            if (keyStroke.getKeyType() != KeyType.Character) {
+                continue;
+            }
+
+            char input = keyStroke.getCharacter();
+
+            if (input == '1') {
+
+            }
+            else if (input == '2') {
+                terminal.resetColorAndSGR();
+                terminal.clearScreen();
+
+                textGraphics.putString(2, 1, "About");
+                textGraphics.putString(2, 3, "Simple Tetrue clone by TEIC.");
+                textGraphics.putString(2, 5, "Press any key to continue...");
+                terminal.readInput();
+
+            }
+            else if (input == '0') {
+                break;
+            }
+
+        }
     }
 }
