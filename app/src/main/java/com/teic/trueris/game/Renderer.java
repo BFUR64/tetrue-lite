@@ -43,7 +43,7 @@ public class Renderer {
                         col, 
                         row, 
                         "" + Symbols.BLOCK_SOLID, 
-                        Color.DEFAULT
+                        Color.GREY
                     );
                     continue;
                 }
@@ -63,7 +63,7 @@ public class Renderer {
 
                 cell = gridData.getGhostCell(row + Config.SPAWN_BUFFER, col);
                 if (!cell.isEmpty()) {
-                    drawTile(col + 1, row + 1, "" + Symbols.BLOCK_SPARSE, Color.DEFAULT);
+                    drawTile(col + 1, row + 1, "" + Symbols.BLOCK_SPARSE, cell.color);
                 }
 
                 cell = gridData.getActiveCell(row + Config.SPAWN_BUFFER, col);
@@ -104,13 +104,11 @@ public class Renderer {
         String out, 
         Color color
     ) {
-        textGraphics.setBackgroundColor(getTextColor(color));
         textGraphics.setForegroundColor(getTextColor(color));
         
         textGraphics.putString(col * 2, row, out);
         textGraphics.putString(col * 2 + 1, row, out);
         
-        textGraphics.setBackgroundColor(getTextColor(Color.DEFAULT));
         textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
     }
 }
