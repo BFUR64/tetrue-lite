@@ -42,7 +42,7 @@ public class Renderer {
                     drawTile(
                         col, 
                         row, 
-                        "" + Symbols.BLOCK_DENSE, 
+                        "" + Symbols.BLOCK_SOLID, 
                         Color.DEFAULT
                     );
                     continue;
