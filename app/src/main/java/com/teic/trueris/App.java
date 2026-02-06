@@ -8,6 +8,10 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.teic.trueris.game.GameLoop;
+import com.teic.trueris.game.GameManager;
+import com.teic.trueris.game.Renderer;
+import com.teic.trueris.game.grid.GridData;
 
 public class App {
     private final Terminal terminal;
@@ -57,7 +61,15 @@ public class App {
             char input = keyStroke.getCharacter();
 
             if (input == '1') {
+                GridData gridData = new GridData();
+                Renderer renderer = new Renderer(textGraphics, gridData);
+                GameManager gameManager = new GameManager(gridData);
 
+                GameLoop gameLoop = new GameLoop(
+                    terminal, renderer, gameManager
+                );
+
+                gameLoop.run();
             }
             else if (input == '2') {
                 terminal.resetColorAndSGR();
