@@ -62,8 +62,8 @@ public class App {
 
             if (input == '1') {
                 GridData gridData = new GridData();
-                Renderer renderer = new Renderer(textGraphics, gridData);
                 GameManager gameManager = new GameManager(gridData);
+                Renderer renderer = new Renderer(textGraphics, gridData,gameManager);
 
                 GameLoop gameLoop = new GameLoop(
                     terminal, renderer, gameManager

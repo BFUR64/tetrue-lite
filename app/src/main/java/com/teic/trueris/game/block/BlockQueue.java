@@ -8,7 +8,7 @@ import com.teic.trueris.game.cell.Cell;
 
 
 public class BlockQueue {
-    private static final int MIN_BLOCK_QUEUE_SIZE = 1;
+    private static final int MIN_BLOCK_QUEUE_SIZE = 3;
     
     private List<BlockRegistry.BlockTemplate> blockQueue;
 
@@ -17,7 +17,7 @@ public class BlockQueue {
     }
 
     public Cell[][] getRandomBlock() {
-        if (blockQueue.size() < MIN_BLOCK_QUEUE_SIZE) {
+        if (blockQueue.size() <= MIN_BLOCK_QUEUE_SIZE) {
             addtoBlockQueue(createRandomizedBag());
         }
 
