@@ -1,13 +1,16 @@
 package com.teic.trueris.game;
 
+import java.util.List;
+
 import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.block.BlockManager;
 import com.teic.trueris.game.block.BlockQueue;
+import com.teic.trueris.game.block.BlockRegistry;
 import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.grid.GridManager;
 import com.teic.trueris.game.grid.GridType;
 
-public class GameManager {
+public class GameManager implements GameState {
     private final BlockManager blockManager;
     private final GridManager gridManager;
     private final BlockQueue blockQueue;
@@ -110,5 +113,18 @@ public class GameManager {
 
         gridManager.eraseGrid(GridType.GHOST);
         gridManager.writeGrid(GridType.GHOST, ghostBlock);
+    }
+
+    // =====================
+    // Game State Interface
+    // =====================
+    @Override
+    public List<BlockRegistry.BlockTemplate> viewBlockQueue() {
+        return blockQueue.viewBlockQueue();
+    }
+
+    @Override
+    public int getScore() {
+        return scoreTracker.getScore();
     }
 }
