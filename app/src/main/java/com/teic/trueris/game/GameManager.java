@@ -11,6 +11,7 @@ public class GameManager {
     private final BlockManager blockManager;
     private final GridManager gridManager;
     private final BlockQueue blockQueue;
+    private final ScoreTracker scoreTracker;
 
     private BlockData activeBlock;
     private BlockData ghostBlock;
@@ -19,6 +20,7 @@ public class GameManager {
         this.blockManager = new BlockManager(gridData);
         this.gridManager = new GridManager(gridData);
         this.blockQueue = new BlockQueue();
+        this.scoreTracker = new ScoreTracker();
 
         generateActiveBlock();
         generateGhostBlock();
@@ -32,7 +34,7 @@ public class GameManager {
 
         if (!blockManager.moveBlockDown(activeBlock)) {
             gridManager.writeGrid(GridType.SOLID, activeBlock);
-            gridManager.clearFilledRows();
+            scoreTracker.updateScore(gridManager.clearFilledRows());
 
             generateActiveBlock();
             generateGhostBlock();
@@ -47,7 +49,7 @@ public class GameManager {
         blockManager.dropBlock(activeBlock);
 
         gridManager.writeGrid(GridType.SOLID, activeBlock);
-        gridManager.clearFilledRows();
+        scoreTracker.updateScore(gridManager.clearFilledRows());
 
         generateActiveBlock();
         generateGhostBlock();

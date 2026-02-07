@@ -52,8 +52,12 @@ public class GridManager {
         }
     }
 
-    public void clearFilledRows() {
-        clearFilledRows(returnFilledRows());
+    public boolean[] clearFilledRows() {
+        boolean[] filledRows = returnFilledRows();
+
+        clearFilledRows(filledRows);
+
+        return filledRows;
     }
 
     private void clearFilledRows(boolean[] filledRows) {
