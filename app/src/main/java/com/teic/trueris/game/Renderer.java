@@ -18,7 +18,7 @@ public class Renderer {
     // Calculations
     // Grid Height (20) + Border Weight
     private final int BUFFER_HEIGHT = 22;
-    private final int BUFFER_WIDTH = 12;
+    private final int BUFFER_WIDTH = 30;
 
     private final int BORDER_SIZE = 1;
     private final int GAME_HEIGHT = Config.GRID_HEIGHT + (BORDER_SIZE * 2);
@@ -57,9 +57,9 @@ public class Renderer {
 
     public void update() {
         writeBorder();
-        writeBlocks();
-        writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
-        writeBlockQueue();
+        //writeBlocks();
+        //writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
+        //writeBlockQueue();
 
         updateScreen();
     }
@@ -74,9 +74,11 @@ public class Renderer {
             }
         }
 
-        previousBuffer = currentBuffer;
-        currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
-        clearBuffer(currentBuffer);
+        // previousBuffer = currentBuffer;
+        // currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
+        // clearBuffer(currentBuffer);
+
+        draw(0, 0, "I am not insane", Color.DEFAULT, true);
     }
 
     private void clearBuffer(RenderCell[][] buffer) {
@@ -185,7 +187,10 @@ public class Renderer {
         textGraphics.setForegroundColor(getTextColor(color));
 
         textGraphics.putString(col * 2, row, out);
-        if (!isCharacter) textGraphics.putString(col * 2 + 1, row, out);
+        
+        if (!isCharacter) {
+            textGraphics.putString(col * 2 + 1, row, out);
+        }
 
         textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
     }
@@ -203,9 +208,9 @@ public class Renderer {
         }
 
         public boolean isEquals(RenderCell renderCell) {
-            return this.symbol == renderCell.symbol |
-                    this.color == renderCell.color |
-                    this.isEmpty == renderCell.isEmpty |
+            return this.symbol == renderCell.symbol &&
+                    this.color == renderCell.color &&
+                    this.isEmpty == renderCell.isEmpty &&
                     this.isCharacter == renderCell.isCharacter;
         }
     }

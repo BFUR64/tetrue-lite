@@ -40,6 +40,8 @@ public class GameLoop {
 
         terminal.flush();
 
+        terminal.readInput();
+
         long delta = 0;;
 
         running = true;
