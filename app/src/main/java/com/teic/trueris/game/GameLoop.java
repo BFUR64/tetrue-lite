@@ -37,7 +37,7 @@ public class GameLoop {
         terminal.clearScreen();
 
         renderer.renderBorder();
-        renderer.updateScreen();
+        renderer.update();
 
         terminal.flush();
 
@@ -50,7 +50,7 @@ public class GameLoop {
             handleGameState(terminal.pollInput());
             gameManager.update(delta);
 
-            renderer.updateScreen();
+            renderer.update();
 
             if (gameState.isGameOver()) {
                 running = false;

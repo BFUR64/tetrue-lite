@@ -1,6 +1,7 @@
 package com.teic.trueris.game.cell;
 
-public class Cell {    public final Color color;
+public class Cell {
+    public final Color color;
     private boolean isCopy;
 
     Cell() {
@@ -32,5 +33,3 @@ public class Cell {    public final Color color;
         return this == CellRegistry.EMPTY;
     }
 }
-
-
