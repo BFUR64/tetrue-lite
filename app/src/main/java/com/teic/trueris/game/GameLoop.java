@@ -36,7 +36,6 @@ public class GameLoop {
     public void run() throws IOException {
         terminal.clearScreen();
 
-        renderer.renderBorder();
         renderer.update();
 
         terminal.flush();
@@ -46,7 +45,7 @@ public class GameLoop {
         running = true;
         while (running) {
             long frameStart = System.nanoTime();
-            
+
             handleGameState(terminal.pollInput());
             gameManager.update(delta);
 
@@ -55,7 +54,7 @@ public class GameLoop {
             if (gameState.isGameOver()) {
                 running = false;
             }
-            
+
             delta = System.nanoTime() - frameStart;
             long remaining = nsPerFrame - delta;
 
