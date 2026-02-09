@@ -19,6 +19,7 @@ public class GameManager implements GameState {
     private BlockData activeBlock;
     private BlockData ghostBlock;
 
+    // Game Variables
     private boolean blockGrounded;
 
     private long gravityThreshold = 500_000_000; // 0.5 Seconds
@@ -26,6 +27,8 @@ public class GameManager implements GameState {
 
     private long lockThreshold = 500_000_000; // 0.5 Seconds
     private long lockTimer;
+
+    private boolean gameOver;
 
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
@@ -174,6 +177,10 @@ public class GameManager implements GameState {
         activeBlock = new BlockData(blockQueue.getRandomBlock());
         gridManager.eraseGrid(GridType.ACTIVE);
         gridManager.writeGrid(GridType.ACTIVE, activeBlock);
+
+        if (!blockManager.isPositionValid(activeBlock)) {
+            gameOver = true;
+        }
     }
 
     private void generateGhostBlock() {
@@ -196,5 +203,10 @@ public class GameManager implements GameState {
     @Override
     public int getScore() {
         return scoreTracker.getScore();
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

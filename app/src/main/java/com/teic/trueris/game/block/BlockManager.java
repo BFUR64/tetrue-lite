@@ -27,16 +27,6 @@ public class BlockManager {
         return true;
     }
 
-    public boolean canMoveBlockDown(BlockData blockData) {
-        blockData.moveDown();
-
-        boolean collisionResult = collision.isPositionValid(blockData);
-        
-        blockData.revertRowPosition();
-
-        return collisionResult;
-    }
-
     public void dropBlock(BlockData blockData) {
         while (moveBlockDown(blockData)) {}
     }
@@ -98,5 +88,22 @@ public class BlockManager {
         }
 
         return true;
+    }
+    
+    // =====================
+    // Utilities
+    // =====================
+    public boolean canMoveBlockDown(BlockData blockData) {
+        blockData.moveDown();
+
+        boolean collisionResult = collision.isPositionValid(blockData);
+        
+        blockData.revertRowPosition();
+
+        return collisionResult;
+    }
+
+    public boolean isPositionValid(BlockData blockData) {
+        return collision.isPositionValid(blockData);
     }
 }
