@@ -2,6 +2,11 @@
 
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Lanterna UI library</h3>
 
+TODO: Add screenshot of the game on Termux (with the keyboard closed)
+
+## Demo 
+- TODO: GIF or MP4 showing basic gameplay and launching from Termux
+
 ## Features
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second
@@ -30,11 +35,21 @@ In the main menu, press `0` to exit the application <br>
 In the game, press `ESC` to exit the game
 
 ## Architecture Overview
-TODO: Coming Soon
+TODO: Screenshot or a PNG from draw.io with a high-level overview
 
 ## Installation / Running (TERMUX ONLY)
-TODO: Coming Soon
+TODO: Step by step instructions assuming a fully working environment with proper build tools and the like already installed
 
 ## Tech Stack
 - Java Programming Language (Adoptium OpenJDK 21.0.9)
 - Lanterna Library (3.1.3)
+
+## Development Environment
+Built on Termux Neovim on Android, because I found it more convenient than my laptop (Ability to work on the go). Plus, Lanterna seems to fair well under Unix-like environments unlike Windows, so...
+
+## Why I Built This
+After 1.5 years of endless architecturing the 'next best' architecture for the project, I realize my honeymoon phase had to end. It doesn't ship. It only promises.
+
+Tetrue Lite is the v7, with all the unnecessary abstractions / over-engineering gutted or removed, with the focus of delivering an MVP, e.g., an actual playable game.
+
+It was a brutal slap in reality when I realized this.
