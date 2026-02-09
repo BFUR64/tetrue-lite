@@ -10,6 +10,7 @@ TODO: Add screenshot of the game on Termux (with the keyboard closed)
 ## Features
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second
+- Lock Grace - Allows adjustment before it gets placed
 - Rotation - Rotate blocks clockwise and counterclockwise
 - Movement - Move blocks left and right
 - Hard Drop - Instantly drop a tetromino to the bottom row
