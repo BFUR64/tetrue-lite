@@ -49,7 +49,7 @@ public class Renderer {
         this.gameState = gameState;
 
         this.previousBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
-        this.currentBuffer = new RenderCell[BUFFER_WIDTH][BUFFER_WIDTH];
+        this.currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
 
         clearBuffer(previousBuffer);
         clearBuffer(currentBuffer);
