@@ -15,8 +15,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 public class Renderer {
-    // Calculations
-    // Grid Height (20) + Border Weight
     private final int BUFFER_HEIGHT = 22;
     private final int BUFFER_WIDTH = 30;
 
@@ -28,14 +26,6 @@ public class Renderer {
     private final GridData gridData;
     private final GameState gameState;
 
-    // Previous Buffer
-    // Current Buffer
-
-    // Write to Current Buffer
-    // Diff check on previous then write the difference?
-    // Use Current Buffer and its variables to print, disregard previous buffer variables (e.g. Block)?
-
-    // Then... Prev = Curr;
     private RenderCell[][] previousBuffer;
     private RenderCell[][] currentBuffer;
 
@@ -57,9 +47,9 @@ public class Renderer {
 
     public void update() {
         writeBorder();
-        //writeBlocks();
-        //writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
-        //writeBlockQueue();
+        writeBlocks();
+        writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
+        writeBlockQueue();
 
         updateScreen();
     }
@@ -69,14 +59,20 @@ public class Renderer {
             for (int col = 0; col < BUFFER_WIDTH; col++) {
                 if (!previousBuffer[row][col].isEquals(currentBuffer[row][col])) {
                     RenderCell cell = currentBuffer[row][col];
+                    
+                    if (cell.isEmpty) {
+                        draw(col, row, " ", cell.color, false);
+                        continue;
+                    }
+
                     draw(col, row, "" + cell.symbol, cell.color, cell.isCharacter);
                 }
             }
         }
 
-        // previousBuffer = currentBuffer;
-        // currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
-        // clearBuffer(currentBuffer);
+        previousBuffer = currentBuffer;
+        currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
+        clearBuffer(currentBuffer);
 
         draw(0, 0, "I am not insane", Color.DEFAULT, true);
     }
