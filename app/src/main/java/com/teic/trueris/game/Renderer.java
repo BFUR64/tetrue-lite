@@ -73,8 +73,6 @@ public class Renderer {
         previousBuffer = currentBuffer;
         currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
         clearBuffer(currentBuffer);
-
-        draw(0, 0, "I am not insane", Color.DEFAULT, true);
     }
 
     private void clearBuffer(RenderCell[][] buffer) {

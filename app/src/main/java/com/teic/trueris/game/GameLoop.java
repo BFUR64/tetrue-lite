@@ -36,13 +36,7 @@ public class GameLoop {
     public void run() throws IOException {
         terminal.clearScreen();
 
-        renderer.update();
-
-        terminal.flush();
-
-        terminal.readInput();
-
-        long delta = 0;;
+        long delta = 0;
 
         running = true;
         while (running) {
@@ -57,7 +51,6 @@ public class GameLoop {
                 running = false;
             }
 
-            delta = System.nanoTime() - frameStart;
             long remaining = nsPerFrame - delta;
 
             if (remaining >= SLEEP_THRESHOLD) {
@@ -70,6 +63,8 @@ public class GameLoop {
             }
 
             while (System.nanoTime() - frameStart < nsPerFrame) {}
+
+            delta = System.nanoTime() - frameStart;
         }
 
         handleGameOver();
