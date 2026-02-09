@@ -48,8 +48,9 @@ TODO: Screenshot or a PNG from draw.io with a high-level overview
 TODO: Step by step instructions assuming a fully working environment with proper build tools and the like already installed
 
 ## Tech Stack
-- Java Programming Language (Adoptium OpenJDK 21.0.9)
-- Lanterna Library (3.1.3)
+- Programming Language: Java 21 (Adoptium OpenJDK 21.0.9)
+- Libraries: Lanterna 3.1.3 (Terminal UI)
+- Build Tools: Gradle 9.3.1
 
 ## Development Environment
 Built on Termux Neovim on Android, because I found it more convenient than my laptop (Ability to work on the go). Plus, Lanterna seems to fair well under Unix-like environments unlike Windows, so...
