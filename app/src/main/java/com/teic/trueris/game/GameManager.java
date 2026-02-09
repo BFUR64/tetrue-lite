@@ -19,6 +19,14 @@ public class GameManager implements GameState {
     private BlockData activeBlock;
     private BlockData ghostBlock;
 
+    private boolean blockGrounded;
+
+    private long gravityThreshold = 500_000_000; // 0.5 Seconds
+    private long gravityTimer;
+
+    private long lockThreshold = 500_000_000; // 0.5 Seconds
+    private long lockTimer;
+
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
         this.gridManager = new GridManager(gridData);
@@ -42,6 +50,8 @@ public class GameManager implements GameState {
             generateActiveBlock();
             generateGhostBlock();
 
+            gravityTimer = 0;
+
             return;
         }
 
@@ -56,6 +66,8 @@ public class GameManager implements GameState {
 
         generateActiveBlock();
         generateGhostBlock();
+
+        gravityTimer = 0;
     }
 
     public void moveBlockLeft() {
@@ -64,6 +76,8 @@ public class GameManager implements GameState {
             gridManager.writeGrid(GridType.ACTIVE, activeBlock);
 
             generateGhostBlock();
+
+            lockTimer = 0;
         }
     }
 
@@ -73,6 +87,8 @@ public class GameManager implements GameState {
             gridManager.writeGrid(GridType.ACTIVE, activeBlock);
 
             generateGhostBlock();
+
+            lockTimer = 0;
         }
     }
 
@@ -85,6 +101,8 @@ public class GameManager implements GameState {
             gridManager.writeGrid(GridType.ACTIVE, activeBlock);
 
             generateGhostBlock();
+
+            lockTimer = 0;
         }
     }
 
@@ -94,6 +112,58 @@ public class GameManager implements GameState {
             gridManager.writeGrid(GridType.ACTIVE, activeBlock);
 
             generateGhostBlock();
+
+            lockTimer = 0;
+        }
+    }
+
+
+    // =====================
+    // Delta
+    // =====================
+    public void update(long delta) {
+        updateBlockGrounded();
+        updateGravity(delta);
+        updateLockGrace(delta);
+
+    }
+
+    private void updateBlockGrounded() {
+        if (!blockManager.canMoveBlockDown(activeBlock)) {
+            blockGrounded = true;
+            return;
+        }
+
+        blockGrounded = false;
+    }
+
+    private void updateGravity(long delta) {
+        if (blockGrounded) {
+            gravityTimer = 0;
+            return;
+        }
+
+        gravityTimer += delta;
+        if (gravityTimer >= gravityThreshold) {
+            gravityTimer -= gravityThreshold;
+            
+            moveBlockDown();
+            return;
+        }
+    }
+
+    private void updateLockGrace(long delta) {
+        if (!blockGrounded) {
+            lockTimer = 0;
+            return;
+        }
+
+        lockTimer += delta;
+        if (lockTimer >= lockThreshold) {
+            lockTimer -= lockThreshold;
+
+            moveBlockDown();
+            return;
         }
     }
 

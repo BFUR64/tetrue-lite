@@ -38,26 +38,19 @@ public class GameLoop {
 
         terminal.flush();
 
-        long deltaAccumulation = 0;
-        long gravity = 500_000_000; // 0.5 Seconds
+        long delta = 0;;
 
         running = true;
         while (running) {
             long frameStart = System.nanoTime();
             
             handleGameState(terminal.pollInput());
-
-            if (deltaAccumulation >= gravity) {
-                gameManager.moveBlockDown();
-                deltaAccumulation -= gravity;
-            }
+            gameManager.update(delta);
 
             renderer.updateScreen();
             
-            long delta = System.nanoTime() - frameStart;
+            delta = System.nanoTime() - frameStart;
             long remaining = nsPerFrame - delta;
-
-            deltaAccumulation += delta;
 
             if (remaining >= SLEEP_THRESHOLD) {
                 try {

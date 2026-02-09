@@ -27,6 +27,16 @@ public class BlockManager {
         return true;
     }
 
+    public boolean canMoveBlockDown(BlockData blockData) {
+        blockData.moveDown();
+
+        boolean collisionResult = collision.isPositionValid(blockData);
+        
+        blockData.revertRowPosition();
+
+        return collisionResult;
+    }
+
     public void dropBlock(BlockData blockData) {
         while (moveBlockDown(blockData)) {}
     }
