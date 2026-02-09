@@ -20,11 +20,16 @@
 - Mobile Friendly Controls - Works on termux
 
 ## Limitations
-- Limited to Unix-like environments involving the tty (Terminal)
 - No game / score tracking after the game is closed
 - No configurable settings
 - Minimal main menu only, featuring `New Game`, `About`, and `Exit`
 - No sound
+
+## Environment Issues
+- Designed and tested primarily on Termux (Android)
+- Unix-like environments only (Linux, MacOs)
+- BLOCK_SPARSE (or any gradient based) character renders as dots on Termux, but may appear as gradients or shading on other terminal emulators
+- **Windows is not supported**
 
 ## Usage / Controls
 - UP Arrow Key - Hard drop
