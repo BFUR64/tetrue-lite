@@ -53,12 +53,13 @@ public class GameManager implements GameState {
             generateActiveBlock();
             generateGhostBlock();
 
-            gravityTimer = 0;
 
             return;
         }
 
         gridManager.writeGrid(GridType.ACTIVE, activeBlock);
+        
+        gravityTimer = 0;
     }
 
     public void dropBlock() {
