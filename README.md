@@ -50,10 +50,23 @@ In the game, press `ESC` to exit the game
 ### Rendering Layer
 <img width="1482" height="582" alt="View Loop" src="https://github.com/user-attachments/assets/f45ce001-bbcd-4825-93e0-0ac6556540c8" />
 
-
-
 ## Installation / Running (TERMUX ONLY)
-TODO: Step by step instructions assuming a fully working environment with proper build tools and the like already installed
+
+### Clone the repository
+```bash
+git clone git@github.com:BFUR64/tetrue-lite.git
+cd tetrue-lite
+```
+
+### Build the shadow JAR
+```bash
+./gradlew shadowJar
+```
+
+### Run the generated JAR
+```bash
+java -jar app/build/libs/app-all.jar
+```
 
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.9)
