@@ -43,7 +43,14 @@ In the main menu, press `0` to exit the application <br>
 In the game, press `ESC` to exit the game
 
 ## Architecture Overview
-TODO: Screenshot or a PNG from draw.io with a high-level overview
+
+### Core Loop
+<img width="2739" height="1659" alt="Core Loop" src="https://github.com/user-attachments/assets/cf28050a-2e21-4941-8370-798e4852de55" />
+
+### Rendering Layer
+<img width="1482" height="582" alt="View Loop" src="https://github.com/user-attachments/assets/f45ce001-bbcd-4825-93e0-0ac6556540c8" />
+
+
 
 ## Installation / Running (TERMUX ONLY)
 TODO: Step by step instructions assuming a fully working environment with proper build tools and the like already installed
