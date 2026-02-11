@@ -7,7 +7,7 @@
 </div>
 
 ## Demo 
-- TODO: GIF or MP4 showing basic gameplay and launching from Termux
+https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
 
 ## Features
 - Falling Blocks - Standard falling tetrominoes
