@@ -1,6 +1,7 @@
 <h1 align="center">Tetrue Lite</h1>
 
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Lanterna UI library</h3>
+
 <div align="center">
   <img width="300" alt="Screenshot of Tetrue Gameplay" src="https://github.com/user-attachments/assets/1031cdde-156b-4a25-b269-d328dd1aa010"/>
 </div>
