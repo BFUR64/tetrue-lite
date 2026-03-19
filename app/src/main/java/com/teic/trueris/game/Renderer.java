@@ -59,13 +59,7 @@ public class Renderer {
             for (int col = 0; col < BUFFER_WIDTH; col++) {
                 if (!previousBuffer[row][col].isEquals(currentBuffer[row][col])) {
                     RenderCell cell = currentBuffer[row][col];
-                    
-                    if (cell.isEmpty) {
-                        draw(col, row, " ", cell.color, false);
-                        continue;
-                    }
-
-                    draw(col, row, "" + cell.symbol, cell.color, cell.isCharacter);
+                    draw(col, row, cell);
                 }
             }
         }
@@ -177,17 +171,15 @@ public class Renderer {
         };
     }
 
-    private void draw(int col, int row, String out, Color color, boolean isCharacter) {
-        textGraphics.setForegroundColor(getTextColor(color));
-
-        textGraphics.putString(col * 2, row, out);
-        
-        if (!isCharacter) {
-            textGraphics.putString(col * 2 + 1, row, out);
-        }
-
-        textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
-    }
+    private void draw(int row, int col, RenderCell cell) {
+		textGraphics.setForegroundColor(getTextColor(cell.color));
+		String out = cell.isEmpty?" ":"" + cell.symbol;
+		textGraphics.putString(col * 2, row, out);
+		if (cell.isEmpty || !cell.isCharacter) {
+			textGraphics.putString(col * 2 + 1, row, out);
+		}
+		textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
+	}
 
     private static class RenderCell {
         private final char symbol;
