@@ -171,13 +171,17 @@ public class Renderer {
         };
     }
 
-    private void draw(int row, int col, RenderCell cell) {
+    private void draw(int col, int row, RenderCell cell) {
 		textGraphics.setForegroundColor(getTextColor(cell.color));
-		String out = cell.isEmpty?" ":"" + cell.symbol;
+
+		String out = cell.isEmpty ? " " : "" + cell.symbol;
+
 		textGraphics.putString(col * 2, row, out);
+
 		if (cell.isEmpty || !cell.isCharacter) {
 			textGraphics.putString(col * 2 + 1, row, out);
 		}
+
 		textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
 	}
 
