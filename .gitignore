@@ -28,3 +28,7 @@ build
 
 #Ignore app/bin. Why was it there??
 app/bin/
+
+# IntelliJ IDEA
+.idea/
+.settings/
