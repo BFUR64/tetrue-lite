@@ -98,8 +98,7 @@ public class BlockRegistry {
             for (int row = 0; row < size; row++) {
                 for (int col = 0; col < size; col++) {
                     int idx = row * size + col;
-                    Cell cell = cells.get(idx);
-                    blockCopy[row][col] = cell.isEmpty() ? CellRegistry.EMPTY : cell.copy();
+                    blockCopy[row][col] = cells.get(idx);
                 }
             }
 
