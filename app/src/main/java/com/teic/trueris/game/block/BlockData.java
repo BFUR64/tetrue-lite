@@ -15,7 +15,7 @@ public class BlockData {
     
     public BlockData(Cell[][] block) {
         this.block = block;
-        this.blockCol = (int) Config.BLOCK_OFFSET;
+        this.blockCol = Config.BLOCK_OFFSET;
     }
 
     private BlockData(Cell[][] block, int blockRow, int blockCol, Direction blockRotation) {
@@ -131,9 +131,7 @@ public class BlockData {
         Cell[][] copy = new Cell[blockSize][blockSize];
 
         for (int row = 0; row < blockSize; row++) {
-            for (int col = 0; col < blockSize; col++) {
-                copy[row][col] = original[row][col];
-            }
+            System.arraycopy(original[row], 0, copy[row], 0, blockSize);
         }
 
         return copy;
@@ -153,8 +151,4 @@ public class BlockData {
     public int blockSize() {
         return block.length;
     }
-}
-
-enum Direction {
-    UP, RIGHT, DOWN, LEFT;
 }
