@@ -29,9 +29,9 @@ public class GridManager {
                 }
 
                 switch (gridType) {
-                    case SOLID -> { gridData.setSolidCell(cell, row + blockRow, col + blockCol); }
-                    case ACTIVE -> { gridData.setActiveCell(cell, row + blockRow, col + blockCol); }
-                    case GHOST -> { gridData.setGhostCell(cell, row + blockRow, col + blockCol); }
+                    case SOLID -> gridData.setSolidCell(cell, row + blockRow, col + blockCol);
+                    case ACTIVE -> gridData.setActiveCell(cell, row + blockRow, col + blockCol);
+                    case GHOST -> gridData.setGhostCell(cell, row + blockRow, col + blockCol);
                 }
             }
         }
@@ -44,9 +44,9 @@ public class GridManager {
         for (int row = 0; row < gridRow; row++) {
             for (int col = 0; col < gridCol; col++) {
                 switch (gridType) {
-                    case SOLID -> { gridData.setSolidCell(CellRegistry.EMPTY, row, col); }
-                    case ACTIVE -> { gridData.setActiveCell(CellRegistry.EMPTY, row, col); }
-                    case GHOST -> { gridData.setGhostCell(CellRegistry.EMPTY, row, col); }
+                    case SOLID -> gridData.setSolidCell(CellRegistry.EMPTY, row, col);
+                    case ACTIVE -> gridData.setActiveCell(CellRegistry.EMPTY, row, col);
+                    case GHOST -> gridData.setGhostCell(CellRegistry.EMPTY, row, col);
                 }
             }
         }

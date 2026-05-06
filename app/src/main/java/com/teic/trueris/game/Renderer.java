@@ -19,8 +19,6 @@ public class Renderer {
     private final int BUFFER_WIDTH = 30;
 
     private final int BORDER_SIZE = 1;
-    private final int GAME_HEIGHT = Config.GRID_HEIGHT + (BORDER_SIZE * 2);
-    private final int GAME_WIDTH = Config.GRID_WIDTH + (BORDER_SIZE * 2);
 
     private final TextGraphics textGraphics;
     private final GridData gridData;
@@ -79,6 +77,9 @@ public class Renderer {
     }
 
     private void writeBorder() {
+        int GAME_HEIGHT = Config.GRID_HEIGHT + (BORDER_SIZE * 2);
+        int GAME_WIDTH = Config.GRID_WIDTH + (BORDER_SIZE * 2);
+
         for (int row = 0; row < GAME_HEIGHT; row++) {
             for (int col = 0; col < GAME_WIDTH; col++) {
                 if (

@@ -10,7 +10,7 @@ import com.teic.trueris.game.cell.Cell;
 public class BlockQueue {
     private static final int MIN_BLOCK_QUEUE_SIZE = 3;
     
-    private List<BlockRegistry.BlockTemplate> blockQueue;
+    private final List<BlockRegistry.BlockTemplate> blockQueue;
 
     public BlockQueue() {
         blockQueue = new LinkedList<>();
@@ -18,7 +18,7 @@ public class BlockQueue {
 
     public Cell[][] getRandomBlock() {
         if (blockQueue.size() <= MIN_BLOCK_QUEUE_SIZE) {
-            addtoBlockQueue(createRandomizedBag());
+            addToBlockQueue(createRandomizedBag());
         }
 
         Cell[][] cells = blockQueue.getFirst().copyBlock();
@@ -32,7 +32,7 @@ public class BlockQueue {
         return Collections.unmodifiableList(blockQueue);
     }
 
-    private void addtoBlockQueue(List<BlockRegistry.BlockTemplate> blocks) {
+    private void addToBlockQueue(List<BlockRegistry.BlockTemplate> blocks) {
         blockQueue.addAll(blocks);
     }
 

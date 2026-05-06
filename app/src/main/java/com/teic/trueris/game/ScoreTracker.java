@@ -6,8 +6,8 @@ public class ScoreTracker {
     public void updateScore(boolean[] filledRows) {
         int totalFilledRows = 0;
 
-        for (int row = 0; row < filledRows.length; row++) {
-            if (!filledRows[row]) {
+        for (boolean filledRow : filledRows) {
+            if (!filledRow) {
                 continue;
             }
 

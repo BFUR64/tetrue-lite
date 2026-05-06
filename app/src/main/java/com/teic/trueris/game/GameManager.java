@@ -17,15 +17,12 @@ public class GameManager implements GameState {
     private final ScoreTracker scoreTracker;
 
     private BlockData activeBlock;
-    private BlockData ghostBlock;
 
     // Game Variables
     private boolean blockGrounded;
 
-    private long gravityThreshold = 500_000_000; // 0.5 Seconds
     private long gravityTimer;
 
-    private long lockThreshold = 500_000_000; // 0.5 Seconds
     private long lockTimer;
 
     private boolean gameOver;
@@ -148,11 +145,13 @@ public class GameManager implements GameState {
         }
 
         gravityTimer += delta;
+
+        long gravityThreshold = 500_000_000; // 0.5 Seconds
+
         if (gravityTimer >= gravityThreshold) {
             gravityTimer -= gravityThreshold;
             
             moveBlockDown();
-            return;
         }
     }
 
@@ -163,11 +162,13 @@ public class GameManager implements GameState {
         }
 
         lockTimer += delta;
+
+        long lockThreshold = 500_000_000; // 0.5 Seconds
+
         if (lockTimer >= lockThreshold) {
             lockTimer -= lockThreshold;
 
             moveBlockDown();
-            return;
         }
     }
 
@@ -185,7 +186,7 @@ public class GameManager implements GameState {
     }
 
     private void generateGhostBlock() {
-        ghostBlock = activeBlock.copyBlockData();
+        BlockData ghostBlock = activeBlock.copyBlockData();
 
         blockManager.dropBlock(ghostBlock);
 

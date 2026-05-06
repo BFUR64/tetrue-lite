@@ -9,7 +9,7 @@ public enum LogType {
     public final String LABEL;
     public final int SEVERITY;
 
-    private LogType(String label, int severity) {
+    LogType(String label, int severity) {
         this.LABEL = label;
         this.SEVERITY = severity;
     }

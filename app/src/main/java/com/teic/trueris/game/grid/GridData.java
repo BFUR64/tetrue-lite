@@ -9,12 +9,9 @@ public class GridData {
     private final Cell[][] activeGrid;
     private final Cell[][] ghostGrid;
 
-    private final int gridRow;
-    private final int gridCol;
-
     public GridData() {
-        gridRow = Config.GRID_HEIGHT + Config.SPAWN_BUFFER;
-        gridCol = Config.GRID_WIDTH;
+        int gridRow = Config.GRID_HEIGHT + Config.SPAWN_BUFFER;
+        int gridCol = Config.GRID_WIDTH;
 
         solidGrid = new Cell[gridRow][gridCol];
         activeGrid = new Cell[gridRow][gridCol];

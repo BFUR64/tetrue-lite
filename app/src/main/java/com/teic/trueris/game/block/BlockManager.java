@@ -27,6 +27,7 @@ public class BlockManager {
         return true;
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     public void dropBlock(BlockData blockData) {
         while (moveBlockDown(blockData)) {}
     }
