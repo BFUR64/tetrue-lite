@@ -1,18 +1,16 @@
 package com.teic.trueris.game;
 
 import java.io.IOException;
+import java.util.concurrent.locks.LockSupport;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.teic.trueris.Config;
-import com.teic.trueris.LogType;
-import com.teic.trueris.Logging;
 
 public class GameLoop {
+    @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
-    private static final int MSEC = 1_000_000;
-    private static final int SLEEP_THRESHOLD = MSEC * 2;
 
     private final Terminal terminal;
     private final Renderer renderer;
@@ -20,7 +18,6 @@ public class GameLoop {
     private final GameState gameState;
 
     private boolean running;
-    private final int targetFps;
     private final int nsPerFrame;
 
     public GameLoop(Terminal terminal, Renderer renderer, GameManager gameManager) {
@@ -29,7 +26,7 @@ public class GameLoop {
         this.gameManager = gameManager;
         this.gameState = gameManager;
 
-        this.targetFps = Config.TARGET_FPS;
+        int targetFps = Config.TARGET_FPS;
         this.nsPerFrame = NSEC / targetFps;
     }
 
@@ -42,32 +39,30 @@ public class GameLoop {
         while (running) {
             long frameStart = System.nanoTime();
 
-            handleGameState(terminal.pollInput());
-            gameManager.update(delta);
+            update(delta);
 
-            renderer.update();
+            long deadline = frameStart + nsPerFrame;
+            long now = System.nanoTime();
 
-            if (gameState.isGameOver()) {
-                running = false;
+            while (now < deadline) {
+                LockSupport.parkNanos(deadline - now);
+                now = System.nanoTime();
             }
-
-            long remaining = nsPerFrame - delta;
-
-            if (remaining >= SLEEP_THRESHOLD) {
-                try {
-                    Thread.sleep(remaining / MSEC);
-                }
-                catch (InterruptedException e) {
-                    Logging.writeStackTrace(LogType.ERROR, e);
-                }
-            }
-
-            while (System.nanoTime() - frameStart < nsPerFrame) {}
 
             delta = System.nanoTime() - frameStart;
         }
 
         handleGameOver();
+    }
+
+    private void update(long delta) throws IOException {
+        handleGameState(terminal.pollInput());
+        gameManager.update(delta);
+        renderer.update();
+
+        if (gameState.isGameOver()) {
+            running = false;
+        }
     }
 
     private void handleGameState(KeyStroke key) {
@@ -76,37 +71,21 @@ public class GameLoop {
         }
 
         switch (key.getKeyType()) {
-            case Escape -> {
-                running = false;
-            }
+            case Escape -> running = false;
 
-            case ArrowUp -> {
-                gameManager.dropBlock();
-            }
+            case ArrowUp -> gameManager.dropBlock();
 
-            case ArrowDown -> {
-                gameManager.moveBlockDown();
-            }
+            case ArrowDown -> gameManager.moveBlockDown();
 
-            case ArrowLeft -> {
-                gameManager.moveBlockLeft();
-            }
+            case ArrowLeft -> gameManager.moveBlockLeft();
 
-            case ArrowRight -> {
-                gameManager.moveBlockRight();
-            }
+            case ArrowRight -> gameManager.moveBlockRight();
 
-            case Home -> {
-                gameManager.rotateBlockLeft();
-            }
+            case Home -> gameManager.rotateBlockLeft();
 
-            case End -> {
-                gameManager.rotateBlockRight();
-            }
+            case End -> gameManager.rotateBlockRight();
 
-            default -> {
-                return;
-            }
+            default -> {}
         }
     }
 
