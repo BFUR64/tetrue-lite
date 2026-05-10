@@ -29,6 +29,9 @@ dependencies {
 
     implementation("net.java.dev.jna:jna:5.18.1")
     implementation("net.java.dev.jna:jna-platform:5.18.1")
+
+    implementation("org.jline:jline:3.30.13")
+    implementation("org.jline:jline-console-ui:3.30.13")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

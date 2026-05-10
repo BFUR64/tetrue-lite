@@ -1,89 +1,43 @@
-
 package com.teic.trueris;
+
+import com.teic.trueris.display.JLine3Renderer;
+import com.teic.trueris.display.Renderer;
+import com.teic.trueris.input.Action;
+import com.teic.trueris.input.Input;
+import com.teic.trueris.input.JLine3Input;
 
 import java.io.IOException;
 
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.teic.trueris.game.GameLoop;
-import com.teic.trueris.game.GameManager;
-import com.teic.trueris.game.Renderer;
-import com.teic.trueris.game.grid.GridData;
-
 public class App {
-    private final Terminal terminal;
-    private final TextGraphics textGraphics;
-
     public static void main(String[] args) {
-        try {
-            Terminal terminal = new DefaultTerminalFactory().createTerminal();
-            terminal.setCursorVisible(false);
+        try (
+            JLine3Renderer render = new JLine3Renderer();
+        ) {
+            Input input = new JLine3Input(render.getTerminal());
 
-            TextGraphics textGraphics = terminal.newTextGraphics();
+            render.clearScreen();
+            render.putString(1, 5, "Hello World!");
+            render.flush();
 
-            terminal.enterPrivateMode();
+            Action action = input.readInput();
 
-            App app = new App(terminal, textGraphics);
-            app.startMenu();
+            String word = switch (action) {
+                case CLOCKWISE_ROTATE -> "clock";
+                case COUNTER_CLOCKWISE_ROTATE -> "counter";
+                case UP -> "up";
+                case DOWN -> "down";
+                case LEFT -> "left";
+                case RIGHT -> "right";
+                case QUIT -> "quit";
+                case NONE -> "none";
+                case ENTER -> "enter";
+            };
 
-            terminal.exitPrivateMode();
+            render.putString(1, 6, "Input: " + word);
+            render.flush();
         }
-        catch (Exception error) {
-            Logging.writeStackTrace(LogType.ERROR, error);
-        }
-    }
-
-    private App(Terminal terminal, TextGraphics textGraphics) {
-        this.terminal = terminal;
-        this.textGraphics = textGraphics;
-    }
-
-    private void startMenu() throws IOException {
-        while (true) {
-            terminal.resetColorAndSGR();
-            terminal.clearScreen();
-
-            textGraphics.putString(2, 1, "Tetrue Lite");
-            textGraphics.putString(2, 3, "1. New Game");
-            textGraphics.putString(2, 4, "2. About");
-            textGraphics.putString(2, 5, "0. Exit");
-            textGraphics.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
-
-            KeyStroke keyStroke = terminal.readInput();
-
-            if (keyStroke.getKeyType() != KeyType.Character) {
-                continue;
-            }
-
-            char input = keyStroke.getCharacter();
-
-            if (input == '1') {
-                GridData gridData = new GridData();
-                GameManager gameManager = new GameManager(gridData);
-                Renderer renderer = new Renderer(textGraphics, gridData,gameManager);
-
-                GameLoop gameLoop = new GameLoop(
-                    terminal, renderer, gameManager
-                );
-
-                gameLoop.run();
-            }
-            else if (input == '2') {
-                terminal.resetColorAndSGR();
-                terminal.clearScreen();
-
-                textGraphics.putString(2, 1, "About");
-                textGraphics.putString(2, 3, "Simple Tetrue clone by TEIC.");
-                textGraphics.putString(2, 5, "Press any key to continue...");
-                terminal.readInput();
-
-            }
-            else if (input == '0') {
-                break;
-            }
+        catch (IOException error) {
+            System.out.println("Failed!");
         }
     }
 }
