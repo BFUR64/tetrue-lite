@@ -14,8 +14,9 @@ public class App {
 
     public static void main(String[] args) {
         try (
-                JLine3Renderer renderer = new JLine3Renderer();) {
-            Input input = new JLine3Input(renderer.getTerminal());
+                JLine3Renderer renderer = new JLine3Renderer();
+                Input input = new JLine3Input(renderer.getTerminal());
+        ) {
 
             App app = new App(renderer, input);
             app.start();
@@ -31,6 +32,8 @@ public class App {
     }
 
     private void start() {
+        String value = "";
+
         while (true) {
             renderer.clearScreen();
 
@@ -39,7 +42,9 @@ public class App {
             renderer.putString(2, 4, "2. About");
             renderer.putString(2, 5, "0. Exit");
             renderer.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
-            renderer.flush();
+            renderer.putString(2, 10, "");
+
+            renderer.putString(2, 8, "Key: " + value);
 
             Key key = input.readInput();
 
@@ -54,7 +59,7 @@ public class App {
                 continue;
             }
 
-            renderer.putString(2, 8, String.valueOf(key.getCharacter()));
+            value = String.valueOf(key.getCharacter());
         }
     }
 }

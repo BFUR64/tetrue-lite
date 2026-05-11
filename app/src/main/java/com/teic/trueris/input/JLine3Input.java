@@ -5,28 +5,58 @@ import org.jline.keymap.KeyMap;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp.Capability;
 
+import java.io.IOError;
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class JLine3Input implements Input {
     private final Terminal terminal;
     private final BindingReader bindingReader;
     private final KeyMap<Key> keyMap;
 
+    private final BlockingQueue<Key> inputQueue = new LinkedBlockingQueue<>(1);
+    private final AtomicBoolean isRunning = new AtomicBoolean(true);
+
+    private final Thread pollReader;
+
     public JLine3Input(Terminal terminal) {
         this.terminal = terminal;
         this.bindingReader = new BindingReader(terminal.reader());
         this.keyMap = buildKeyMap();
+
+        this.pollReader = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted() && isRunning.get()) {
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    inputQueue.offer(bindingReader.readBinding(keyMap), 5, TimeUnit.MILLISECONDS);
+
+                } catch (InterruptedException | IOError e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+
+        pollReader.start();
     }
 
     @Override
     public Key readInput() {
-        terminal.puts(Capability.keypad_xmit);
-        terminal.flush();
+        try {
+            return inputQueue.take();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-        Key key = bindingReader.readBinding(keyMap);
+        return null;
+    }
 
-        terminal.puts(Capability.keypad_local);
-        terminal.flush();
-
-        return key;
+    @Override
+    public Key pollInput() {
+        return inputQueue.poll();
     }
 
     private KeyMap<Key> buildKeyMap() {
@@ -41,6 +71,8 @@ public class JLine3Input implements Input {
         keyMap.bind(Key.ENTER, "\r");
         keyMap.bind(Key.ENTER, "\n");
 
+        keyMap.bind(Key.ESCAPE, "\033");
+
         keyMap.bind(Key.COUNTER_CLOCKWISE, "q");
         keyMap.bind(Key.CLOCKWISE, "e");
         
@@ -54,5 +86,11 @@ public class JLine3Input implements Input {
         keyMap.setNomatch(Key.UNKNOWN);
 
         return keyMap;
+    }
+
+    @Override
+    public void close() throws IOException {
+        isRunning.set(false);
+        pollReader.interrupt();
     }
 }
