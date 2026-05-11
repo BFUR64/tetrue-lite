@@ -8,7 +8,7 @@ import org.jline.utils.InfoCmp.Capability;
 public class JLine3Input implements Input {
     private final Terminal terminal;
     private final BindingReader bindingReader;
-    private final KeyMap<Action> keyMap;
+    private final KeyMap<Key> keyMap;
 
     public JLine3Input(Terminal terminal) {
         this.terminal = terminal;
@@ -17,37 +17,41 @@ public class JLine3Input implements Input {
     }
 
     @Override
-    public Action readInput() {
+    public Key readInput() {
         terminal.puts(Capability.keypad_xmit);
         terminal.flush();
 
-        Action action = bindingReader.readBinding(keyMap);
+        Key key = bindingReader.readBinding(keyMap);
 
         terminal.puts(Capability.keypad_local);
         terminal.flush();
 
-        return action;
+        return key;
     }
 
-    private KeyMap<Action> buildKeyMap() {
-        KeyMap<Action> keyMap = new KeyMap<>();
+    private KeyMap<Key> buildKeyMap() {
+        KeyMap<Key> keyMap = new KeyMap<>();
 
-        keyMap.bind(Action.UP , KeyMap.key(terminal, Capability.key_up));
-        keyMap.bind(Action.DOWN,  KeyMap.key(terminal, Capability.key_down));
-        keyMap.bind(Action.LEFT,  KeyMap.key(terminal, Capability.key_left));
-        keyMap.bind(Action.RIGHT, KeyMap.key(terminal, Capability.key_right));
+        keyMap.bind(Key.UP , KeyMap.key(terminal, Capability.key_up));
+        keyMap.bind(Key.DOWN,  KeyMap.key(terminal, Capability.key_down));
+        keyMap.bind(Key.LEFT,  KeyMap.key(terminal, Capability.key_left));
+        keyMap.bind(Key.RIGHT, KeyMap.key(terminal, Capability.key_right));
 
-        keyMap.bind(Action.ENTER, KeyMap.key(terminal, Capability.key_enter));
-        keyMap.bind(Action.ENTER, "\r");
-        keyMap.bind(Action.ENTER, "\n");
+        keyMap.bind(Key.ENTER, KeyMap.key(terminal, Capability.key_enter));
+        keyMap.bind(Key.ENTER, "\r");
+        keyMap.bind(Key.ENTER, "\n");
 
-        keyMap.bind(Action.UP, "w");
-        keyMap.bind(Action.DOWN, "s");
-        keyMap.bind(Action.LEFT, "a");
-        keyMap.bind(Action.RIGHT, "d");
+        keyMap.bind(Key.COUNTER_CLOCKWISE, "q");
+        keyMap.bind(Key.CLOCKWISE, "e");
+        
+        // 0 -> 9, A -> Z, a -> z
+        for (char c = '0'; c <= 'z'; c++) {
+            if (Character.isLetterOrDigit(c)) {
+                keyMap.bind(Key.fromCharacter(c), String.valueOf(c));
+            }
+        }
 
-        keyMap.bind(Action.COUNTER_CLOCKWISE_ROTATE, "q");
-        keyMap.bind(Action.CLOCKWISE_ROTATE, "e");
+        keyMap.setNomatch(Key.UNKNOWN);
 
         return keyMap;
     }
