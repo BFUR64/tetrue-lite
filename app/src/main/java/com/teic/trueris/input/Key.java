@@ -49,8 +49,8 @@ public class Key {
         return this == target;
     }
 
-    public boolean matches(Character source) {
-        return Objects.equals(source, character);
+    public boolean matches(Character target) {
+        return Objects.equals(target, character);
     }
 
     public Character getCharacter() {
