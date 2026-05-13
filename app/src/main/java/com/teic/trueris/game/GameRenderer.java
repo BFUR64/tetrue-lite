@@ -1,11 +1,8 @@
 package com.teic.trueris.game;
 
 import com.googlecode.lanterna.Symbols;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.TextColor.Indexed;
-import com.googlecode.lanterna.TextColor.ANSI;
-import com.googlecode.lanterna.graphics.TextGraphics;
 import com.teic.trueris.Config;
+import com.teic.trueris.display.Renderer;
 import com.teic.trueris.game.block.BlockRegistry.BlockTemplate;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
@@ -14,25 +11,25 @@ import com.teic.trueris.game.grid.GridData;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class Renderer {
+public class GameRenderer {
     private final int BUFFER_HEIGHT = 22;
     private final int BUFFER_WIDTH = 30;
 
     private final int BORDER_SIZE = 1;
 
-    private final TextGraphics textGraphics;
+    private final Renderer renderer;
     private final GridData gridData;
     private final GameState gameState;
 
     private RenderCell[][] previousBuffer;
     private RenderCell[][] currentBuffer;
 
-    public Renderer(
-        TextGraphics textGraphics,
+    public GameRenderer(
+        Renderer renderer,
         GridData gridData,
         GameState gameState
     ) {
-        this.textGraphics = textGraphics;
+        this.renderer = renderer;
         this.gridData = gridData;
         this.gameState = gameState;
 
@@ -61,6 +58,8 @@ public class Renderer {
                 }
             }
         }
+
+        renderer.flush();
 
         previousBuffer = currentBuffer;
         currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
@@ -156,7 +155,8 @@ public class Renderer {
         }
     }
 
-    private TextColor getTextColor(Color color) {
+    // TODO Reimplement
+    /*private TextColor getTextColor(Color color) {
         return switch (color) {
             case DEFAULT -> ANSI.DEFAULT;
             case GREY -> Indexed.fromRGB(96, 96, 96);
@@ -170,20 +170,20 @@ public class Renderer {
             case WHITE -> ANSI.WHITE;
             default -> throw new InputMismatchException("Undefined color");
         };
-    }
+    }*/
 
     private void draw(int col, int row, RenderCell cell) {
-		textGraphics.setForegroundColor(getTextColor(cell.color));
+		// textGraphics.setForegroundColor(getTextColor(cell.color));
 
 		String out = cell.isEmpty ? " " : "" + cell.symbol;
 
-		textGraphics.putString(col * 2, row, out);
+		renderer.putString(col * 2, row, out);
 
 		if (cell.isEmpty || !cell.isCharacter) {
-			textGraphics.putString(col * 2 + 1, row, out);
+			renderer.putString(col * 2 + 1, row, out);
 		}
 
-		textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
+		// textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
 	}
 
     private static class RenderCell {
@@ -200,9 +200,9 @@ public class Renderer {
 
         public boolean isEquals(RenderCell renderCell) {
             return this.symbol == renderCell.symbol &&
-                    this.color == renderCell.color &&
-                    this.isEmpty == renderCell.isEmpty &&
-                    this.isCharacter == renderCell.isCharacter;
+                this.color == renderCell.color &&
+                this.isEmpty == renderCell.isEmpty &&
+                this.isCharacter == renderCell.isCharacter;
         }
     }
 }

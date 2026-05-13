@@ -3,26 +3,30 @@ package com.teic.trueris.game;
 import java.io.IOException;
 import java.util.concurrent.locks.LockSupport;
 
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.terminal.Terminal;
 import com.teic.trueris.Config;
+import com.teic.trueris.display.Renderer;
+import com.teic.trueris.input.Input;
+import com.teic.trueris.input.Key;
 
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
 
-    private final Terminal terminal;
     private final Renderer renderer;
+    private final Input input;
+
+    private final GameRenderer gameRenderer;
     private final GameManager gameManager;
     private final GameState gameState;
 
     private boolean running;
     private final int nsPerFrame;
 
-    public GameLoop(Terminal terminal, Renderer renderer, GameManager gameManager) {
-        this.terminal = terminal;
+    public GameLoop(Renderer renderer, Input input, GameRenderer gameRenderer, GameManager gameManager) {
         this.renderer = renderer;
+        this.input = input;
+
+        this.gameRenderer = gameRenderer;
         this.gameManager = gameManager;
         this.gameState = gameManager;
 
@@ -31,7 +35,7 @@ public class GameLoop {
     }
 
     public void run() throws IOException {
-        terminal.clearScreen();
+        renderer.clearScreen();
 
         long delta = 0;
 
@@ -56,55 +60,59 @@ public class GameLoop {
     }
 
     private void update(long delta) throws IOException {
-        handleGameState(terminal.pollInput());
+        handleGameState(input.pollInput());
         gameManager.update(delta);
-        renderer.update();
+        gameRenderer.update();
 
         if (gameState.isGameOver()) {
             running = false;
         }
     }
 
-    private void handleGameState(KeyStroke key) {
+    private void handleGameState(Key key) {
         if (key == null) {
             return;
         }
 
-        switch (key.getKeyType()) {
-            case Escape -> running = false;
-
-            case ArrowUp -> gameManager.dropBlock();
-
-            case ArrowDown -> gameManager.moveBlockDown();
-
-            case ArrowLeft -> gameManager.moveBlockLeft();
-
-            case ArrowRight -> gameManager.moveBlockRight();
-
-            case Home -> gameManager.rotateBlockLeft();
-
-            case End -> gameManager.rotateBlockRight();
-
-            default -> {}
+        if (key.matches(Key.ESCAPE)) {
+            running = false;
+        }
+        else if (key.matches('w')) {
+            gameManager.dropBlock();
+        }
+        else if (key.matches('s')) {
+            gameManager.moveBlockDown();
+        }
+        else if (key.matches('a')) {
+            gameManager.moveBlockLeft();
+        }
+        else if (key.matches('d')) {
+            gameManager.moveBlockRight();
+        }
+        else if (key.matches('i')) {
+            gameManager.rotateBlockLeft();
+        }
+        else if (key.matches('p')) {
+            gameManager.rotateBlockRight();
         }
     }
 
     private void handleGameOver() throws IOException {
-        terminal.resetColorAndSGR();
-        terminal.clearScreen();
+        // TODO uncomment once implemented
+        // renderer.resetColorAndSGR();
+        renderer.clearScreen();
         
-        terminal.setCursorPosition(2, 1);
-        terminal.putString("Game Over!");
+        renderer.putString(2, 1, "Game Over!");
 
-        terminal.setCursorPosition(2, 3);
-        terminal.putString("Score: " + gameState.getScore());
+        renderer.putString(2, 3, "Score: " + gameState.getScore());
 
-        terminal.setCursorPosition(2, 5);
-        terminal.putString("Press ESC to go back to Main Menu");
+        renderer.putString(2, 5, "Press ESC to go back to Main Menu");
+
+        renderer.flush();
 
         while (true) {
-            KeyStroke keyStroke = terminal.readInput();
-            if (keyStroke.getKeyType() == KeyType.Escape) {
+            Key key = input.readInput();
+            if (key.matches(Key.ESCAPE)) {
                 break;
             }
         }

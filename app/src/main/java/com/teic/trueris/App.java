@@ -1,6 +1,10 @@
 package com.teic.trueris;
 
 import com.teic.trueris.display.JLine3Renderer;
+import com.teic.trueris.game.GameLoop;
+import com.teic.trueris.game.GameManager;
+import com.teic.trueris.game.GameRenderer;
+import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.input.Key;
 import com.teic.trueris.input.Input;
 import com.teic.trueris.input.JLine3Input;
@@ -21,6 +25,7 @@ public class App {
             app.start();
 
         } catch (IOException error) {
+            // TODO change this to a proper log out
             System.out.println("Failed!");
         }
     }
@@ -30,7 +35,7 @@ public class App {
         this.input = input;
     }
 
-    private void start() {
+    private void start() throws IOException {
         while (true) {
             renderer.clearScreen();
 
@@ -53,7 +58,15 @@ public class App {
             }
 
             if (key.matches('1')) {
+                GridData gridData = new GridData();
+                GameManager gameManager = new GameManager(gridData);
+                GameRenderer gameRenderer = new GameRenderer(renderer, gridData, gameManager);
 
+                GameLoop gameLoop = new GameLoop(
+                    renderer, input, gameRenderer, gameManager
+                );
+
+                gameLoop.run();
             }
             else if (key.matches('2')) {
                 renderer.clearScreen();

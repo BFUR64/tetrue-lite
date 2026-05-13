@@ -71,7 +71,7 @@ public class JLine3Input implements Input {
         keyMap.bind(Key.ENTER, "\r");
         keyMap.bind(Key.ENTER, "\n");
 
-        keyMap.bind(Key.ESCAPE, "\033");
+        keyMap.bind(Key.ESCAPE, "\033\033");
 
         keyMap.bind(Key.COUNTER_CLOCKWISE, "q");
         keyMap.bind(Key.CLOCKWISE, "e");
@@ -84,6 +84,7 @@ public class JLine3Input implements Input {
         }
 
         keyMap.setNomatch(Key.UNKNOWN);
+        keyMap.setAmbiguousTimeout(100);
 
         return keyMap;
     }

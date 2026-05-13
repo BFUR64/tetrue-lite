@@ -10,7 +10,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.teic.trueris.game.GameLoop;
 import com.teic.trueris.game.GameManager;
-import com.teic.trueris.game.Renderer;
+import com.teic.trueris.game.GameRenderer;
 import com.teic.trueris.game.grid.GridData;
 
 public class AppOld {
@@ -63,13 +63,13 @@ public class AppOld {
             if (input == '1') {
                 GridData gridData = new GridData();
                 GameManager gameManager = new GameManager(gridData);
-                Renderer renderer = new Renderer(textGraphics, gridData,gameManager);
+                // GameRenderer renderer = new GameRenderer(textGraphics, gridData,gameManager);
 
-                GameLoop gameLoop = new GameLoop(
+                /*GameLoop gameLoop = new GameLoop(
                     terminal, renderer, gameManager
-                );
+                );*/
 
-                gameLoop.run();
+                // gameLoop.run();
             }
             else if (input == '2') {
                 terminal.resetColorAndSGR();
