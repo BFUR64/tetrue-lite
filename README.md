@@ -18,7 +18,6 @@ https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
 - Block Queueing (7 Bag System) - Next pieces preview and fair randomization
-- Mobile Friendly Controls - Works on termux
 
 ## Limitations
 - No game / score tracking after the game is closed
@@ -26,21 +25,42 @@ https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
 - Minimal main menu only, featuring `New Game`, `About`, and `Exit`
 - No sound
 
-## Environment Issues
-- Designed and tested primarily on Termux (Android)
-- Unix-like environments only (Linux, MacOs)
-- BLOCK_SPARSE (or any gradient based) character renders as dots on Termux, but may appear as gradients or shading on other terminal emulators
-- **Windows is not supported**
+## Environment
+- Designed and tested primarily on Linux, Windows, and Termux (Android)
 
 ## Usage / Controls
 - UP Arrow Key - Hard drop
 - DOWN Arrow Key - Move tetromino down
 - LEFT / RIGHT Arrow Keys - Move tetromino left / right within the grid
-- END Key - Rotate tetromino clockwise
-- HOME Key - Rotate tetromino counter-clockwise
+- Q Key - Rotate tetromino clockwise
+- E Key - Rotate tetromino counter-clockwise
 
-In the main menu, press `0` to exit the application <br>
-In the game, press `ESC` to exit the game
+In the main menu, press `0` or `ESC` twice to exit the application <br>
+In the game, press `ESC` twice to exit the game
+
+## Installation / Running
+
+### Clone the repository
+```bash
+git clone git@github.com:BFUR64/tetrue-lite.git
+cd tetrue-lite
+```
+
+### Build the shadow JAR
+#### Windows
+```bash
+./gradlew build
+```
+
+#### Linux / Termux
+```bash
+sh gradlew build
+```
+
+### Run the generated JAR
+```bash
+java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
+```
 
 ## Architecture Overview
 
@@ -50,33 +70,19 @@ In the game, press `ESC` to exit the game
 ### Rendering Layer
 <img width="1482" height="582" alt="View Loop" src="https://github.com/user-attachments/assets/f45ce001-bbcd-4825-93e0-0ac6556540c8" />
 
-## Installation / Running (Unix-like Environments)
-
-### Clone the repository
-```bash
-git clone git@github.com:BFUR64/tetrue-lite.git
-cd tetrue-lite
-```
-
-### Build the shadow JAR
-```bash
-./gradlew shadowJar
-```
-
-### Run the generated JAR
-```bash
-java -jar app/build/libs/app-all.jar
-```
-
 ## Tech Stack
-- Programming Language: Java 21 (Adoptium OpenJDK 21.0.9)
-- Libraries: Lanterna 3.1.3 (Terminal UI)
+- Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
+- Libraries:
+  - Lanterna 3.1.3 (UI Library for Termux)
+  - JLine 3.30.13 (UI Library for everything else)
 - Build Tools: Gradle 9.3.1
 
 ## Development Environment
-Built on Termux Neovim on Android, because I found it more convenient than my laptop (Ability to work on the go). Plus, Lanterna seems to fair well under Unix-like environments unlike Windows, so...
+Originally built on Termux Neovim on Android, because I found it more convenient than my laptop (Ability to work on the go).
 
-## Why I Built This
+Now, it's mostly tested and built on my laptop ever since the move to JLine 3. I still use Termux to ssh into the laptop and code every now and then if I'm on the go.
+
+## Why I Built This (v1 Tetrue Lite)
 After 1.5 years of endless architecturing the 'next best' architecture for the project, I realize my honeymoon phase had to end. It doesn't ship. It only promises.
 
 Tetrue Lite is the v7, with all the unnecessary abstractions / over-engineering gutted or removed, with the focus of delivering an MVP, e.g., an actual playable game.
