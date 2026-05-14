@@ -8,6 +8,10 @@ public interface Renderer extends Closeable {
     void putString(int x, int y, String out);
     void flush();
 
+    void setForegroundColor(int r, int g, int b);
+    void setBackgroundColor(int r, int g, int b);
+    void resetColorAndStyle();
+
     @Override
     void close() throws IOException;
 }

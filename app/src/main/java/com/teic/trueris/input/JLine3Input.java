@@ -93,9 +93,6 @@ public class JLine3Input implements Input {
             }
         }
 
-        // TODO Does not seem to work. Consider removing in the future or investigate
-        keyMap.setNomatch(Key.UNKNOWN);
-
         return keyMap;
     }
 

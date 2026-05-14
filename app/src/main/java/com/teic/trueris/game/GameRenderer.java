@@ -8,7 +8,6 @@ import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class GameRenderer {
@@ -155,25 +154,30 @@ public class GameRenderer {
         }
     }
 
-    // TODO Reimplement
-    /*private TextColor getTextColor(Color color) {
+    private int[] getTextColor(Color color) {
         return switch (color) {
-            case DEFAULT -> ANSI.DEFAULT;
-            case GREY -> Indexed.fromRGB(96, 96, 96);
-            case YELLOW -> Indexed.fromRGB(205, 205, 0);
-            case BLUE -> Indexed.fromRGB(0, 0, 205);
-            case ORANGE -> Indexed.fromRGB(205, 102, 0);
-            case GREEN -> Indexed.fromRGB(0, 205, 0);
-            case RED -> Indexed.fromRGB(205, 0, 0);
-            case PURPLE -> Indexed.fromRGB(154, 0, 205);
-            case CYAN -> Indexed.fromRGB(0, 205, 205);
-            case WHITE -> ANSI.WHITE;
-            default -> throw new InputMismatchException("Undefined color");
+            case DEFAULT -> new int[]{0, 0, 0};
+            case GREY -> new int[]{96, 96, 96};
+            case YELLOW -> new int[]{205, 205, 0};
+            case BLUE -> new int[]{0, 0, 205};
+            case ORANGE -> new int[]{205, 102, 0};
+            case GREEN -> new int[]{0, 205, 0};
+            case RED -> new int[]{205, 0, 0};
+            case PURPLE -> new int[]{154, 0, 205};
+            case CYAN -> new int[]{0, 205, 205};
+            case WHITE -> new int[]{255, 255, 255};
         };
-    }*/
+    }
 
     private void draw(int col, int row, RenderCell cell) {
-		// textGraphics.setForegroundColor(getTextColor(cell.color));
+        int[] textColor = getTextColor(cell.color);
+
+        if (!cell.isCharacter) {
+            renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
+        }
+        else {
+            renderer.setForegroundColor(255, 255, 255);
+        }
 
 		String out = cell.isEmpty ? " " : "" + cell.symbol;
 
@@ -183,7 +187,9 @@ public class GameRenderer {
 			renderer.putString(col * 2 + 1, row, out);
 		}
 
-		// textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
+        textColor = getTextColor(Color.DEFAULT);
+
+        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 	}
 
     private static class RenderCell {

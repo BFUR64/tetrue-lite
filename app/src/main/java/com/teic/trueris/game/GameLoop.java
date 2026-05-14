@@ -98,8 +98,7 @@ public class GameLoop {
     }
 
     private void handleGameOver() throws IOException {
-        // TODO uncomment once implemented
-        // renderer.resetColorAndSGR();
+        renderer.resetColorAndStyle();
         renderer.clearScreen();
         
         renderer.putString(2, 1, "Game Over!");

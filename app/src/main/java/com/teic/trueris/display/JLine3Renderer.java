@@ -43,6 +43,21 @@ public class JLine3Renderer implements Renderer {
     }
 
     @Override
+    public void setForegroundColor(int r, int g, int b) {
+        printWriter.print(String.format("\u001b[38;2;%s;%s;%sm", r, g, b));
+    }
+
+    @Override
+    public void setBackgroundColor(int r, int g, int b) {
+        printWriter.print(String.format("\u001b[48;2;%s;%s;%sm", r, g, b));
+    }
+
+    @Override
+    public void resetColorAndStyle() {
+        printWriter.print("\u001b[0m");
+    }
+
+    @Override
     public void close() throws IOException {
         terminal.puts(Capability.cursor_visible);
         terminal.close();
