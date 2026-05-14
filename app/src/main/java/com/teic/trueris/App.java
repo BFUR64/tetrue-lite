@@ -1,6 +1,8 @@
 package com.teic.trueris;
 
 import com.teic.trueris.display.JLine3Renderer;
+import com.teic.trueris.display.LanternaRenderer;
+import com.teic.trueris.display.Renderer;
 import com.teic.trueris.game.GameLoop;
 import com.teic.trueris.game.GameManager;
 import com.teic.trueris.game.GameRenderer;
@@ -8,31 +10,48 @@ import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.input.Key;
 import com.teic.trueris.input.Input;
 import com.teic.trueris.input.JLine3Input;
+import com.teic.trueris.input.LanternaInput;
 
 import java.io.IOException;
 
 public class App {
-    private final JLine3Renderer renderer;
+    private final Renderer renderer;
     private final Input input;
 
     public static void main(String[] args) {
-        try (
-            JLine3Renderer renderer = new JLine3Renderer();
-            Input input = new JLine3Input(renderer.getTerminal());
-        ) {
-
-            App app = new App(renderer, input);
-            app.start();
-
-        } catch (IOException error) {
-            // TODO change this to a proper log out
+        try {
+            if (isTermux()) {
+                try (
+                    LanternaRenderer renderer = new LanternaRenderer();
+                    LanternaInput input = new LanternaInput(renderer.getTerminal())
+                ) {
+                    App app = new App(renderer, input);
+                    app.start();
+                }
+            }
+            else {
+                try (
+                    JLine3Renderer renderer = new JLine3Renderer();
+                    Input input = new JLine3Input(renderer.getTerminal())
+                ) {
+                    App app = new App(renderer, input);
+                    app.start();
+                }
+            }
+        }
+        catch (IOException error) {
             System.out.println("Failed!");
         }
     }
 
-    public App(JLine3Renderer renderer, Input input) {
+    public App(Renderer renderer, Input input) {
         this.renderer = renderer;
         this.input = input;
+    }
+
+    private static boolean isTermux() {
+        return System.getenv("PREFIX").contains("termux") ||
+                !System.getenv("TERMUX_VERSION").isEmpty();
     }
 
     private void start() throws IOException {

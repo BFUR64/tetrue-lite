@@ -70,7 +70,7 @@ public class GameLoop {
     }
 
     private void handleGameState(Key key) {
-        if (key == null) {
+        if (key == Key.UNKNOWN) {
             return;
         }
 

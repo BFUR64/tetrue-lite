@@ -4,6 +4,7 @@ import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp.Capability;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -44,19 +45,23 @@ public class JLine3Input implements Input {
     }
 
     @Override
-    public Key readInput() {
+    public @NonNull Key readInput() {
         try {
             return inputQueue.take();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
-        return null;
+        return Key.UNKNOWN;
     }
 
     @Override
-    public Key pollInput() {
-        return inputQueue.poll();
+    public @NonNull Key pollInput() {
+        Key key = inputQueue.poll();
+
+        if (key == null) return Key.UNKNOWN;
+
+        return key;
     }
 
     private KeyMap<Key> buildKeyMap() {
