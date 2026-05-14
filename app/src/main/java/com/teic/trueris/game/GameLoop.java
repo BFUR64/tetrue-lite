@@ -89,10 +89,10 @@ public class GameLoop {
         else if (key.matches(Key.RIGHT)) {
             gameManager.moveBlockRight();
         }
-        else if (key.matches('i')) {
+        else if (key.matches(Key.COUNTER_CLOCKWISE)) {
             gameManager.rotateBlockLeft();
         }
-        else if (key.matches('p')) {
+        else if (key.matches(Key.CLOCKWISE)) {
             gameManager.rotateBlockRight();
         }
     }

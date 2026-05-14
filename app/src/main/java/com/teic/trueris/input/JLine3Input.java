@@ -62,16 +62,19 @@ public class JLine3Input implements Input {
     private KeyMap<Key> buildKeyMap() {
         KeyMap<Key> keyMap = new KeyMap<>();
 
+        // Windows specific capabilities
         keyMap.bind(Key.UP , KeyMap.key(terminal, Capability.key_up));
         keyMap.bind(Key.DOWN,  KeyMap.key(terminal, Capability.key_down));
         keyMap.bind(Key.LEFT,  KeyMap.key(terminal, Capability.key_left));
         keyMap.bind(Key.RIGHT, KeyMap.key(terminal, Capability.key_right));
 
+        // Linux specific capabilities
         keyMap.bind(Key.UP , "\033[A");
         keyMap.bind(Key.DOWN,  "\033[B");
         keyMap.bind(Key.LEFT,  "\033[D");
         keyMap.bind(Key.RIGHT, "\033[C");
 
+        // General capabilities
         keyMap.bind(Key.ENTER, KeyMap.key(terminal, Capability.key_enter));
         keyMap.bind(Key.ENTER, "\r");
         keyMap.bind(Key.ENTER, "\n");
@@ -80,16 +83,18 @@ public class JLine3Input implements Input {
 
         keyMap.bind(Key.COUNTER_CLOCKWISE, "q");
         keyMap.bind(Key.CLOCKWISE, "e");
-        
+
+        // post-hoc to make `COUNTER_CLOCKWISE` and `CLOCKWISE` work
         // 0 -> 9, A -> Z, a -> z
         for (char c = '0'; c <= 'z'; c++) {
             if (Character.isLetterOrDigit(c)) {
+                if (c == 'q' || c == 'e') continue;
                 keyMap.bind(Key.fromCharacter(c), String.valueOf(c));
             }
         }
 
+        // TODO Does not seem to work. Consider removing in the future or investigate
         keyMap.setNomatch(Key.UNKNOWN);
-        keyMap.setAmbiguousTimeout(100);
 
         return keyMap;
     }
