@@ -36,13 +36,7 @@ public class LanternaRenderer implements Renderer {
 
     @Override
     public void putString(int x, int y, String out) {
-        try {
-            terminal.setCursorPosition(x, y);
-            terminal.putString(out);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        textGraphics.putString(x, y, out);
     }
 
     @Override
