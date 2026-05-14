@@ -9,6 +9,10 @@
 ## Demo 
 https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
 
+---
+
+[Tetrue Lite GDD](https://docs.google.com/document/d/19IZbQ8FgqG-YYqf-uAuDHytYcsIJh5Mo0PuvelidNwE/edit?usp=sharing)
+
 ## Features
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second
