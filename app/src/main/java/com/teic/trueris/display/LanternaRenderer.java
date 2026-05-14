@@ -62,7 +62,7 @@ public class LanternaRenderer implements Renderer {
 
     @Override
     public void setBackgroundColor(int r, int g, int b) {
-        textGraphics.setForegroundColor(TextColor.Indexed.fromRGB(r, g, b));
+        textGraphics.setBackgroundColor(TextColor.Indexed.fromRGB(r, g, b));
     }
 
     @Override

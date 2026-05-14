@@ -115,7 +115,7 @@ public class GameRenderer {
         char[] charArray = out.toCharArray();
 
         for (int pointer = 0; pointer < charArray.length; pointer++) {
-            currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.DEFAULT);
+            currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.WHITE);
             currentBuffer[row][col + pointer].isCharacter = true;
         }
     }
@@ -172,12 +172,7 @@ public class GameRenderer {
     private void draw(int col, int row, RenderCell cell) {
         int[] textColor = getTextColor(cell.color);
 
-        if (!cell.isCharacter) {
-            renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
-        }
-        else {
-            renderer.setForegroundColor(255, 255, 255);
-        }
+        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 
 		String out = cell.isEmpty ? " " : "" + cell.symbol;
 
