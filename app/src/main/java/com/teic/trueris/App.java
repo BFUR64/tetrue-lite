@@ -50,8 +50,11 @@ public class App {
     }
 
     private static boolean isTermux() {
-        return System.getenv("PREFIX").contains("termux") ||
-                !System.getenv("TERMUX_VERSION").isEmpty();
+        String prefix = System.getenv("PREFIX");
+
+        return (prefix != null &&
+            prefix.contains("termux")) ||
+            System.getenv("TERMUX_VERSION") != null;
     }
 
     private void start() throws IOException {

@@ -1,5 +1,7 @@
 package com.teic.trueris.display;
 
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
@@ -7,10 +9,13 @@ import java.io.IOException;
 
 public class LanternaRenderer implements Renderer {
     private final Terminal terminal;
+    private final TextGraphics textGraphics;
 
     public LanternaRenderer() throws IOException {
         terminal = new DefaultTerminalFactory().createTerminal();
         terminal.setCursorVisible(false);
+
+        textGraphics = terminal.newTextGraphics();
 
         terminal.enterPrivateMode();
     }
@@ -52,22 +57,12 @@ public class LanternaRenderer implements Renderer {
 
     @Override
     public void setForegroundColor(int r, int g, int b) {
-        try {
-            terminal.putString(String.format("\u001b[38;2;%s;%s;%sm", r, g, b));
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        textGraphics.setForegroundColor(TextColor.Indexed.fromRGB(r, g, b));
     }
 
     @Override
     public void setBackgroundColor(int r, int g, int b) {
-        try {
-            terminal.putString(String.format("\u001b[48;2;%s;%s;%sm", r, g, b));
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        textGraphics.setForegroundColor(TextColor.Indexed.fromRGB(r, g, b));
     }
 
     @Override
