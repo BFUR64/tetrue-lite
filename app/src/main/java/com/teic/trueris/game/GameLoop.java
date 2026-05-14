@@ -77,16 +77,16 @@ public class GameLoop {
         if (key.matches(Key.ESCAPE)) {
             running = false;
         }
-        else if (key.matches('w')) {
+        else if (key.matches(Key.UP)) {
             gameManager.dropBlock();
         }
-        else if (key.matches('s')) {
+        else if (key.matches(Key.DOWN)) {
             gameManager.moveBlockDown();
         }
-        else if (key.matches('a')) {
+        else if (key.matches(Key.LEFT)) {
             gameManager.moveBlockLeft();
         }
-        else if (key.matches('d')) {
+        else if (key.matches(Key.RIGHT)) {
             gameManager.moveBlockRight();
         }
         else if (key.matches('i')) {
