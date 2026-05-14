@@ -67,6 +67,11 @@ public class JLine3Input implements Input {
         keyMap.bind(Key.LEFT,  KeyMap.key(terminal, Capability.key_left));
         keyMap.bind(Key.RIGHT, KeyMap.key(terminal, Capability.key_right));
 
+        keyMap.bind(Key.UP , "\033[A");
+        keyMap.bind(Key.DOWN,  "\033[B");
+        keyMap.bind(Key.LEFT,  "\033[D");
+        keyMap.bind(Key.RIGHT, "\033[C");
+
         keyMap.bind(Key.ENTER, KeyMap.key(terminal, Capability.key_enter));
         keyMap.bind(Key.ENTER, "\r");
         keyMap.bind(Key.ENTER, "\n");
