@@ -70,6 +70,8 @@ java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
 ### Rendering Layer
 <img width="1482" height="582" alt="View Loop" src="https://github.com/user-attachments/assets/f45ce001-bbcd-4825-93e0-0ac6556540c8" />
 
+[Tetrue Lite Game Design Document](https://docs.google.com/document/d/19IZbQ8FgqG-YYqf-uAuDHytYcsIJh5Mo0PuvelidNwE/edit?usp=sharing)
+
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
