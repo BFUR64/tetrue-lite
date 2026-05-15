@@ -63,6 +63,7 @@ public class LanternaRenderer implements Renderer {
     public void resetColorAndStyle() {
         try {
             terminal.resetColorAndSGR();
+            setForegroundColor(255, 255, 255);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
