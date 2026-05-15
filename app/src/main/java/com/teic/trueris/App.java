@@ -1,111 +1,79 @@
 package com.teic.trueris;
 
-import com.teic.trueris.display.JLine3Renderer;
-import com.teic.trueris.display.LanternaRenderer;
-import com.teic.trueris.display.Renderer;
 import com.teic.trueris.game.GameLoop;
 import com.teic.trueris.game.GameManager;
 import com.teic.trueris.game.GameRenderer;
 import com.teic.trueris.game.grid.GridData;
-import com.teic.trueris.input.Key;
-import com.teic.trueris.input.Input;
-import com.teic.trueris.input.JLine3Input;
-import com.teic.trueris.input.LanternaInput;
+import io.github.bfur64.terminal.Terminal;
+import io.github.bfur64.terminal.input.KeyStroke;
+import io.github.bfur64.terminal.input.KeyType;
 
 import java.io.IOException;
 
 public class App {
-    private final Renderer renderer;
-    private final Input input;
+    private final Terminal terminal;
 
     public static void main(String[] args) {
-        try {
-            if (isTermux()) {
-                try (
-                    LanternaRenderer renderer = new LanternaRenderer();
-                    LanternaInput input = new LanternaInput(renderer.getTerminal())
-                ) {
-                    App app = new App(renderer, input);
-                    app.start();
-                }
-            }
-            else {
-                try (
-                    JLine3Renderer renderer = new JLine3Renderer();
-                    Input input = new JLine3Input(renderer.getTerminal())
-                ) {
-                    App app = new App(renderer, input);
-                    app.start();
-                }
-            }
+        try (Terminal terminal = Terminal.build()) {
+            App app = new App(terminal);
+            app.start();
         }
         catch (IOException error) {
             System.out.println("Failed!");
         }
     }
 
-    public App(Renderer renderer, Input input) {
-        this.renderer = renderer;
-        this.input = input;
-    }
-
-    private static boolean isTermux() {
-        String prefix = System.getenv("PREFIX");
-
-        return (prefix != null &&
-            prefix.contains("termux")) ||
-            System.getenv("TERMUX_VERSION") != null;
+    public App(Terminal terminal) {
+        this.terminal = terminal;
     }
 
     private void start() throws IOException {
         while (true) {
-            renderer.clearScreen();
+            terminal.clearScreen();
 
-            renderer.putString(2, 1, "Tetrue Lite");
-            renderer.putString(2, 3, "1. New Game");
-            renderer.putString(2, 4, "2. About");
-            renderer.putString(2, 5, "0. Exit");
-            renderer.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
+            terminal.putString(2, 1, "Tetrue Lite v2.0.2");
+            terminal.putString(2, 3, "1. New Game");
+            terminal.putString(2, 4, "2. About");
+            terminal.putString(2, 5, "0. Exit");
+            terminal.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
 
-            renderer.flush();
+            terminal.flush();
 
-            Key key = input.readInput();
+            KeyStroke key = terminal.readInput();
 
-            if (!key.hasCharacter()) {
-                if (key.equals(Key.ESCAPE)) {
-                    break;
-                }
-
-                continue;
+            if (key.getKeyType() == KeyType.ESCAPE) {
+                break;
             }
 
-            if (key.matches('1')) {
+            if (key.getKeyType() != KeyType.CHARACTER) continue;
+
+            if (key.getCharacter() == '1') {
                 GridData gridData = new GridData();
                 GameManager gameManager = new GameManager(gridData);
-                GameRenderer gameRenderer = new GameRenderer(renderer, gridData, gameManager);
+                GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
 
-                GameLoop gameLoop = new GameLoop(
-                    renderer, input, gameRenderer, gameManager
-                );
+                GameLoop gameLoop = new GameLoop(terminal, gameRenderer, gameManager);
 
                 gameLoop.run();
             }
-            else if (key.matches('2')) {
-                renderer.clearScreen();
+            else if (key.getCharacter() == '2') {
+                terminal.clearScreen();
 
-                renderer.putString(2, 1, "About");
-                renderer.putString(2, 3, "Simple Tetrue clone by TEIC.");
-                renderer.putString(2, 5, "Press any key to continue...");
-                renderer.flush();
+                terminal.putString(2, 1, "About");
+                terminal.putString(2, 3, "Simple Tetrue clone by TEIC.");
+                terminal.putString(2, 5, "Renderer: " + terminal.getTerminalInfo());
+                terminal.putString(2, 6, "X: " + terminal.getXSize() + " | Y: " + terminal.getYSize());
+                terminal.putString(2, 8, "Press any key to continue...");
+                terminal.flush();
 
-                input.readInput();
+                terminal.readInput();
             }
-            else if (key.matches('0')) {
+            else if (key.getCharacter() == '0') {
                 break;
             }
         }
 
-        renderer.clearScreen();
-        renderer.flush();
+        terminal.clearScreen();
+        terminal.flush();
     }
 }

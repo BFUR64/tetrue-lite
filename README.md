@@ -75,8 +75,7 @@ java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
-  - Lanterna 3.1.3 (UI Library for Termux)
-  - JLine 3.30.13 (UI Library for everything else)
+  - Tetrue Terminal (Personal Dual Engine Library UI for Termux and Everything Else)
 - Build Tools: Gradle 9.3.1
 
 ## Development Environment
