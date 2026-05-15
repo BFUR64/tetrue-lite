@@ -182,7 +182,7 @@ public class GameRenderer {
 			renderer.putString(col * 2 + 1, row, out);
 		}
 
-        textColor = getTextColor(Color.DEFAULT);
+        textColor = getTextColor(Color.WHITE);
 
         renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 	}
