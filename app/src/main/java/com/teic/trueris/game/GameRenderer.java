@@ -1,38 +1,34 @@
 package com.teic.trueris.game;
 
 import com.googlecode.lanterna.Symbols;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.TextColor.Indexed;
-import com.googlecode.lanterna.TextColor.ANSI;
-import com.googlecode.lanterna.graphics.TextGraphics;
 import com.teic.trueris.Config;
+import com.teic.trueris.display.Renderer;
 import com.teic.trueris.game.block.BlockRegistry.BlockTemplate;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
-public class Renderer {
+public class GameRenderer {
     private final int BUFFER_HEIGHT = 22;
     private final int BUFFER_WIDTH = 30;
 
     private final int BORDER_SIZE = 1;
 
-    private final TextGraphics textGraphics;
+    private final Renderer renderer;
     private final GridData gridData;
     private final GameState gameState;
 
     private RenderCell[][] previousBuffer;
     private RenderCell[][] currentBuffer;
 
-    public Renderer(
-        TextGraphics textGraphics,
+    public GameRenderer(
+        Renderer renderer,
         GridData gridData,
         GameState gameState
     ) {
-        this.textGraphics = textGraphics;
+        this.renderer = renderer;
         this.gridData = gridData;
         this.gameState = gameState;
 
@@ -61,6 +57,8 @@ public class Renderer {
                 }
             }
         }
+
+        renderer.flush();
 
         previousBuffer = currentBuffer;
         currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
@@ -117,7 +115,7 @@ public class Renderer {
         char[] charArray = out.toCharArray();
 
         for (int pointer = 0; pointer < charArray.length; pointer++) {
-            currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.DEFAULT);
+            currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.WHITE);
             currentBuffer[row][col + pointer].isCharacter = true;
         }
     }
@@ -156,34 +154,37 @@ public class Renderer {
         }
     }
 
-    private TextColor getTextColor(Color color) {
+    private int[] getTextColor(Color color) {
         return switch (color) {
-            case DEFAULT -> ANSI.DEFAULT;
-            case GREY -> Indexed.fromRGB(96, 96, 96);
-            case YELLOW -> Indexed.fromRGB(205, 205, 0);
-            case BLUE -> Indexed.fromRGB(0, 0, 205);
-            case ORANGE -> Indexed.fromRGB(205, 102, 0);
-            case GREEN -> Indexed.fromRGB(0, 205, 0);
-            case RED -> Indexed.fromRGB(205, 0, 0);
-            case PURPLE -> Indexed.fromRGB(154, 0, 205);
-            case CYAN -> Indexed.fromRGB(0, 205, 205);
-            case WHITE -> ANSI.WHITE;
-            default -> throw new InputMismatchException("Undefined color");
+            case DEFAULT -> new int[]{0, 0, 0};
+            case GREY -> new int[]{96, 96, 96};
+            case YELLOW -> new int[]{205, 205, 0};
+            case BLUE -> new int[]{0, 0, 205};
+            case ORANGE -> new int[]{205, 102, 0};
+            case GREEN -> new int[]{0, 205, 0};
+            case RED -> new int[]{205, 0, 0};
+            case PURPLE -> new int[]{154, 0, 205};
+            case CYAN -> new int[]{0, 205, 205};
+            case WHITE -> new int[]{255, 255, 255};
         };
     }
 
     private void draw(int col, int row, RenderCell cell) {
-		textGraphics.setForegroundColor(getTextColor(cell.color));
+        int[] textColor = getTextColor(cell.color);
+
+        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 
 		String out = cell.isEmpty ? " " : "" + cell.symbol;
 
-		textGraphics.putString(col * 2, row, out);
+		renderer.putString(col * 2, row, out);
 
 		if (cell.isEmpty || !cell.isCharacter) {
-			textGraphics.putString(col * 2 + 1, row, out);
+			renderer.putString(col * 2 + 1, row, out);
 		}
 
-		textGraphics.setForegroundColor(getTextColor(Color.DEFAULT));
+        textColor = getTextColor(Color.DEFAULT);
+
+        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 	}
 
     private static class RenderCell {
@@ -200,9 +201,9 @@ public class Renderer {
 
         public boolean isEquals(RenderCell renderCell) {
             return this.symbol == renderCell.symbol &&
-                    this.color == renderCell.color &&
-                    this.isEmpty == renderCell.isEmpty &&
-                    this.isCharacter == renderCell.isCharacter;
+                this.color == renderCell.color &&
+                this.isEmpty == renderCell.isEmpty &&
+                this.isCharacter == renderCell.isCharacter;
         }
     }
 }

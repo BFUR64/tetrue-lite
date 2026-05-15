@@ -1,89 +1,111 @@
-
 package com.teic.trueris;
+
+import com.teic.trueris.display.JLine3Renderer;
+import com.teic.trueris.display.LanternaRenderer;
+import com.teic.trueris.display.Renderer;
+import com.teic.trueris.game.GameLoop;
+import com.teic.trueris.game.GameManager;
+import com.teic.trueris.game.GameRenderer;
+import com.teic.trueris.game.grid.GridData;
+import com.teic.trueris.input.Key;
+import com.teic.trueris.input.Input;
+import com.teic.trueris.input.JLine3Input;
+import com.teic.trueris.input.LanternaInput;
 
 import java.io.IOException;
 
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.teic.trueris.game.GameLoop;
-import com.teic.trueris.game.GameManager;
-import com.teic.trueris.game.Renderer;
-import com.teic.trueris.game.grid.GridData;
-
 public class App {
-    private final Terminal terminal;
-    private final TextGraphics textGraphics;
+    private final Renderer renderer;
+    private final Input input;
 
     public static void main(String[] args) {
         try {
-            Terminal terminal = new DefaultTerminalFactory().createTerminal();
-            terminal.setCursorVisible(false);
-
-            TextGraphics textGraphics = terminal.newTextGraphics();
-
-            terminal.enterPrivateMode();
-
-            App app = new App(terminal, textGraphics);
-            app.startMenu();
-
-            terminal.exitPrivateMode();
+            if (isTermux()) {
+                try (
+                    LanternaRenderer renderer = new LanternaRenderer();
+                    LanternaInput input = new LanternaInput(renderer.getTerminal())
+                ) {
+                    App app = new App(renderer, input);
+                    app.start();
+                }
+            }
+            else {
+                try (
+                    JLine3Renderer renderer = new JLine3Renderer();
+                    Input input = new JLine3Input(renderer.getTerminal())
+                ) {
+                    App app = new App(renderer, input);
+                    app.start();
+                }
+            }
         }
-        catch (Exception error) {
-            Logging.writeStackTrace(LogType.ERROR, error);
+        catch (IOException error) {
+            System.out.println("Failed!");
         }
     }
 
-    private App(Terminal terminal, TextGraphics textGraphics) {
-        this.terminal = terminal;
-        this.textGraphics = textGraphics;
+    public App(Renderer renderer, Input input) {
+        this.renderer = renderer;
+        this.input = input;
     }
 
-    private void startMenu() throws IOException {
+    private static boolean isTermux() {
+        String prefix = System.getenv("PREFIX");
+
+        return (prefix != null &&
+            prefix.contains("termux")) ||
+            System.getenv("TERMUX_VERSION") != null;
+    }
+
+    private void start() throws IOException {
         while (true) {
-            terminal.resetColorAndSGR();
-            terminal.clearScreen();
+            renderer.clearScreen();
 
-            textGraphics.putString(2, 1, "Tetrue Lite");
-            textGraphics.putString(2, 3, "1. New Game");
-            textGraphics.putString(2, 4, "2. About");
-            textGraphics.putString(2, 5, "0. Exit");
-            textGraphics.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
+            renderer.putString(2, 1, "Tetrue Lite");
+            renderer.putString(2, 3, "1. New Game");
+            renderer.putString(2, 4, "2. About");
+            renderer.putString(2, 5, "0. Exit");
+            renderer.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
 
-            KeyStroke keyStroke = terminal.readInput();
+            renderer.flush();
 
-            if (keyStroke.getKeyType() != KeyType.Character) {
+            Key key = input.readInput();
+
+            if (!key.hasCharacter()) {
+                if (key.equals(Key.ESCAPE)) {
+                    break;
+                }
+
                 continue;
             }
 
-            char input = keyStroke.getCharacter();
-
-            if (input == '1') {
+            if (key.matches('1')) {
                 GridData gridData = new GridData();
                 GameManager gameManager = new GameManager(gridData);
-                Renderer renderer = new Renderer(textGraphics, gridData,gameManager);
+                GameRenderer gameRenderer = new GameRenderer(renderer, gridData, gameManager);
 
                 GameLoop gameLoop = new GameLoop(
-                    terminal, renderer, gameManager
+                    renderer, input, gameRenderer, gameManager
                 );
 
                 gameLoop.run();
             }
-            else if (input == '2') {
-                terminal.resetColorAndSGR();
-                terminal.clearScreen();
+            else if (key.matches('2')) {
+                renderer.clearScreen();
 
-                textGraphics.putString(2, 1, "About");
-                textGraphics.putString(2, 3, "Simple Tetrue clone by TEIC.");
-                textGraphics.putString(2, 5, "Press any key to continue...");
-                terminal.readInput();
+                renderer.putString(2, 1, "About");
+                renderer.putString(2, 3, "Simple Tetrue clone by TEIC.");
+                renderer.putString(2, 5, "Press any key to continue...");
+                renderer.flush();
 
+                input.readInput();
             }
-            else if (input == '0') {
+            else if (key.matches('0')) {
                 break;
             }
         }
+
+        renderer.clearScreen();
+        renderer.flush();
     }
 }
