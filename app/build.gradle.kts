@@ -25,7 +25,7 @@ dependencies {
     implementation(libs.guava)
 
     // Rendering Pipeline
-    implementation("io.github.bfur64:tetrue-terminal:1.2.0")
+    implementation("io.github.bfur64:tetrue-terminal:1.2.2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
