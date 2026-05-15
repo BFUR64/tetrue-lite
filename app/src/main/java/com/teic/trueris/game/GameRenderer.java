@@ -1,12 +1,11 @@
 package com.teic.trueris.game;
 
-import com.googlecode.lanterna.Symbols;
 import com.teic.trueris.Config;
-import com.teic.trueris.display.Renderer;
 import com.teic.trueris.game.block.BlockRegistry.BlockTemplate;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
+import io.github.bfur64.terminal.Terminal;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class GameRenderer {
 
     private final int BORDER_SIZE = 1;
 
-    private final Renderer renderer;
+    private final Terminal terminal;
     private final GridData gridData;
     private final GameState gameState;
 
@@ -24,11 +23,11 @@ public class GameRenderer {
     private RenderCell[][] currentBuffer;
 
     public GameRenderer(
-        Renderer renderer,
+        Terminal terminal,
         GridData gridData,
         GameState gameState
     ) {
-        this.renderer = renderer;
+        this.terminal = terminal;
         this.gridData = gridData;
         this.gameState = gameState;
 
@@ -58,7 +57,7 @@ public class GameRenderer {
             }
         }
 
-        renderer.flush();
+        terminal.flush();
 
         previousBuffer = currentBuffer;
         currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
@@ -84,7 +83,7 @@ public class GameRenderer {
                     row == 0 || row == GAME_HEIGHT - 1 ||
                     col == 0 || col == GAME_WIDTH - 1
                 ) {
-                    currentBuffer[row][col] = new RenderCell(Symbols.BLOCK_SOLID, Color.GREY);
+                    currentBuffer[row][col] = new RenderCell('█', Color.GREY);
                 }
             }
         }
@@ -95,17 +94,17 @@ public class GameRenderer {
             for (int col = 0; col < Config.GRID_WIDTH; col++) {
                 Cell cell = gridData.getSolidCell(row + Config.SPAWN_BUFFER, col);
                 if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell(Symbols.BLOCK_SOLID, cell.color);
+                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('█', cell.color);
                 }
 
                 cell = gridData.getGhostCell(row + Config.SPAWN_BUFFER, col);
                 if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell(Symbols.BLOCK_SPARSE, cell.color);
+                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('░', cell.color);
                 }
 
                 cell = gridData.getActiveCell(row + Config.SPAWN_BUFFER, col);
                 if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell(Symbols.BLOCK_SOLID, cell.color);
+                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('█', cell.color);
                 }
             }
         }
@@ -149,7 +148,7 @@ public class GameRenderer {
                     continue;
                 }
 
-                currentBuffer[row + rowStart][col + colStart] = new RenderCell(Symbols.BLOCK_SOLID, cell.color);
+                currentBuffer[row + rowStart][col + colStart] = new RenderCell('█', cell.color);
             }
         }
     }
@@ -172,19 +171,19 @@ public class GameRenderer {
     private void draw(int col, int row, RenderCell cell) {
         int[] textColor = getTextColor(cell.color);
 
-        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
+        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 
 		String out = cell.isEmpty ? " " : "" + cell.symbol;
 
-		renderer.putString(col * 2, row, out);
+		terminal.putString(col * 2, row, out);
 
 		if (cell.isEmpty || !cell.isCharacter) {
-			renderer.putString(col * 2 + 1, row, out);
+			terminal.putString(col * 2 + 1, row, out);
 		}
 
         textColor = getTextColor(Color.WHITE);
 
-        renderer.setForegroundColor(textColor[0], textColor[1], textColor[2]);
+        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
 	}
 
     private static class RenderCell {

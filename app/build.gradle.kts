@@ -25,8 +25,7 @@ dependencies {
     implementation(libs.guava)
 
     // Rendering Pipeline
-    implementation("com.googlecode.lanterna:lanterna:3.1.3")
-    implementation("org.jline:jline:3.30.13")
+    implementation("io.github.bfur64:tetrue-terminal:1.0.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
