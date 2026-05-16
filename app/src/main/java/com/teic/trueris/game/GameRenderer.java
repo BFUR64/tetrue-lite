@@ -42,9 +42,15 @@ public class GameRenderer {
         writeBorder();
         writeBlocks();
         writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
+        writeString(Config.GRID_WIDTH + 3, 3, "Difficulty: " + calculateDifficulty() + "x");
         writeBlockQueue();
 
         updateScreen();
+    }
+
+    private double calculateDifficulty() {
+        // Assume 500_000_000 is 0.5 Seconds and is 1x
+        return Math.ceil((double) 500_000_000 / gameState.getGravityThreshold() * 100) / 100;
     }
 
     private void updateScreen() {
@@ -122,7 +128,7 @@ public class GameRenderer {
     private void writeBlockQueue() {
         List<BlockTemplate> blocks = gameState.viewBlockQueue();
 
-        int rowPointer = 3;
+        int rowPointer = 6;
         int counter = 0;
 
         for (BlockTemplate block : blocks) {

@@ -27,6 +27,8 @@ public class GameManager implements GameState {
 
     private boolean gameOver;
 
+    private long gravityThreshold = 500_000_000; // 0.5 Seconds
+
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
         this.gridManager = new GridManager(gridData);
@@ -49,7 +51,6 @@ public class GameManager implements GameState {
 
             generateActiveBlock();
             generateGhostBlock();
-
 
             return;
         }
@@ -124,6 +125,7 @@ public class GameManager implements GameState {
     // =====================
     public void update(long delta) {
         updateBlockGrounded();
+        updateGravityThreshold();
         updateGravity(delta);
         updateLockGrace(delta);
 
@@ -138,6 +140,13 @@ public class GameManager implements GameState {
         blockGrounded = false;
     }
 
+    private void updateGravityThreshold() {
+        if (gravityThreshold > 100_000_000 && scoreTracker.hasLineCleared()) {
+            scoreTracker.setLineCleared(false);
+            gravityThreshold -= 20_000_000; // 0.02 Seconds
+        }
+    }
+
     private void updateGravity(long delta) {
         if (blockGrounded) {
             gravityTimer = 0;
@@ -145,8 +154,6 @@ public class GameManager implements GameState {
         }
 
         gravityTimer += delta;
-
-        long gravityThreshold = 500_000_000; // 0.5 Seconds
 
         if (gravityTimer >= gravityThreshold) {
             gravityTimer -= gravityThreshold;
@@ -210,5 +217,10 @@ public class GameManager implements GameState {
     @Override
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    @Override
+    public long getGravityThreshold() {
+        return gravityThreshold;
     }
 }

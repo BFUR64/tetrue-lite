@@ -8,4 +8,5 @@ public interface GameState {
     List<BlockRegistry.BlockTemplate> viewBlockQueue();
     int getScore();
     boolean isGameOver();
+    long getGravityThreshold();
 }
