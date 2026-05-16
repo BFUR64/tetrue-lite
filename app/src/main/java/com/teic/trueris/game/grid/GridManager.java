@@ -12,7 +12,7 @@ public class GridManager {
         this.gridData = gridData;
     }
 
-    public void writeGrid(GridType gridType, BlockData blockData) {
+    public void writeGrid(BlockData blockData) {
         Cell[][] block = blockData.getRotatedBlockCopy();
 
         int blockRow = blockData.blockRow();
@@ -28,29 +28,10 @@ public class GridManager {
                     continue;
                 }
 
-                switch (gridType) {
-                    case SOLID -> gridData.setSolidCell(cell, row + blockRow, col + blockCol);
-                    case ACTIVE -> gridData.setActiveCell(cell, row + blockRow, col + blockCol);
-                    case GHOST -> gridData.setGhostCell(cell, row + blockRow, col + blockCol);
+                gridData.setCell(cell, row + blockRow, col + blockCol);
                 }
             }
         }
-    }
-
-    public void eraseGrid(GridType gridType) {
-        int gridRow = Config.GRID_HEIGHT + Config.SPAWN_BUFFER;
-        int gridCol = Config.GRID_WIDTH;
-
-        for (int row = 0; row < gridRow; row++) {
-            for (int col = 0; col < gridCol; col++) {
-                switch (gridType) {
-                    case SOLID -> gridData.setSolidCell(CellRegistry.EMPTY, row, col);
-                    case ACTIVE -> gridData.setActiveCell(CellRegistry.EMPTY, row, col);
-                    case GHOST -> gridData.setGhostCell(CellRegistry.EMPTY, row, col);
-                }
-            }
-        }
-    }
 
     public boolean[] clearFilledRows() {
         boolean[] filledRows = returnFilledRows();
@@ -79,7 +60,7 @@ public class GridManager {
         for (int row = 0; row < totalGridRow; row++) {
             boolean isEmpty = false;
             for (int col = 0; col < Config.GRID_WIDTH; col++) {
-                Cell cell = gridData.getSolidCell(row, col);
+                Cell cell = gridData.getCell(row, col);
 
                 if (!cell.isEmpty()) continue;
 
@@ -98,15 +79,15 @@ public class GridManager {
     private void shiftSolidGridRowFrom(int rowStart) {
         for (int row = rowStart; row > 0; row--) {
             for (int col = 0; col < Config.GRID_WIDTH; col++) {
-                Cell cell = gridData.getSolidCell(row - 1, col);
-                gridData.setSolidCell(cell, row, col);
+                Cell cell = gridData.getCell(row - 1, col);
+                gridData.setCell(cell, row, col);
             }
         }
     }
 
     private void clearFirstRow() {
         for (int col = 0; col < Config.GRID_WIDTH; col++) {
-            gridData.setSolidCell(CellRegistry.EMPTY, 0, col);
+            gridData.setCell(CellRegistry.EMPTY, 0, col);
         }
     }
 }

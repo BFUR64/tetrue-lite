@@ -1,6 +1,7 @@
 package com.teic.trueris.game;
 
 import com.teic.trueris.Config;
+import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.block.BlockRegistry.BlockTemplate;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
@@ -98,19 +99,32 @@ public class GameRenderer {
     private void writeBlocks() {
         for (int row = 0; row < Config.GRID_HEIGHT; row++) {
             for (int col = 0; col < Config.GRID_WIDTH; col++) {
-                Cell cell = gridData.getSolidCell(row + Config.SPAWN_BUFFER, col);
+                Cell cell = gridData.getCell(row + Config.SPAWN_BUFFER, col);
                 if (!cell.isEmpty()) {
                     currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('█', cell.color);
                 }
+            }
+        }
 
-                cell = gridData.getGhostCell(row + Config.SPAWN_BUFFER, col);
-                if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('░', cell.color);
-                }
+        writeBlock(gameState.getGhostBlockCopy(), '░');
+        writeBlock(gameState.getActiveBlockCopy(), '█');
+    }
 
-                cell = gridData.getActiveCell(row + Config.SPAWN_BUFFER, col);
-                if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('█', cell.color);
+    private void writeBlock(BlockData blockData, char out) {
+        Cell[][] block = blockData.getRotatedBlockCopy();
+
+        for (int row = 0; row < blockData.blockSize(); row++) {
+            for (int col = 0; col < blockData.blockSize(); col++) {
+                Cell cell = block[row][col];
+
+                int rowOffset = row + blockData.blockRow() + BORDER_SIZE - Config.SPAWN_BUFFER;
+                int colOffset = col + blockData.blockCol() + BORDER_SIZE;
+
+                if (rowOffset >= BORDER_SIZE && colOffset >= BORDER_SIZE &&
+                    rowOffset < BORDER_SIZE + Config.GRID_HEIGHT &&
+                    colOffset < BORDER_SIZE + Config.GRID_WIDTH && !cell.isEmpty()
+                ) {
+                    currentBuffer[rowOffset][colOffset] = new RenderCell(out, cell.color);
                 }
             }
         }
