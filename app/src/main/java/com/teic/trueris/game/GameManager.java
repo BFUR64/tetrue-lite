@@ -111,7 +111,6 @@ public class GameManager implements GameState {
         updateGravityThreshold();
         updateGravity(delta);
         updateLockGrace(delta);
-
     }
 
     private void updateBlockGrounded() {
