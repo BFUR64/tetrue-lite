@@ -65,7 +65,7 @@ sh gradlew build
 java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
 ```
 
-## Architecture Overview
+## Architecture Overview (OUTDATED SINCE v2.0.4)
 
 ### Core Loop
 <img width="2739" height="1659" alt="Core Loop" src="https://github.com/user-attachments/assets/cf28050a-2e21-4941-8370-798e4852de55" />
