@@ -9,17 +9,18 @@ import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class App {
     private final Terminal terminal;
 
     public static void main(String[] args) {
-        try (Terminal terminal = Terminal.build()) {
+        try (Terminal terminal = Terminal.auto()) {
             App app = new App(terminal);
             app.start();
         }
         catch (IOException error) {
-            System.out.println("Failed!");
+            System.out.println("Failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
         }
     }
 
