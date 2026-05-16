@@ -75,7 +75,7 @@ java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
-  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) (Personal Dual Engine Library UI for Termux and Everything Else)
+  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 1.2.3 (Personal Dual Engine Library UI for Termux and Everything Else)
 - Build Tools: Gradle 9.3.1
 
 ## Development Environment
