@@ -155,7 +155,7 @@ public class GameManager implements GameState {
 
         gravityTimer += delta;
 
-        if (gravityTimer >= gravityThreshold) {
+        while (gravityTimer >= gravityThreshold) {
             gravityTimer -= gravityThreshold;
             
             moveBlockDown();
@@ -172,7 +172,7 @@ public class GameManager implements GameState {
 
         long lockThreshold = 500_000_000; // 0.5 Seconds
 
-        if (lockTimer >= lockThreshold) {
+        while (lockTimer >= lockThreshold) {
             lockTimer -= lockThreshold;
 
             moveBlockDown();
