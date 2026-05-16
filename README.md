@@ -1,6 +1,6 @@
 <h1 align="center">Tetrue Lite</h1>
 
-<h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Lanterna UI library</h3>
+<h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal API</h3>
 
 <div align="center">
   <img width="300" alt="Screenshot of Tetrue Gameplay" src="https://github.com/user-attachments/assets/1031cdde-156b-4a25-b269-d328dd1aa010"/>
@@ -21,6 +21,9 @@ https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
 
 ## Limitations
 - No game / score tracking after the game is closed
+- Inaccurate block rotation (Not the same as modern Tetris)
+- Inaccurate scoring / gravity
+- No gravity speedup when scoring
 - No configurable settings
 - Minimal main menu only, featuring `New Game`, `About`, and `Exit`
 - No sound
