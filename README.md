@@ -3,11 +3,11 @@
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal API</h3>
 
 <div align="center">
-  <img width="300" alt="Screenshot of Tetrue Gameplay" src="https://github.com/user-attachments/assets/1031cdde-156b-4a25-b269-d328dd1aa010"/>
+  <img width="726" height="523" alt="image" src="https://github.com/user-attachments/assets/f4197ad3-7d01-472a-9ae7-a3ff4feb6d16" />
 </div>
 
 ## Demo 
-https://github.com/user-attachments/assets/381943ea-5c4d-4108-a197-6eff122c388b
+https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 
 ## Features
 - Falling Blocks - Standard falling tetrominoes
