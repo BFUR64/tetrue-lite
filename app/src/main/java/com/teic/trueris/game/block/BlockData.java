@@ -28,27 +28,27 @@ public class BlockData {
     // =====================
     // Movement
     // =====================
-    public void moveDown() {
+    void moveDown() {
         prevBlockRow = blockRow;
         blockRow++;
     }
 
-    public void moveLeft() {
+    void moveLeft() {
         prevBlockCol = blockCol;
         blockCol--;
     }
 
-    public void moveRight() {
+    void moveRight() {
         prevBlockCol = blockCol;
         blockCol++;
     }
 
-    public void revertRowPosition() {
+    void revertRowPosition() {
         blockRow = prevBlockRow;
         prevBlockRow = 0;
     }
 
-    public void revertColPosition() {
+    void revertColPosition() {
         blockCol = prevBlockCol;
         prevBlockCol = 0;
     }
@@ -56,7 +56,7 @@ public class BlockData {
     // =====================
     // Rotation
     // =====================
-    public void rotateLeft() {
+    void rotateLeft() {
         Direction[] directions = Direction.values();
 
         int rotationIndex = (
@@ -68,7 +68,7 @@ public class BlockData {
         blockRotation = directions[rotationIndex];
     }
 
-    public void rotateRight() {
+    void rotateRight() {
         Direction[] directions = Direction.values();
 
         int rotationIndex = (
@@ -80,7 +80,7 @@ public class BlockData {
         blockRotation = directions[rotationIndex];
     }
 
-    public void revertBlockRotation() {
+    void revertBlockRotation() {
         blockRotation = prevBlockRotation;
         prevBlockRotation = Direction.UP;
     }

@@ -48,6 +48,6 @@ public class Collision {
     }
 
     private boolean isColliding(int gridRow, int gridCol) {
-        return !gridData.getSolidCell(gridRow, gridCol).isEmpty();
+        return !gridData.getCell(gridRow, gridCol).isEmpty();
     }
 }

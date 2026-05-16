@@ -35,7 +35,7 @@ public class App {
     private void newStart() {
         List<Item> items = List.of(
             new BreakItem(),
-            new TextItem("<< Tetrue Lite v2.0.3 >>"),
+            new TextItem("<< Tetrue Lite " + Config.GAME_VERSION + " >>"),
             new BreakItem(),
             new ActionItem("[ New Game ]", this::runNewGame),
             new ActionItem("[ About ]", this::runAbout),

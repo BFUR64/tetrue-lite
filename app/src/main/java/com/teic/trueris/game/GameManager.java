@@ -8,7 +8,6 @@ import com.teic.trueris.game.block.BlockQueue;
 import com.teic.trueris.game.block.BlockRegistry;
 import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.grid.GridManager;
-import com.teic.trueris.game.grid.GridType;
 
 public class GameManager implements GameState {
     private final BlockManager blockManager;
@@ -17,6 +16,7 @@ public class GameManager implements GameState {
     private final ScoreTracker scoreTracker;
 
     private BlockData activeBlock;
+    private BlockData ghostBlock;
 
     // Game Variables
     private boolean blockGrounded;
@@ -26,6 +26,8 @@ public class GameManager implements GameState {
     private long lockTimer;
 
     private boolean gameOver;
+
+    private long gravityThreshold = 500_000_000; // 0.5 Seconds
 
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
@@ -41,20 +43,15 @@ public class GameManager implements GameState {
     // Movement
     // =====================
     public void moveBlockDown() {
-        gridManager.eraseGrid(GridType.ACTIVE);
-
         if (!blockManager.moveBlockDown(activeBlock)) {
-            gridManager.writeGrid(GridType.SOLID, activeBlock);
+            gridManager.writeGrid(activeBlock);
             scoreTracker.updateScore(gridManager.clearFilledRows());
 
             generateActiveBlock();
             generateGhostBlock();
 
-
             return;
         }
-
-        gridManager.writeGrid(GridType.ACTIVE, activeBlock);
         
         gravityTimer = 0;
     }
@@ -62,7 +59,7 @@ public class GameManager implements GameState {
     public void dropBlock() {
         blockManager.dropBlock(activeBlock);
 
-        gridManager.writeGrid(GridType.SOLID, activeBlock);
+        gridManager.writeGrid(activeBlock);
         scoreTracker.updateScore(gridManager.clearFilledRows());
 
         generateActiveBlock();
@@ -73,9 +70,6 @@ public class GameManager implements GameState {
 
     public void moveBlockLeft() {
         if (blockManager.moveBlockLeft(activeBlock)) {
-            gridManager.eraseGrid(GridType.ACTIVE);
-            gridManager.writeGrid(GridType.ACTIVE, activeBlock);
-
             generateGhostBlock();
 
             lockTimer = 0;
@@ -84,9 +78,6 @@ public class GameManager implements GameState {
 
     public void moveBlockRight() {
         if (blockManager.moveBlockRight(activeBlock)) {
-            gridManager.eraseGrid(GridType.ACTIVE);
-            gridManager.writeGrid(GridType.ACTIVE, activeBlock);
-
             generateGhostBlock();
 
             lockTimer = 0;
@@ -98,9 +89,6 @@ public class GameManager implements GameState {
     // =====================
     public void rotateBlockLeft() {
         if (blockManager.rotateBlockLeft(activeBlock)) {
-            gridManager.eraseGrid(GridType.ACTIVE);
-            gridManager.writeGrid(GridType.ACTIVE, activeBlock);
-
             generateGhostBlock();
 
             lockTimer = 0;
@@ -109,24 +97,20 @@ public class GameManager implements GameState {
 
     public void rotateBlockRight() {
         if (blockManager.rotateBlockRight(activeBlock)) {
-            gridManager.eraseGrid(GridType.ACTIVE);
-            gridManager.writeGrid(GridType.ACTIVE, activeBlock);
-
             generateGhostBlock();
 
             lockTimer = 0;
         }
     }
 
-
     // =====================
     // Delta
     // =====================
     public void update(long delta) {
         updateBlockGrounded();
+        updateGravityThreshold();
         updateGravity(delta);
         updateLockGrace(delta);
-
     }
 
     private void updateBlockGrounded() {
@@ -138,6 +122,14 @@ public class GameManager implements GameState {
         blockGrounded = false;
     }
 
+    private void updateGravityThreshold() {
+        // TODO Replace `hasLineCleared()` with a better mode
+        if (gravityThreshold > 100_000_000 && scoreTracker.hasLineCleared()) {
+            scoreTracker.setLineCleared(false);
+            gravityThreshold -= 20_000_000; // 0.02 Seconds
+        }
+    }
+
     private void updateGravity(long delta) {
         if (blockGrounded) {
             gravityTimer = 0;
@@ -146,9 +138,7 @@ public class GameManager implements GameState {
 
         gravityTimer += delta;
 
-        long gravityThreshold = 500_000_000; // 0.5 Seconds
-
-        if (gravityTimer >= gravityThreshold) {
+        while (gravityTimer >= gravityThreshold) {
             gravityTimer -= gravityThreshold;
             
             moveBlockDown();
@@ -165,7 +155,7 @@ public class GameManager implements GameState {
 
         long lockThreshold = 500_000_000; // 0.5 Seconds
 
-        if (lockTimer >= lockThreshold) {
+        while (lockTimer >= lockThreshold) {
             lockTimer -= lockThreshold;
 
             moveBlockDown();
@@ -177,8 +167,6 @@ public class GameManager implements GameState {
     // =====================
     private void generateActiveBlock() {
         activeBlock = new BlockData(blockQueue.getRandomBlock());
-        gridManager.eraseGrid(GridType.ACTIVE);
-        gridManager.writeGrid(GridType.ACTIVE, activeBlock);
 
         if (!blockManager.isPositionValid(activeBlock)) {
             gameOver = true;
@@ -186,12 +174,9 @@ public class GameManager implements GameState {
     }
 
     private void generateGhostBlock() {
-        BlockData ghostBlock = activeBlock.copyBlockData();
+        ghostBlock = activeBlock.copyBlockData();
 
         blockManager.dropBlock(ghostBlock);
-
-        gridManager.eraseGrid(GridType.GHOST);
-        gridManager.writeGrid(GridType.GHOST, ghostBlock);
     }
 
     // =====================
@@ -210,5 +195,20 @@ public class GameManager implements GameState {
     @Override
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    @Override
+    public long getGravityThreshold() {
+        return gravityThreshold;
+    }
+
+    @Override
+    public BlockData getActiveBlockCopy() {
+        return activeBlock.copyBlockData();
+    }
+
+    @Override
+    public BlockData getGhostBlockCopy() {
+        return ghostBlock.copyBlockData();
     }
 }
