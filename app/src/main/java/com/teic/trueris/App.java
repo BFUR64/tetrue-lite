@@ -4,12 +4,16 @@ import com.teic.trueris.game.GameLoop;
 import com.teic.trueris.game.GameManager;
 import com.teic.trueris.game.GameRenderer;
 import com.teic.trueris.game.grid.GridData;
+import io.github.bfur64.menu.MenuManager;
+import io.github.bfur64.menu.item.ActionItem;
+import io.github.bfur64.menu.item.BreakItem;
+import io.github.bfur64.menu.item.Item;
+import io.github.bfur64.menu.item.TextItem;
 import io.github.bfur64.terminal.Terminal;
-import io.github.bfur64.terminal.input.KeyStroke;
-import io.github.bfur64.terminal.input.KeyType;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class App {
     private final Terminal terminal;
@@ -17,7 +21,7 @@ public class App {
     public static void main(String[] args) {
         try (Terminal terminal = Terminal.auto()) {
             App app = new App(terminal);
-            app.start();
+            app.newStart();
         }
         catch (IOException error) {
             System.out.println("Failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
@@ -28,53 +32,49 @@ public class App {
         this.terminal = terminal;
     }
 
-    private void start() throws IOException {
-        while (true) {
-            terminal.clearScreen();
+    private void newStart() {
+        List<Item> items = List.of(
+            new BreakItem(),
+            new TextItem("<< Tetrue Lite v2.0.3 >>"),
+            new BreakItem(),
+            new ActionItem("[ New Game ]", this::runNewGame),
+            new ActionItem("[ About ]", this::runAbout),
+            new ActionItem("[ Exit ]", () -> {}, true),
+            new BreakItem(),
+            new TextItem("  [TIP] Use the `UP` and `DOWN` keys to move"),
+            new TextItem("  [TIP] Press `ENTER` to select an item"),
+            new TextItem("  [TIP] Press `ESC` to close the menu")
+        );
 
-            terminal.putString(2, 1, "Tetrue Lite v2.0.2");
-            terminal.putString(2, 3, "1. New Game");
-            terminal.putString(2, 4, "2. About");
-            terminal.putString(2, 5, "0. Exit");
-            terminal.putString(2, 7, "Press the keys 1, 2, 0 to navigate.");
+        MenuManager menu = new MenuManager(terminal, items);
+        menu.run();
+    }
 
-            terminal.flush();
+    private void runNewGame() {
+        GridData gridData = new GridData();
+        GameManager gameManager = new GameManager(gridData);
+        GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
 
-            KeyStroke key = terminal.readInput();
+        GameLoop gameLoop = new GameLoop(terminal, gameRenderer, gameManager);
+        gameLoop.run();
+    }
 
-            if (key.getKeyType() == KeyType.ESCAPE) {
-                break;
-            }
+    private void runAbout() {
+        List<Item> items = List.of(
+            new BreakItem(),
+            new TextItem("<< About >>"),
+            new BreakItem(),
+            new TextItem("A simple Tetrue clone made by TEIC."),
+            new BreakItem(),
+            new TextItem("Renderer: " + terminal.getTerminalInfo()),
+            new TextItem("Columns: " + terminal.getXSize() + " | Rows: " + terminal.getYSize()),
+            new BreakItem(),
+            new TextItem("Menu Manager: " + MenuManager.getVersion()),
+            new BreakItem(),
+            new ActionItem("[ Return ]", () -> {}, true)
+        );
 
-            if (key.getKeyType() != KeyType.CHARACTER) continue;
-
-            if (key.getCharacter() == '1') {
-                GridData gridData = new GridData();
-                GameManager gameManager = new GameManager(gridData);
-                GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
-
-                GameLoop gameLoop = new GameLoop(terminal, gameRenderer, gameManager);
-
-                gameLoop.run();
-            }
-            else if (key.getCharacter() == '2') {
-                terminal.clearScreen();
-
-                terminal.putString(2, 1, "About");
-                terminal.putString(2, 3, "Simple Tetrue clone by TEIC.");
-                terminal.putString(2, 5, "Renderer: " + terminal.getTerminalInfo());
-                terminal.putString(2, 6, "X: " + terminal.getXSize() + " | Y: " + terminal.getYSize());
-                terminal.putString(2, 8, "Press any key to continue...");
-                terminal.flush();
-
-                terminal.readInput();
-            }
-            else if (key.getCharacter() == '0') {
-                break;
-            }
-        }
-
-        terminal.clearScreen();
-        terminal.flush();
+        MenuManager menu = new MenuManager(terminal, items);
+        menu.run();
     }
 }

@@ -1,12 +1,16 @@
 package com.teic.trueris.game;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 
 import com.teic.trueris.Config;
+import io.github.bfur64.menu.MenuManager;
+import io.github.bfur64.menu.item.ActionItem;
+import io.github.bfur64.menu.item.BreakItem;
+import io.github.bfur64.menu.item.Item;
+import io.github.bfur64.menu.item.TextItem;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
-import io.github.bfur64.terminal.input.KeyType;
 
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
@@ -32,7 +36,7 @@ public class GameLoop {
         this.nsPerFrame = NSEC / targetFps;
     }
 
-    public void run() throws IOException {
+    public void run() {
         terminal.clearScreen();
 
         long delta = 0;
@@ -57,7 +61,7 @@ public class GameLoop {
         handleGameOver();
     }
 
-    private void update(long delta) throws IOException {
+    private void update(long delta) {
         handleGameState(terminal.pollInput());
         gameManager.update(delta);
         gameRenderer.update();
@@ -87,23 +91,17 @@ public class GameLoop {
         }
     }
 
-    private void handleGameOver() throws IOException {
-        terminal.resetColorAndStyle();
-        terminal.clearScreen();
-        
-        terminal.putString(2, 1, "Game Over!");
+    private void handleGameOver() {
+        List<Item> items = List.of(
+            new BreakItem(),
+            new TextItem("Game Over!"),
+            new BreakItem(),
+            new TextItem("Score: " + gameState.getScore()),
+            new BreakItem(),
+            new ActionItem("[ Return ] ", () -> {}, true)
+        );
 
-        terminal.putString(2, 3, "Score: " + gameState.getScore());
-
-        terminal.putString(2, 5, "Press ESC to go back to Main Menu");
-
-        terminal.flush();
-
-        while (true) {
-            KeyStroke key = terminal.readInput();
-            if (key.getKeyType() == KeyType.ESCAPE) {
-                break;
-            }
-        }
+        MenuManager menu = new MenuManager(terminal, items);
+        menu.run();
     }
 }

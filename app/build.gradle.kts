@@ -27,6 +27,9 @@ dependencies {
 
     // Rendering Pipeline
     implementation("io.github.bfur64:tetrue-terminal:1.2.3")
+
+    // Menu Manager
+    implementation("io.github.bfur64:menu-manager:0.2.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
