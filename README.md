@@ -82,6 +82,14 @@ java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
   - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.2.2 (Personal Composite-based Menu Management)
 - Build Tools: Gradle 9.3.1
 
+## Version Releasing
+MAJOR . MINOR . PATCH
+
+* MAJOR - Breaking Changes
+* Minor - Feature Releases / Without breaking the existing API
+* Patch - Bug fixes
+
+
 ## Development Environment
 Originally built on Termux Neovim on Android, because I found it more convenient than my laptop (Ability to work on the go).
 
