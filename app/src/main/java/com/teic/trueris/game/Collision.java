@@ -42,8 +42,8 @@ public class Collision {
 
     private boolean isOutOfBounds(int gridRow, int gridCol) {
         return (
-            gridRow < 0 || gridRow >= Config.GRID_HEIGHT + Config.SPAWN_BUFFER
-            || gridCol < 0 || gridCol >= Config.GRID_WIDTH
+            gridRow < 0 || gridRow >= Config.getGridHeight() + Config.SPAWN_BUFFER
+            || gridCol < 0 || gridCol >= Config.getGridWidth()
         );
     }
 

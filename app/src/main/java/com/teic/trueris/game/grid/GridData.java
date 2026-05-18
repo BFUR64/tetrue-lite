@@ -8,8 +8,8 @@ public class GridData {
     private final Cell[][] grid;
 
     public GridData() {
-        int gridRow = Config.GRID_HEIGHT + Config.SPAWN_BUFFER;
-        int gridCol = Config.GRID_WIDTH;
+        int gridRow = Config.getGridHeight() + Config.SPAWN_BUFFER;
+        int gridCol = Config.getGridWidth();
 
         grid = new Cell[gridRow][gridCol];
         for (int row = 0; row < gridRow; row++) {

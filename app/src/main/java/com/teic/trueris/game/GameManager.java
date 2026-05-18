@@ -178,7 +178,7 @@ public class GameManager implements GameState {
         activeBlock = new BlockData(blockQueue.getRandomBlock());
 
         if (!blockManager.isPositionValid(activeBlock)) {
-            Config.setGravity(Config.GRAVITY_DEF);
+            Config.setGravity(Config.GravityDef);
             gameOver = true;
         }
     }
