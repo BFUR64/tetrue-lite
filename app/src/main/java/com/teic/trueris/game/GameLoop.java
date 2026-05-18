@@ -11,6 +11,7 @@ import io.github.bfur64.menu.item.Item;
 import io.github.bfur64.menu.item.StaticText;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
+import io.github.bfur64.terminal.input.KeyType;
 
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
@@ -76,18 +77,28 @@ public class GameLoop {
             return;
         }
 
-        switch (keyStroke.getKeyType()) {
-            case CHARACTER -> {
-                switch (keyStroke.getCharacter()) {
-                    case 'q' -> gameManager.rotateBlockLeft();
-                    case 'e' -> gameManager.rotateBlockRight();
-                }
-            }
-            case ESCAPE -> running = false;
-            case ARROW_UP -> gameManager.dropBlock();
-            case ARROW_DOWN -> gameManager.moveBlockDown();
-            case ARROW_LEFT -> gameManager.moveBlockLeft();
-            case ARROW_RIGHT -> gameManager.moveBlockRight();
+        if (keyStroke.getKeyType() == KeyType.ESCAPE) {
+            running = false;
+            return;
+        }
+
+        if (keyStroke.equals(Config.getHardDrop())) {
+            gameManager.dropBlock();
+        }
+        else if (keyStroke.equals(Config.getMoveDown())) {
+            gameManager.moveBlockDown();
+        }
+        else if (keyStroke.equals(Config.getMoveLeft())) {
+            gameManager.moveBlockLeft();
+        }
+        else if (keyStroke.equals(Config.getMoveRight())) {
+            gameManager.moveBlockRight();
+        }
+        else if (keyStroke.equals(Config.getRotateLeft())) {
+            gameManager.rotateBlockLeft();
+        }
+        else if (keyStroke.equals(Config.getRotateRight())) {
+            gameManager.rotateBlockRight();
         }
     }
 
