@@ -60,9 +60,14 @@ cd tetrue-lite
 sh gradlew build
 ```
 
-### Run the generated JAR
+### Run the generated JAR (Java 22 and later)
 ```bash
 java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
+```
+
+## Run the generated JAR (Java 21)
+```bash
+java -jar app/build/libs/app-all.jar
 ```
 
 ## Architecture Overview (OUTDATED SINCE v2.0.4)
