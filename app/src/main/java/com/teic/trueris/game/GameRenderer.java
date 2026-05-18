@@ -154,7 +154,7 @@ public class GameRenderer {
                 int colOffset = col + colStart;
 
                 if (!cell.isEmpty() && isWithinBuffer(rowOffset, colOffset)) {
-                    currentBuffer[row + rowStart][col + colStart] = new RenderCell('█', cell.color);
+                    currentBuffer[row + rowStart][col + colStart] = new RenderCell(SOLID, cell.color);
                 }
             }
         }
