@@ -50,8 +50,8 @@ public class GameRenderer {
     }
 
     private double calculateDifficulty() {
-        // Assume 500_000_000 is 0.5 Seconds and is 1x
-        return Math.ceil((double) 500_000_000 / gameState.getGravityThreshold() * 100) / 100;
+        // Assume 500 is 500 ms
+        return Math.ceil((double) 500 / gameState.getGravity().toMillis() * 100) / 100;
     }
 
     private void updateScreen() {

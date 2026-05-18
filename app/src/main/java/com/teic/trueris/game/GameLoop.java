@@ -6,9 +6,9 @@ import java.util.concurrent.locks.LockSupport;
 import com.teic.trueris.Config;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
-import io.github.bfur64.menu.item.BreakItem;
+import io.github.bfur64.menu.item.LineBreak;
 import io.github.bfur64.menu.item.Item;
-import io.github.bfur64.menu.item.TextItem;
+import io.github.bfur64.menu.item.StaticText;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
 
@@ -93,12 +93,12 @@ public class GameLoop {
 
     private void handleGameOver() {
         List<Item> items = List.of(
-            new BreakItem(),
-            new TextItem("Game Over!"),
-            new BreakItem(),
-            new TextItem("Score: " + gameState.getScore()),
-            new BreakItem(),
-            new ActionItem("[ Return ] ", () -> {}, true)
+            new LineBreak(),
+            new StaticText("Game Over!"),
+            new LineBreak(),
+            new StaticText("Score: " + gameState.getScore()),
+            new LineBreak(),
+            new ActionItem("[ Return ] ", true)
         );
 
         MenuManager menu = new MenuManager(terminal, items);

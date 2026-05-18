@@ -1,7 +1,9 @@
 package com.teic.trueris.game;
 
+import java.time.Duration;
 import java.util.List;
 
+import com.teic.trueris.Config;
 import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.block.BlockManager;
 import com.teic.trueris.game.block.BlockQueue;
@@ -27,7 +29,7 @@ public class GameManager implements GameState {
 
     private boolean gameOver;
 
-    private long gravityThreshold = 500_000_000; // 0.5 Seconds
+//    private long gravityThreshold = 500_000_000; // 0.5 Seconds
 
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
@@ -124,9 +126,14 @@ public class GameManager implements GameState {
 
     private void updateGravityThreshold() {
         // TODO Replace `hasLineCleared()` with a better mode
-        if (gravityThreshold > 100_000_000 && scoreTracker.hasLineCleared()) {
+        long gravity = Config.getGravity().toNanos();
+        long gravityMin = Config.GRAVITY_MIN.toNanos();
+
+        long gravityStep = Duration.ofMillis(20).toNanos();
+
+        if (gravity >= (gravityMin + gravityStep) && scoreTracker.hasLineCleared()) {
             scoreTracker.setLineCleared(false);
-            gravityThreshold -= 20_000_000; // 0.02 Seconds
+            Config.setGravity(Duration.ofNanos(gravity - gravityStep));
         }
     }
 
@@ -138,8 +145,10 @@ public class GameManager implements GameState {
 
         gravityTimer += delta;
 
-        while (gravityTimer >= gravityThreshold) {
-            gravityTimer -= gravityThreshold;
+        long gravity = Config.getGravity().toNanos();
+
+        while (gravityTimer >= gravity) {
+            gravityTimer -= gravity;
             
             moveBlockDown();
         }
@@ -169,6 +178,7 @@ public class GameManager implements GameState {
         activeBlock = new BlockData(blockQueue.getRandomBlock());
 
         if (!blockManager.isPositionValid(activeBlock)) {
+            Config.setGravity(Config.GRAVITY_DEF);
             gameOver = true;
         }
     }
@@ -198,8 +208,8 @@ public class GameManager implements GameState {
     }
 
     @Override
-    public long getGravityThreshold() {
-        return gravityThreshold;
+    public Duration getGravity() {
+        return Config.getGravity();
     }
 
     @Override
