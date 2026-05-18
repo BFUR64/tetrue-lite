@@ -54,12 +54,12 @@ public class GridManager {
     }
 
     private boolean[] returnFilledRows() {
-        int totalGridRow = Config.GRID_HEIGHT + Config.SPAWN_BUFFER;
+        int totalGridRow = Config.getGridHeight() + Config.SPAWN_BUFFER;
         boolean[] filledRows = new boolean[totalGridRow];
 
         for (int row = 0; row < totalGridRow; row++) {
             boolean isEmpty = false;
-            for (int col = 0; col < Config.GRID_WIDTH; col++) {
+            for (int col = 0; col < Config.getGridWidth(); col++) {
                 Cell cell = gridData.getCell(row, col);
 
                 if (!cell.isEmpty()) continue;
@@ -78,7 +78,7 @@ public class GridManager {
 
     private void shiftSolidGridRowFrom(int rowStart) {
         for (int row = rowStart; row > 0; row--) {
-            for (int col = 0; col < Config.GRID_WIDTH; col++) {
+            for (int col = 0; col < Config.getGridWidth(); col++) {
                 Cell cell = gridData.getCell(row - 1, col);
                 gridData.setCell(cell, row, col);
             }
@@ -86,7 +86,7 @@ public class GridManager {
     }
 
     private void clearFirstRow() {
-        for (int col = 0; col < Config.GRID_WIDTH; col++) {
+        for (int col = 0; col < Config.getGridWidth(); col++) {
             gridData.setCell(CellRegistry.EMPTY, 0, col);
         }
     }

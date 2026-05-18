@@ -96,7 +96,10 @@ public class App {
                 new LineBreak(),
                 new StaticText("| Game Options |"),
                 new LineBreak(),
-                new EditableItem<>("Gravity", Config.getGravityProperty(), "ms"),
+                new EditableItem<>("Gravity", ": ", Config.getGravityProperty(), "ms"),
+                new LineBreak(),
+                new EditableItem<>("Grid Height", ": ", Config.getGridHeightProperty(), "Cells"),
+                new EditableItem<>("Grid Width", ": ", Config.getGridWidthProperty(), "Cells"),
                 new LineBreak(),
                 new ActionItem("[ Save & Return ]", Config::saveState, true)
         ));

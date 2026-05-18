@@ -2,7 +2,7 @@ package com.teic.trueris.game;
 
 import com.teic.trueris.Config;
 import com.teic.trueris.game.block.BlockData;
-import com.teic.trueris.game.block.BlockRegistry.BlockTemplate;
+import com.teic.trueris.game.block.BlockRegistry;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
@@ -11,10 +11,14 @@ import io.github.bfur64.terminal.Terminal;
 import java.util.List;
 
 public class GameRenderer {
-    private final int BUFFER_HEIGHT = 22;
-    private final int BUFFER_WIDTH = 30;
+    private static final char EMPTY = ' ';
+    private static final char SOLID = '█';
+    private static final char GHOST = '░';
 
-    private final int BORDER_SIZE = 1;
+    private final int BUFFER_HEIGHT;
+    private final int BUFFER_WIDTH;
+    private final int BORDER_THICKNESS = 1;
+    private final int BORDER_OFFSET = 2;
 
     private final Terminal terminal;
     private final GridData gridData;
@@ -23,39 +27,35 @@ public class GameRenderer {
     private RenderCell[][] previousBuffer;
     private RenderCell[][] currentBuffer;
 
-    public GameRenderer(
-        Terminal terminal,
-        GridData gridData,
-        GameState gameState
-    ) {
+    public GameRenderer(Terminal terminal, GridData gridData, GameState gameState) {
         this.terminal = terminal;
         this.gridData = gridData;
         this.gameState = gameState;
 
-        this.previousBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
-        this.currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
+        BUFFER_HEIGHT = terminal.getYSize();
+        BUFFER_WIDTH = terminal.getXSize();
 
+        previousBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
+        currentBuffer = new RenderCell[BUFFER_HEIGHT][BUFFER_WIDTH];
         clearBuffer(previousBuffer);
         clearBuffer(currentBuffer);
     }
 
     public void update() {
         writeBorder();
-        writeBlocks();
-        writeString(Config.GRID_WIDTH + 3, 1, "Score: " + gameState.getScore());
-        writeString(Config.GRID_WIDTH + 3, 3, "Difficulty: " + calculateDifficulty() + "x");
-        writeBlockQueue();
+        writeGameCells();
 
-        updateScreen();
+        int leftPadding = Config.getGridWidth() + BORDER_OFFSET + 1;
+        writeString(leftPadding, 1, "Score: " + gameState.getScore());
+        writeString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
+
+        writeQueue(5);
+
+        updateBufferAndPrint();
     }
 
-    private double calculateDifficulty() {
-        // Assume 500 is 500 ms
-        return Math.ceil((double) 500 / gameState.getGravity().toMillis() * 100) / 100;
-    }
-
-    private void updateScreen() {
-        for (int row = 0; row < BUFFER_HEIGHT; row++) {
+    private void updateBufferAndPrint() {
+        for (int row = 0; row < BUFFER_HEIGHT; row++ ) {
             for (int col = 0; col < BUFFER_WIDTH; col++) {
                 if (!previousBuffer[row][col].isEquals(currentBuffer[row][col])) {
                     RenderCell cell = currentBuffer[row][col];
@@ -63,7 +63,6 @@ public class GameRenderer {
                 }
             }
         }
-
         terminal.flush();
 
         previousBuffer = currentBuffer;
@@ -71,106 +70,158 @@ public class GameRenderer {
         clearBuffer(currentBuffer);
     }
 
-    private void clearBuffer(RenderCell[][] buffer) {
-        for (int row = 0; row < BUFFER_HEIGHT; row++) {
-            for (int col = 0; col < BUFFER_WIDTH; col++) {
-                buffer[row][col] = new RenderCell('\0', Color.DEFAULT);
-                buffer[row][col].isEmpty = true;
-            }
-        }
-    }
-
+    // =====================
+    // Border
+    // =====================
     private void writeBorder() {
-        int GAME_HEIGHT = Config.GRID_HEIGHT + (BORDER_SIZE * 2);
-        int GAME_WIDTH = Config.GRID_WIDTH + (BORDER_SIZE * 2);
+        int gameHeight = Config.getGridHeight() + BORDER_OFFSET;
+        int gameWidth = Config.getGridWidth() + BORDER_OFFSET;
 
-        for (int row = 0; row < GAME_HEIGHT; row++) {
-            for (int col = 0; col < GAME_WIDTH; col++) {
-                if (
-                    row == 0 || row == GAME_HEIGHT - 1 ||
-                    col == 0 || col == GAME_WIDTH - 1
+        for (int row = 0; row < gameHeight; row++) {
+            for (int col = 0; col < gameWidth; col++) {
+                if ((row == 0 || row == gameHeight - 1 ||
+                        col == 0 || col == gameWidth - 1) && isWithinBuffer(row, col)
                 ) {
-                    currentBuffer[row][col] = new RenderCell('█', Color.GREY);
+                    currentBuffer[row][col] = new RenderCell(SOLID, Color.GREY);
                 }
             }
         }
     }
 
-    private void writeBlocks() {
-        for (int row = 0; row < Config.GRID_HEIGHT; row++) {
-            for (int col = 0; col < Config.GRID_WIDTH; col++) {
+    // =====================
+    // Game Cells
+    // =====================
+    private void writeGameCells() {
+        writeLockedCells();
+        writeQueueBlock(gameState.getGhostBlockCopy(), GHOST);
+        writeQueueBlock(gameState.getActiveBlockCopy(), SOLID);
+    }
+
+    private void writeLockedCells() {
+        for (int row = 0; row < Config.getGridHeight(); row++) {
+            for (int col = 0; col < Config.getGridWidth(); col++) {
                 Cell cell = gridData.getCell(row + Config.SPAWN_BUFFER, col);
-                if (!cell.isEmpty()) {
-                    currentBuffer[row + BORDER_SIZE][col + BORDER_SIZE] = new RenderCell('█', cell.color);
+                int rowOffset = row + BORDER_THICKNESS;
+                int colOffset = col + BORDER_THICKNESS;
+
+                if (!cell.isEmpty() && isWithinBuffer(rowOffset, colOffset)) {
+                    currentBuffer[rowOffset][colOffset] = new RenderCell(SOLID, cell.color);
                 }
             }
         }
-
-        writeBlock(gameState.getGhostBlockCopy(), '░');
-        writeBlock(gameState.getActiveBlockCopy(), '█');
     }
 
-    private void writeBlock(BlockData blockData, char out) {
-        Cell[][] block = blockData.getRotatedBlockCopy();
+    private void writeQueueBlock(BlockData blockData, char out) {
+        Cell[][] cellBlock = blockData.getRotatedBlockCopy();
 
         for (int row = 0; row < blockData.blockSize(); row++) {
             for (int col = 0; col < blockData.blockSize(); col++) {
-                Cell cell = block[row][col];
+                Cell cell = cellBlock[row][col];
+                int rowOffset = row + blockData.blockRow() + BORDER_THICKNESS - Config.SPAWN_BUFFER;
+                int colOffset = col + blockData.blockCol() + BORDER_THICKNESS;
 
-                int rowOffset = row + blockData.blockRow() + BORDER_SIZE - Config.SPAWN_BUFFER;
-                int colOffset = col + blockData.blockCol() + BORDER_SIZE;
-
-                if (rowOffset >= BORDER_SIZE && colOffset >= BORDER_SIZE &&
-                    rowOffset < BORDER_SIZE + Config.GRID_HEIGHT &&
-                    colOffset < BORDER_SIZE + Config.GRID_WIDTH && !cell.isEmpty()
-                ) {
+                if (!cell.isEmpty() && isWithinGameBorder(rowOffset, colOffset) && isWithinBuffer(rowOffset, colOffset)) {
                     currentBuffer[rowOffset][colOffset] = new RenderCell(out, cell.color);
                 }
             }
         }
     }
 
+    // =====================
+    // Block Queue
+    // =====================
+    private void writeQueue(int rowPointer) {
+        List<BlockRegistry.BlockTemplate> blocks = gameState.viewBlockQueue();
+
+        int blocksShown = 3;
+
+        for (int counter = 0; counter < blocksShown; counter++) {
+            Cell[][] cellBlock = blocks.get(counter).copyBlock();
+
+            int leftPadding = BORDER_OFFSET + 1;
+            writeQueueBlock(Config.getGridWidth() + leftPadding, rowPointer, cellBlock);
+
+            int topPadding = 1;
+            rowPointer += cellBlock.length + topPadding;
+        }
+    }
+
+    private void writeQueueBlock(int colStart, int rowStart, Cell[][] block) {
+        for (int row = 0; row < block.length; row++) {
+            for (int col = 0; col < block[0].length; col++) {
+                Cell cell = block[row][col];
+                int rowOffset = row + rowStart;
+                int colOffset = col + colStart;
+
+                if (!cell.isEmpty() && isWithinBuffer(rowOffset, colOffset)) {
+                    currentBuffer[row + rowStart][col + colStart] = new RenderCell('█', cell.color);
+                }
+            }
+        }
+    }
+
+    // =====================
+    // Helpers
+    // =====================
+    private boolean isWithinGameBorder(int row, int col) {
+        return row >= BORDER_THICKNESS && col >= BORDER_THICKNESS &&
+                row < BORDER_THICKNESS + Config.getGridHeight() &&
+                col < BORDER_THICKNESS + Config.getGridWidth();
+    }
+
     private void writeString(int col, int row, String out) {
         char[] charArray = out.toCharArray();
 
         for (int pointer = 0; pointer < charArray.length; pointer++) {
-            currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.WHITE);
-            currentBuffer[row][col + pointer].isCharacter = true;
+            if (isWithinBuffer(row, col + pointer)) {
+                currentBuffer[row][col + pointer] = new RenderCell(charArray[pointer], Color.WHITE);
+                currentBuffer[row][col + pointer].isCharacter = true;
+            }
         }
     }
 
-    private void writeBlockQueue() {
-        List<BlockTemplate> blocks = gameState.viewBlockQueue();
+    private boolean isWithinBuffer(int row, int col) {
+        return row < BUFFER_HEIGHT && col < BUFFER_WIDTH;
+    }
 
-        int rowPointer = 6;
-        int counter = 0;
+    private double calculateDifficulty() {
+        // Assume 500 is 500 ms and is 1x
+        return Math.ceil((double) 500 / gameState.getGravity().toMillis() * 100) / 100;
+    }
 
-        for (BlockTemplate block : blocks) {
-            Cell[][] blockArr = block.copyBlock();
-
-            writeBlock(Config.GRID_WIDTH + 3, rowPointer, blockArr);
-
-            if (counter >= 2 ) {
-                break;
+    private void clearBuffer(RenderCell[][] buffer) {
+        for (int row = 0; row < BUFFER_HEIGHT; row++) {
+            for (int col = 0; col < BUFFER_WIDTH; col++) {
+                buffer[row][col] = new RenderCell(EMPTY, Color.DEFAULT);
+                buffer[row][col].isEmpty = true;
             }
-
-            rowPointer += blockArr.length + 1;
-            counter++;
         }
     }
 
-    private void writeBlock(int colStart, int rowStart, Cell[][] block) {
-        for (int row = 0; row < block.length; row++) {
-            for (int col = 0; col < block[0].length; col++) {
-                Cell cell = block[row][col];
+    // =====================
+    // Screen Drawing
+    // =====================
+    private void draw(int col, int row, RenderCell cell) {
+        int colOffset = col * 2;
 
-                if (cell.isEmpty()) {
-                    continue;
-                }
-
-                currentBuffer[row + rowStart][col + colStart] = new RenderCell('█', cell.color);
-            }
+        if (colOffset > terminal.getXSize() || colOffset + 1 > terminal.getXSize() || row > terminal.getYSize()) {
+            return;
         }
+
+        int[] textColor = getTextColor(cell.color);
+        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
+
+        char out1 = cell.symbol;
+        char out2 = out1;
+
+        if (cell.isCharacter) {
+            out2 = ' ';
+        }
+
+        terminal.putString(colOffset, row, String.valueOf(out1));
+        terminal.putString(colOffset + 1, row, String.valueOf(out2));
+
+        terminal.resetColorAndStyle();
     }
 
     private int[] getTextColor(Color color) {
@@ -187,24 +238,6 @@ public class GameRenderer {
             case WHITE -> new int[]{255, 255, 255};
         };
     }
-
-    private void draw(int col, int row, RenderCell cell) {
-        int[] textColor = getTextColor(cell.color);
-
-        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
-
-		String out = cell.isEmpty ? " " : "" + cell.symbol;
-
-		terminal.putString(col * 2, row, out);
-
-		if (cell.isEmpty || !cell.isCharacter) {
-			terminal.putString(col * 2 + 1, row, out);
-		}
-
-        textColor = getTextColor(Color.WHITE);
-
-        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
-	}
 
     private static class RenderCell {
         private final char symbol;
