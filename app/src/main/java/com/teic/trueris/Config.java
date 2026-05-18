@@ -5,7 +5,7 @@ import io.github.bfur64.menu.utils.Property;
 import java.time.Duration;
 
 public class Config {
-    public static final String GAME_VERSION = "v2.0.5";
+    public static final String GAME_VERSION = "v2.1.0";
 
     public static final int BLOCK_OFFSET = 3;
     public static final int SPAWN_BUFFER = 2;
