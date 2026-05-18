@@ -101,6 +101,15 @@ public class App {
                 new EditableItem<>("Grid Height", ": ", Config.getGridHeightProperty(), "Cells"),
                 new EditableItem<>("Grid Width", ": ", Config.getGridWidthProperty(), "Cells"),
                 new LineBreak(),
+                new StaticText("| Key Binds |"),
+                new LineBreak(),
+                new KeyReaderItem("Hard Drop", Config.getHardDropProperty()),
+                new KeyReaderItem("Drop Block", Config.getMoveDownProperty()),
+                new KeyReaderItem("Move Left", Config.getMoveLeftProperty()),
+                new KeyReaderItem("Move Right", Config.getMoveRightProperty()),
+                new KeyReaderItem("Rotate Left", Config.getRotateLeftProperty()),
+                new KeyReaderItem("Rotate Right", Config.getRotateRightProperty()),
+                new LineBreak(),
                 new ActionItem("[ Save & Return ]", Config::saveState, true)
         ));
 
