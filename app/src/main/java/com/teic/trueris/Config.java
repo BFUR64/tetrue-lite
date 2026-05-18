@@ -14,8 +14,13 @@ public class Config {
     public static final Duration GRAVITY_MIN = Duration.ofMillis(40);
     private static final Duration GRAVITY_MAX = Duration.ofMillis(5000);
 
-    private static int gridHeight = 20;
-    private static int gridWidth = 10;
+    private static final int GRID_HEIGHT_MIN = 20;
+    private static final int GRID_HEIGHT_MAX = 100;
+    private static int gridHeight = GRID_HEIGHT_MIN ;
+
+    private static final int GRID_WIDTH_MIN = 10;
+    private static final int GRID_WIDTH_MAX = 100;
+    private static int gridWidth = GRID_WIDTH_MIN;
 
     private static Duration gravity = GravityDef;
 
@@ -29,8 +34,8 @@ public class Config {
             ms -> gravity = Duration.ofMillis(ms),
             Long::parseLong
         )
-        .withValidator(threshold -> threshold >= GRAVITY_MIN.toMillis(), "Time should be more than 40 ms")
-        .withValidator(threshold -> threshold <= GRAVITY_MAX.toMillis(), "Time should be less than 5 s");
+        .withValidator(threshold -> threshold >= GRAVITY_MIN.toMillis(), "Time should be more than " + GRAVITY_MIN.toMillis() + " ms")
+        .withValidator(threshold -> threshold <= GRAVITY_MAX.toMillis(), "Time should be less than " + GRAVITY_MAX.toSeconds() +  " s");
     }
 
     public static Duration getGravity() {
@@ -46,7 +51,9 @@ public class Config {
             Config::getGridHeight,
             Config::setGridHeight,
             Integer::parseInt
-        );
+        )
+        .withValidator(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
+        .withValidator(value -> value <= GRID_HEIGHT_MAX, "...? Why?");
     }
 
     public static int getGridHeight() {
@@ -62,7 +69,9 @@ public class Config {
             Config::getGridWidth,
             Config::setGridWidth,
             Integer::parseInt
-        );
+        )
+        .withValidator(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
+        .withValidator(value -> value <= GRID_WIDTH_MAX, "...? Why?");
     }
 
     public static int getGridWidth() {
