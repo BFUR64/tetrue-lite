@@ -38,8 +38,8 @@ https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 - Q Key - Rotate tetromino clockwise
 - E Key - Rotate tetromino counter-clockwise
 
-In the main menu, press `0` or `ESC` twice to exit the application <br>
-In the game, press `ESC` twice to exit the game
+In the main menu, press `0` or `ESC` to exit the application <br>
+In the game, press `ESC` to exit the game
 
 ## Installation / Running
 
