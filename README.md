@@ -38,8 +38,8 @@ https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 - Q Key - Rotate tetromino clockwise
 - E Key - Rotate tetromino counter-clockwise
 
-In the main menu, press `0` or `ESC` twice to exit the application <br>
-In the game, press `ESC` twice to exit the game
+In the main menu, press `0` or `ESC` to exit the application <br>
+In the game, press `ESC` to exit the game
 
 ## Installation / Running
 
@@ -78,8 +78,8 @@ java -jar --enable-native-access=ALL-UNNAMED app/build/libs/app-all.jar
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
-  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 1.2.3 (Personal Dual Engine Library UI for Termux and Everything Else)
-  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.2.2 (Personal Composite-based Menu Management)
+  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 1.4.0 (Personal Dual Engine Library UI for Termux and Everything Else)
+  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.4.0 (Personal Composite-based Menu Management)
 - Build Tools: Gradle 9.3.1
 
 ## Version Releasing
