@@ -126,14 +126,14 @@ public class GameManager implements GameState {
 
     private void updateGravityThreshold() {
         // TODO Replace `hasLineCleared()` with a better mode
-        long gravity = Config.getGravity().toNanos();
-        long gravityMin = Config.GRAVITY_MIN.toNanos();
+        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
+        long gravityMin = Duration.ofMillis(Config.GRAVITY_MIN).toNanos();
 
         long gravityStep = Duration.ofMillis(20).toNanos();
 
         if (gravity >= (gravityMin + gravityStep) && scoreTracker.hasLineCleared()) {
             scoreTracker.setLineCleared(false);
-            Config.setGravity(Duration.ofNanos(gravity - gravityStep));
+            Config.gravity.set(Math.toIntExact(Duration.ofNanos(gravity - gravityStep).toMillis()));
         }
     }
 
@@ -145,7 +145,7 @@ public class GameManager implements GameState {
 
         gravityTimer += delta;
 
-        long gravity = Config.getGravity().toNanos();
+        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
 
         while (gravityTimer >= gravity) {
             gravityTimer -= gravity;
@@ -178,7 +178,7 @@ public class GameManager implements GameState {
         activeBlock = new BlockData(blockQueue.getRandomBlock());
 
         if (!blockManager.isPositionValid(activeBlock)) {
-            Config.setGravity(Config.GravityDef);
+            Config.gravity.set(Config.gravityDef);
             gameOver = true;
         }
     }
@@ -209,7 +209,7 @@ public class GameManager implements GameState {
 
     @Override
     public Duration getGravity() {
-        return Config.getGravity();
+        return Duration.ofMillis(Config.gravity.get());
     }
 
     @Override

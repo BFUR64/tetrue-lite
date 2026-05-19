@@ -37,7 +37,7 @@ public class App {
             new ActionItem("[ New Game ]", this::runNewGame),
             new ActionItem("[ Options ] ", this::runOptions),
             new ActionItem("[ About ]", this::runAbout),
-            new ActionItem("[ Exit ]", () -> {}, true),
+            new ActionItem("[ Exit ]", true),
             new LineBreak(),
             new StaticText("  [TIP] Use the `UP` and `DOWN` keys to move"),
             new StaticText("  [TIP] Press `ENTER` to select an item"),
@@ -94,23 +94,57 @@ public class App {
                 new LineBreak(),
                 new StaticText("<< Options >>"),
                 new LineBreak(),
-                new StaticText("| Game Options |"),
+                new ActionItem("[ Game Options ]", this::runGameOptions),
                 new LineBreak(),
-                new EditableItem<>("Gravity", ": ", Config.getGravityProperty(), "ms"),
+                new ActionItem("[ Key Binds ]", this::runKeyBinds),
                 new LineBreak(),
-                new EditableItem<>("Grid Height", ": ", Config.getGridHeightProperty(), "Cells"),
-                new EditableItem<>("Grid Width", ": ", Config.getGridWidthProperty(), "Cells"),
-                new LineBreak(),
-                new StaticText("| Key Binds |"),
-                new LineBreak(),
-                new KeyReaderItem("Hard Drop", Config.getHardDropProperty()),
-                new KeyReaderItem("Drop Block", Config.getMoveDownProperty()),
-                new KeyReaderItem("Move Left", Config.getMoveLeftProperty()),
-                new KeyReaderItem("Move Right", Config.getMoveRightProperty()),
-                new KeyReaderItem("Rotate Left", Config.getRotateLeftProperty()),
-                new KeyReaderItem("Rotate Right", Config.getRotateRightProperty()),
+                new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
                 new LineBreak(),
                 new ActionItem("[ Save & Return ]", Config::saveState, true)
+        ));
+
+        menu.run();
+    }
+
+    private void runGameOptions() {
+        MenuManager menu = new MenuManager(terminal, List.of(
+                new LineBreak(),
+                new StaticText("<< Game Options >>"),
+                new LineBreak(),
+                new InputItem<>("Gravity", ": ", Config.gravity, "ms"),
+                new LineBreak(),
+                new ActionItem("[ Return ]", Config::saveState, true)
+        ));
+
+        menu.run();
+    }
+
+    private void runKeyBinds() {
+        MenuManager menu = new MenuManager(terminal, List.of(
+                new LineBreak(),
+                new StaticText("<< Key Binds >>"),
+                new LineBreak(),
+                new KeyInputItem("Hard Drop", Config.hardDropKey),
+                new KeyInputItem("Soft Drop", Config.softDropKey),
+                new KeyInputItem("Move Left", Config.moveLeftKey),
+                new KeyInputItem("Move Right", Config.moveRightKey),
+                new KeyInputItem("Rotate Left", Config.rotateLeftKey),
+                new KeyInputItem("Rotate Right", Config.rotateRightKey),
+                new LineBreak(),
+                new ActionItem("[ Return ]", Config::saveState, true)
+        ));
+
+        menu.run();
+    }
+
+    private void runAdvancedOptions() {
+        MenuManager menu = new MenuManager(terminal, List.of(
+                new StaticText("<< Advanced Options >>"),
+                new LineBreak(),
+                new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
+                new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
+                new LineBreak(),
+                new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
         menu.run();

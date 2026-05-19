@@ -45,7 +45,7 @@ public class GameRenderer {
         writeBorder();
         writeGameCells();
 
-        int leftPadding = Config.getGridWidth() + BORDER_OFFSET + 1;
+        int leftPadding = Config.gridWidth.get() + BORDER_OFFSET + 1;
         writeString(leftPadding, 1, "Score: " + gameState.getScore());
         writeString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
 
@@ -74,8 +74,8 @@ public class GameRenderer {
     // Border
     // =====================
     private void writeBorder() {
-        int gameHeight = Config.getGridHeight() + BORDER_OFFSET;
-        int gameWidth = Config.getGridWidth() + BORDER_OFFSET;
+        int gameHeight = Config.gridHeight.get() + BORDER_OFFSET;
+        int gameWidth = Config.gridWidth.get() + BORDER_OFFSET;
 
         for (int row = 0; row < gameHeight; row++) {
             for (int col = 0; col < gameWidth; col++) {
@@ -98,8 +98,8 @@ public class GameRenderer {
     }
 
     private void writeLockedCells() {
-        for (int row = 0; row < Config.getGridHeight(); row++) {
-            for (int col = 0; col < Config.getGridWidth(); col++) {
+        for (int row = 0; row < Config.gridHeight.get(); row++) {
+            for (int col = 0; col < Config.gridWidth.get(); col++) {
                 Cell cell = gridData.getCell(row + Config.SPAWN_BUFFER, col);
                 int rowOffset = row + BORDER_THICKNESS;
                 int colOffset = col + BORDER_THICKNESS;
@@ -139,7 +139,7 @@ public class GameRenderer {
             Cell[][] cellBlock = blocks.get(counter).copyBlock();
 
             int leftPadding = BORDER_OFFSET + 1;
-            writeQueueBlock(Config.getGridWidth() + leftPadding, rowPointer, cellBlock);
+            writeQueueBlock(Config.gridWidth.get() + leftPadding, rowPointer, cellBlock);
 
             int topPadding = 1;
             rowPointer += cellBlock.length + topPadding;
@@ -165,8 +165,8 @@ public class GameRenderer {
     // =====================
     private boolean isWithinGameBorder(int row, int col) {
         return row >= BORDER_THICKNESS && col >= BORDER_THICKNESS &&
-                row < BORDER_THICKNESS + Config.getGridHeight() &&
-                col < BORDER_THICKNESS + Config.getGridWidth();
+                row < BORDER_THICKNESS + Config.gridHeight.get() &&
+                col < BORDER_THICKNESS + Config.gridWidth.get();
     }
 
     private void writeString(int col, int row, String out) {

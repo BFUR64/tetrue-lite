@@ -16,7 +16,7 @@ public class BlockData {
     public BlockData(Cell[][] block) {
         this.block = block;
 
-        @SuppressWarnings("UnnecessaryLocalVariable") int blockOffset = (Config.getGridWidth() / 2) - 2;
+        @SuppressWarnings("UnnecessaryLocalVariable") int blockOffset = (Config.gridWidth.get() / 2) - 2;
 
         this.blockCol = blockOffset;
     }
