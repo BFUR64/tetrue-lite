@@ -93,8 +93,8 @@ public class GameRenderer {
     // =====================
     private void writeGameCells() {
         writeLockedCells();
-        writeQueueBlock(gameState.getGhostBlockCopy(), GHOST);
-        writeQueueBlock(gameState.getActiveBlockCopy(), SOLID);
+        writeGameBlock(gameState.getGhostBlockCopy(), GHOST);
+        writeGameBlock(gameState.getActiveBlockCopy(), SOLID);
     }
 
     private void writeLockedCells() {
@@ -111,7 +111,7 @@ public class GameRenderer {
         }
     }
 
-    private void writeQueueBlock(BlockData blockData, char out) {
+    private void writeGameBlock(BlockData blockData, char out) {
         Cell[][] cellBlock = blockData.getRotatedBlockCopy();
 
         for (int row = 0; row < blockData.blockSize(); row++) {
