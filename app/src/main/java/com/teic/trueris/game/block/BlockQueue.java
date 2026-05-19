@@ -4,42 +4,48 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.teic.trueris.game.cell.Cell;
-
 
 public class BlockQueue {
     private static final int MIN_BLOCK_QUEUE_SIZE = 3;
     
-    private final List<BlockRegistry.BlockTemplate> blockQueue;
+    private final List<BlockData> blockQueue;
 
     public BlockQueue() {
         blockQueue = new LinkedList<>();
     }
 
-    public Cell[][] getRandomBlock() {
+    public BlockData getFirstBlock() {
         if (blockQueue.size() <= MIN_BLOCK_QUEUE_SIZE) {
             addToBlockQueue(createRandomizedBag());
         }
 
-        Cell[][] cells = blockQueue.getFirst().copyBlock();
+        BlockData blockData = blockQueue.getFirst();
         blockQueue.removeFirst();
 
-        return cells;
-
+        return blockData;
     }
 
-    public List<BlockRegistry.BlockTemplate> viewBlockQueue() {
+    public List<BlockData> viewBlockQueue() {
         return Collections.unmodifiableList(blockQueue);
     }
 
-    private void addToBlockQueue(List<BlockRegistry.BlockTemplate> blocks) {
+    private void addToBlockQueue(List<BlockData> blocks) {
         blockQueue.addAll(blocks);
     }
 
-    private List<BlockRegistry.BlockTemplate> createRandomizedBag() {
-        List<BlockRegistry.BlockTemplate> sevenBag = new LinkedList<>(BlockRegistry.values());
-        Collections.shuffle(sevenBag);
+    private List<BlockData> createRandomizedBag() {
+//        List<BlockRegistry.BlockTemplate> sevenBag = new LinkedList<>(BlockRegistry.values());
 
-        return sevenBag;
+        List<BlockRegistry.BlockTemplate> sevenBagTemplates = new LinkedList<>(BlockRegistry.values());
+        List<BlockData> sevenBagBlockData = new LinkedList<>();
+
+        for (BlockRegistry.BlockTemplate template : sevenBagTemplates) {
+            sevenBagBlockData.add(new BlockData(template.copyBlock()));
+        }
+
+//        Collections.shuffle(sevenBag);
+        Collections.shuffle(sevenBagBlockData);
+
+        return sevenBagBlockData;
     }
 }

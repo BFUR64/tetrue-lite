@@ -82,23 +82,26 @@ public class GameLoop {
             return;
         }
 
-        if (keyStroke.equals(Config.getHardDrop())) {
+        if (keyStroke.equals(Config.hardDropKey.get())) {
             gameManager.dropBlock();
         }
-        else if (keyStroke.equals(Config.getMoveDown())) {
+        else if (keyStroke.equals(Config.softDropKey.get())) {
             gameManager.moveBlockDown();
         }
-        else if (keyStroke.equals(Config.getMoveLeft())) {
+        else if (keyStroke.equals(Config.moveLeftKey.get())) {
             gameManager.moveBlockLeft();
         }
-        else if (keyStroke.equals(Config.getMoveRight())) {
+        else if (keyStroke.equals(Config.moveRightKey.get())) {
             gameManager.moveBlockRight();
         }
-        else if (keyStroke.equals(Config.getRotateLeft())) {
+        else if (keyStroke.equals(Config.rotateLeftKey.get())) {
             gameManager.rotateBlockLeft();
         }
-        else if (keyStroke.equals(Config.getRotateRight())) {
+        else if (keyStroke.equals(Config.rotateRightKey.get())) {
             gameManager.rotateBlockRight();
+        }
+        else if (keyStroke.equals(Config.holdKey.get())) {
+            gameManager.holdBlock();
         }
     }
 

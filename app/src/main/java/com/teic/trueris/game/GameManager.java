@@ -7,7 +7,6 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.block.BlockManager;
 import com.teic.trueris.game.block.BlockQueue;
-import com.teic.trueris.game.block.BlockRegistry;
 import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.grid.GridManager;
 
@@ -19,17 +18,18 @@ public class GameManager implements GameState {
 
     private BlockData activeBlock;
     private BlockData ghostBlock;
+    private BlockData heldBlock;
 
     // Game Variables
-    private boolean blockGrounded;
+    private boolean isBlockGrounded;
+
+    private boolean isBlockHeld;
 
     private long gravityTimer;
 
     private long lockTimer;
 
     private boolean gameOver;
-
-//    private long gravityThreshold = 500_000_000; // 0.5 Seconds
 
     public GameManager(GridData gridData) {
         this.blockManager = new BlockManager(gridData);
@@ -51,6 +51,7 @@ public class GameManager implements GameState {
 
             generateActiveBlock();
             generateGhostBlock();
+            isBlockHeld = false;
 
             return;
         }
@@ -66,6 +67,7 @@ public class GameManager implements GameState {
 
         generateActiveBlock();
         generateGhostBlock();
+        isBlockHeld = false;
 
         gravityTimer = 0;
     }
@@ -104,6 +106,27 @@ public class GameManager implements GameState {
             lockTimer = 0;
         }
     }
+    // =====================
+    // Block Holding
+    // =====================
+    public void holdBlock() {
+        if (!isBlockHeld) {
+            switchHoldAndActiveBlocks();
+            isBlockHeld = true;
+        }
+    }
+
+    public void switchHoldAndActiveBlocks() {
+        BlockData tempBlock = new BlockData(activeBlock.getCellCopy());
+        activeBlock = heldBlock;
+        heldBlock = tempBlock;
+
+        if (activeBlock == null) {
+            generateActiveBlock();
+        }
+
+        generateGhostBlock();
+    }
 
     // =====================
     // Delta
@@ -117,35 +140,35 @@ public class GameManager implements GameState {
 
     private void updateBlockGrounded() {
         if (!blockManager.canMoveBlockDown(activeBlock)) {
-            blockGrounded = true;
+            isBlockGrounded = true;
             return;
         }
 
-        blockGrounded = false;
+        isBlockGrounded = false;
     }
 
     private void updateGravityThreshold() {
         // TODO Replace `hasLineCleared()` with a better mode
-        long gravity = Config.getGravity().toNanos();
-        long gravityMin = Config.GRAVITY_MIN.toNanos();
+        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
+        long gravityMin = Duration.ofMillis(Config.GRAVITY_MIN).toNanos();
 
         long gravityStep = Duration.ofMillis(20).toNanos();
 
         if (gravity >= (gravityMin + gravityStep) && scoreTracker.hasLineCleared()) {
             scoreTracker.setLineCleared(false);
-            Config.setGravity(Duration.ofNanos(gravity - gravityStep));
+            Config.gravity.set(Math.toIntExact(Duration.ofNanos(gravity - gravityStep).toMillis()));
         }
     }
 
     private void updateGravity(long delta) {
-        if (blockGrounded) {
+        if (isBlockGrounded) {
             gravityTimer = 0;
             return;
         }
 
         gravityTimer += delta;
 
-        long gravity = Config.getGravity().toNanos();
+        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
 
         while (gravityTimer >= gravity) {
             gravityTimer -= gravity;
@@ -155,7 +178,7 @@ public class GameManager implements GameState {
     }
 
     private void updateLockGrace(long delta) {
-        if (!blockGrounded) {
+        if (!isBlockGrounded) {
             lockTimer = 0;
             return;
         }
@@ -175,10 +198,10 @@ public class GameManager implements GameState {
     // Utilities
     // =====================
     private void generateActiveBlock() {
-        activeBlock = new BlockData(blockQueue.getRandomBlock());
+        activeBlock = blockQueue.getFirstBlock();
 
         if (!blockManager.isPositionValid(activeBlock)) {
-            Config.setGravity(Config.GravityDef);
+            Config.gravity.set(Config.gravityDef);
             gameOver = true;
         }
     }
@@ -193,7 +216,7 @@ public class GameManager implements GameState {
     // Game State Interface
     // =====================
     @Override
-    public List<BlockRegistry.BlockTemplate> viewBlockQueue() {
+    public List<BlockData> viewBlockQueue() {
         return blockQueue.viewBlockQueue();
     }
 
@@ -209,7 +232,7 @@ public class GameManager implements GameState {
 
     @Override
     public Duration getGravity() {
-        return Config.getGravity();
+        return Duration.ofMillis(Config.gravity.get());
     }
 
     @Override
@@ -220,5 +243,14 @@ public class GameManager implements GameState {
     @Override
     public BlockData getGhostBlockCopy() {
         return ghostBlock.copyBlockData();
+    }
+
+    @Override
+    public BlockData getHeldBlockCopy() {
+        if (heldBlock != null) {
+             return heldBlock.copyBlockData();
+        }
+
+        return null;
     }
 }

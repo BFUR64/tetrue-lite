@@ -2,7 +2,6 @@ package com.teic.trueris.game;
 
 import com.teic.trueris.Config;
 import com.teic.trueris.game.block.BlockData;
-import com.teic.trueris.game.block.BlockRegistry;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
@@ -42,14 +41,31 @@ public class GameRenderer {
     }
 
     public void update() {
-        writeBorder();
+        int gameBorderWidth = Config.gridWidth.get() + BORDER_OFFSET;
+        int gameBorderHeight = Config.gridHeight.get() + BORDER_OFFSET;
+
+        // Game & Blocks
+        writeBorder(0, 0, gameBorderWidth, gameBorderHeight);
         writeGameCells();
 
-        int leftPadding = Config.getGridWidth() + BORDER_OFFSET + 1;
+        // Score & Difficulty
+        int leftPadding = gameBorderWidth + 1;
         writeString(leftPadding, 1, "Score: " + gameState.getScore());
         writeString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
 
-        writeQueue(5);
+        // Hold Block
+        String holdName = "Hold";
+        int holdY = 5;
+        writeString(leftPadding, holdY, holdName);
+        BlockData blockData = gameState.getHeldBlockCopy();
+        if (blockData != null) {
+            writeBlock(leftPadding + holdName.length() + 1, holdY, blockData.getCellCopy(), SOLID);
+        }
+
+        // Queue
+        int textQueueY = 8;
+        writeString(leftPadding, textQueueY, "Next");
+        writeQueue(leftPadding + 2, textQueueY + 2);
 
         updateBufferAndPrint();
     }
@@ -73,16 +89,13 @@ public class GameRenderer {
     // =====================
     // Border
     // =====================
-    private void writeBorder() {
-        int gameHeight = Config.getGridHeight() + BORDER_OFFSET;
-        int gameWidth = Config.getGridWidth() + BORDER_OFFSET;
-
-        for (int row = 0; row < gameHeight; row++) {
-            for (int col = 0; col < gameWidth; col++) {
-                if ((row == 0 || row == gameHeight - 1 ||
-                        col == 0 || col == gameWidth - 1) && isWithinBuffer(row, col)
+    private void writeBorder(int x, int y, int xSize, int ySize) {
+        for (int row = 0; row < ySize; row++) {
+            for (int col = 0; col < xSize; col++) {
+                if ((row == 0 || row == ySize - 1 ||
+                        col == 0 || col == xSize - 1) && isWithinBuffer(row, col)
                 ) {
-                    currentBuffer[row][col] = new RenderCell(SOLID, Color.GREY);
+                    currentBuffer[row + y][col + x] = new RenderCell(SOLID, Color.GREY);
                 }
             }
         }
@@ -93,14 +106,22 @@ public class GameRenderer {
     // =====================
     private void writeGameCells() {
         writeLockedCells();
-        writeQueueBlock(gameState.getGhostBlockCopy(), GHOST);
-        writeQueueBlock(gameState.getActiveBlockCopy(), SOLID);
+
+        BlockData ghostBlock = gameState.getGhostBlockCopy();
+        int colShift = ghostBlock.blockCol() + BORDER_THICKNESS;
+        int rowShift = ghostBlock.blockRow() + BORDER_THICKNESS;
+        writeBlock(colShift, rowShift, ghostBlock.getRotatedCellCopy(), GHOST);
+
+        BlockData activeBlock = gameState.getActiveBlockCopy();
+        colShift = activeBlock.blockCol() + BORDER_THICKNESS;
+        rowShift = activeBlock.blockRow() + BORDER_THICKNESS;
+        writeBlock(colShift, rowShift, activeBlock.getRotatedCellCopy(), SOLID);
     }
 
     private void writeLockedCells() {
-        for (int row = 0; row < Config.getGridHeight(); row++) {
-            for (int col = 0; col < Config.getGridWidth(); col++) {
-                Cell cell = gridData.getCell(row + Config.SPAWN_BUFFER, col);
+        for (int row = 0; row < Config.gridHeight.get(); row++) {
+            for (int col = 0; col < Config.gridWidth.get(); col++) {
+                Cell cell = gridData.getCell(row, col);
                 int rowOffset = row + BORDER_THICKNESS;
                 int colOffset = col + BORDER_THICKNESS;
 
@@ -111,42 +132,28 @@ public class GameRenderer {
         }
     }
 
-    private void writeQueueBlock(BlockData blockData, char out) {
-        Cell[][] cellBlock = blockData.getRotatedBlockCopy();
-
-        for (int row = 0; row < blockData.blockSize(); row++) {
-            for (int col = 0; col < blockData.blockSize(); col++) {
-                Cell cell = cellBlock[row][col];
-                int rowOffset = row + blockData.blockRow() + BORDER_THICKNESS - Config.SPAWN_BUFFER;
-                int colOffset = col + blockData.blockCol() + BORDER_THICKNESS;
-
-                if (!cell.isEmpty() && isWithinGameBorder(rowOffset, colOffset) && isWithinBuffer(rowOffset, colOffset)) {
-                    currentBuffer[rowOffset][colOffset] = new RenderCell(out, cell.color);
-                }
-            }
-        }
-    }
-
     // =====================
     // Block Queue
     // =====================
-    private void writeQueue(int rowPointer) {
-        List<BlockRegistry.BlockTemplate> blocks = gameState.viewBlockQueue();
+    private void writeQueue(int x, int rowPointer) {
+        List<BlockData> blocks = gameState.viewBlockQueue();
 
         int blocksShown = 3;
 
         for (int counter = 0; counter < blocksShown; counter++) {
-            Cell[][] cellBlock = blocks.get(counter).copyBlock();
+            Cell[][] cellBlock = blocks.get(counter).getRotatedCellCopy();
 
-            int leftPadding = BORDER_OFFSET + 1;
-            writeQueueBlock(Config.getGridWidth() + leftPadding, rowPointer, cellBlock);
+            writeBlock(x, rowPointer, cellBlock, SOLID);
 
             int topPadding = 1;
             rowPointer += cellBlock.length + topPadding;
         }
     }
 
-    private void writeQueueBlock(int colStart, int rowStart, Cell[][] block) {
+    // =====================
+    // Helpers
+    // =====================
+    private void writeBlock(int colStart, int rowStart, Cell[][] block, char out) {
         for (int row = 0; row < block.length; row++) {
             for (int col = 0; col < block[0].length; col++) {
                 Cell cell = block[row][col];
@@ -154,19 +161,16 @@ public class GameRenderer {
                 int colOffset = col + colStart;
 
                 if (!cell.isEmpty() && isWithinBuffer(rowOffset, colOffset)) {
-                    currentBuffer[row + rowStart][col + colStart] = new RenderCell(SOLID, cell.color);
+                    currentBuffer[row + rowStart][col + colStart] = new RenderCell(out, cell.color);
                 }
             }
         }
     }
 
-    // =====================
-    // Helpers
-    // =====================
     private boolean isWithinGameBorder(int row, int col) {
         return row >= BORDER_THICKNESS && col >= BORDER_THICKNESS &&
-                row < BORDER_THICKNESS + Config.getGridHeight() &&
-                col < BORDER_THICKNESS + Config.getGridWidth();
+                row < BORDER_THICKNESS + Config.gridHeight.get() &&
+                col < BORDER_THICKNESS + Config.gridWidth.get();
     }
 
     private void writeString(int col, int row, String out) {
