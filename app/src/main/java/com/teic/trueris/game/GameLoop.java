@@ -100,6 +100,9 @@ public class GameLoop {
         else if (keyStroke.equals(Config.rotateRightKey.get())) {
             gameManager.rotateBlockRight();
         }
+        else if (keyStroke.equals(Config.holdKey.get())) {
+            gameManager.holdBlock();
+        }
     }
 
     private void handleGameOver() {

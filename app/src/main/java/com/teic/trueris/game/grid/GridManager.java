@@ -13,7 +13,7 @@ public class GridManager {
     }
 
     public void writeGrid(BlockData blockData) {
-        Cell[][] block = blockData.getRotatedBlockCopy();
+        Cell[][] block = blockData.getRotatedCellCopy();
 
         int blockRow = blockData.blockRow();
         int blockCol = blockData.blockCol();
@@ -54,7 +54,7 @@ public class GridManager {
     }
 
     private boolean[] returnFilledRows() {
-        int totalGridRow = Config.gridHeight.get() + Config.SPAWN_BUFFER;
+        int totalGridRow = Config.gridHeight.get();
         boolean[] filledRows = new boolean[totalGridRow];
 
         for (int row = 0; row < totalGridRow; row++) {

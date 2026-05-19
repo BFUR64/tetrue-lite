@@ -5,9 +5,8 @@ import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 
 public class Config {
-    public static final String GAME_VERSION = "v2.3.2";
+    public static final String GAME_VERSION = "v2.4.0";
 
-    public static final int SPAWN_BUFFER = 2;
     public static final int TARGET_FPS = 60;
 
     // milliseconds
@@ -54,4 +53,6 @@ public class Config {
     public static Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('q')).build();
 
     public static Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
+
+    public static Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
 }

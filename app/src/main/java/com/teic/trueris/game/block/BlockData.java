@@ -94,8 +94,12 @@ public class BlockData {
 
     // rotateArrayRight → used by rotateBlockNTimes → used by getRotatedBlockCopy
 
-    public Cell[][] getRotatedBlockCopy() {
+    public Cell[][] getRotatedCellCopy() {
         return rotateBlockNTimes(blockRotation.ordinal());
+    }
+
+    public Cell[][] getCellCopy() {
+        return rotateBlockNTimes(0);
     }
 
     private Cell[][] rotateBlockNTimes(int amount) {
