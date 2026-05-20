@@ -48,10 +48,15 @@ public class GameRenderer {
         writeBorder(0, 0, gameBorderWidth, gameBorderHeight);
         writeGameCells();
 
-        // Score & Difficulty
+        // Score & Difficulty / Gravity
         int leftPadding = gameBorderWidth + 1;
         writeString(leftPadding, 1, "Score: " + gameState.getScore());
-        writeString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
+        if (!Config.showGravity.get()) {
+            writeString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
+        }
+        else {
+            writeString(leftPadding, 3, "Gravity: " + gameState.getGravity().toMillis() + " ms");
+        }
 
         // Hold Block
         String holdName = "Hold";
@@ -108,13 +113,13 @@ public class GameRenderer {
         writeLockedCells();
 
         BlockData ghostBlock = gameState.getGhostBlockCopy();
-        int colShift = ghostBlock.blockCol() + BORDER_THICKNESS;
-        int rowShift = ghostBlock.blockRow() + BORDER_THICKNESS;
+        int colShift = ghostBlock.getBlockCol() + BORDER_THICKNESS;
+        int rowShift = ghostBlock.getBlockRow() + BORDER_THICKNESS;
         writeBlock(colShift, rowShift, ghostBlock.getRotatedCellCopy(), GHOST);
 
         BlockData activeBlock = gameState.getActiveBlockCopy();
-        colShift = activeBlock.blockCol() + BORDER_THICKNESS;
-        rowShift = activeBlock.blockRow() + BORDER_THICKNESS;
+        colShift = activeBlock.getBlockCol() + BORDER_THICKNESS;
+        rowShift = activeBlock.getBlockRow() + BORDER_THICKNESS;
         writeBlock(colShift, rowShift, activeBlock.getRotatedCellCopy(), SOLID);
     }
 
@@ -165,12 +170,6 @@ public class GameRenderer {
                 }
             }
         }
-    }
-
-    private boolean isWithinGameBorder(int row, int col) {
-        return row >= BORDER_THICKNESS && col >= BORDER_THICKNESS &&
-                row < BORDER_THICKNESS + Config.gridHeight.get() &&
-                col < BORDER_THICKNESS + Config.gridWidth.get();
     }
 
     private void writeString(int col, int row, String out) {

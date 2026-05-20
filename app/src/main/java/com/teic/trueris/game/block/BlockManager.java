@@ -1,13 +1,17 @@
 package com.teic.trueris.game.block;
 
-import com.teic.trueris.game.Collision;
+import com.teic.trueris.game.utils.Collision;
+import com.teic.trueris.game.utils.RotationResult;
+import com.teic.trueris.game.utils.RotationSystem;
 import com.teic.trueris.game.grid.GridData;
 
 public class BlockManager {
     private final Collision collision;
+    private final RotationSystem rotationSystem;
 
     public BlockManager(GridData gridData) {
         collision = new Collision(gridData);
+        rotationSystem = new RotationSystem(collision);
     }
 
     // =====================
@@ -64,31 +68,27 @@ public class BlockManager {
     // Rotation
     // =====================
     public boolean rotateBlockLeft(BlockData blockData) {
-        blockData.rotateLeft();
+        RotationResult rotationResult = rotationSystem.computeRotation(blockData, false);
 
-        boolean isPositionValid = collision.isPositionValid(blockData);
+        rotateBlock(blockData, rotationResult);
 
-        if (!isPositionValid) {
-            blockData.revertBlockRotation();
-
-            return false;
-        }
-
-        return true;
+        return rotationResult.success();
     }
 
     public boolean rotateBlockRight(BlockData blockData) {
-        blockData.rotateRight();
+        RotationResult rotationResult = rotationSystem.computeRotation(blockData, true);
 
-        boolean isPositionValid = collision.isPositionValid(blockData);
+        rotateBlock(blockData, rotationResult);
 
-        if (!isPositionValid) {
-            blockData.revertBlockRotation();
+        return rotationResult.success();
+    }
 
-            return false;
+    private void rotateBlock(BlockData blockData, RotationResult rotationResult) {
+        if (rotationResult.success()) {
+            blockData.setRotation(rotationResult.newRotation());
+            blockData.setBlockRow(blockData.getBlockRow() + rotationResult.rowOffset());
+            blockData.setBlockCol(blockData.getBlockCol() + rotationResult.colOffset());
         }
-
-        return true;
     }
     
     // =====================
