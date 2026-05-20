@@ -15,8 +15,8 @@ public class GridManager {
     public void writeGrid(BlockData blockData) {
         Cell[][] block = blockData.getRotatedCellCopy();
 
-        int blockRow = blockData.blockRow();
-        int blockCol = blockData.blockCol();
+        int blockRow = blockData.getBlockRow();
+        int blockCol = blockData.getBlockCol();
 
         int blockSize = blockData.blockSize();
 

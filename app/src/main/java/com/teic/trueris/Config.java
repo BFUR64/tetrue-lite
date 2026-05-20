@@ -5,7 +5,7 @@ import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 
 public class Config {
-    public static final String GAME_VERSION = "v2.4.0";
+    public static final String GAME_VERSION = "v2.5.0";
 
     public static final int TARGET_FPS = 60;
 
@@ -55,4 +55,11 @@ public class Config {
     public static Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
 
     public static Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
+
+    // =====================
+    // Game Flags
+    // =====================
+    public static Property<Boolean> showGravity = Property.of(false).build();
+
+    public static Property<Boolean> noSRS = Property.of(false).build();
 }

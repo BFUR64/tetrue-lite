@@ -1,4 +1,4 @@
-package com.teic.trueris.game;
+package com.teic.trueris.game.utils;
 
 public class ScoreTracker {
     private int score;

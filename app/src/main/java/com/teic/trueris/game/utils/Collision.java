@@ -1,4 +1,4 @@
-package com.teic.trueris.game;
+package com.teic.trueris.game.utils;
 
 import com.teic.trueris.Config;
 import com.teic.trueris.game.block.BlockData;
@@ -15,9 +15,14 @@ public class Collision {
     public boolean isPositionValid(BlockData blockData) {
         Cell[][] block = blockData.getRotatedCellCopy();
 
+        int blockRow = blockData.getBlockRow();
+        int blockCol = blockData.getBlockCol();
+
+        return isPositionValid(block, blockRow, blockCol);
+    }
+
+    public boolean isPositionValid(Cell[][] block, int blockRow, int blockCol) {
         int blockSize = block.length;
-        int blockRow = blockData.blockRow();
-        int blockCol = blockData.blockCol();
 
         for (int row = 0; row < blockSize; row++) {
             for (int col = 0; col < blockSize; col++) {

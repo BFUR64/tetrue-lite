@@ -9,6 +9,7 @@ import com.teic.trueris.game.block.BlockManager;
 import com.teic.trueris.game.block.BlockQueue;
 import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.grid.GridManager;
+import com.teic.trueris.game.utils.ScoreTracker;
 
 public class GameManager implements GameState {
     private final BlockManager blockManager;

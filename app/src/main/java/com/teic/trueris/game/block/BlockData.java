@@ -9,7 +9,6 @@ public class BlockData {
     private int blockRow;
     private int blockCol;
 
-    private Direction prevBlockRotation = blockRotation;
     private int prevBlockRow;
     private int prevBlockCol;
     
@@ -59,33 +58,8 @@ public class BlockData {
     // =====================
     // Rotation
     // =====================
-    void rotateLeft() {
-        Direction[] directions = Direction.values();
-
-        int rotationIndex = (
-            ((blockRotation.ordinal() - 1) % 4 + 4) % 4
-        );
-
-        prevBlockRotation = blockRotation;
-        
-        blockRotation = directions[rotationIndex];
-    }
-
-    void rotateRight() {
-        Direction[] directions = Direction.values();
-
-        int rotationIndex = (
-            ((blockRotation.ordinal() + 1) % 4 + 4) % 4
-        );
-
-        prevBlockRotation = blockRotation;
-        
-        blockRotation = directions[rotationIndex];
-    }
-
-    void revertBlockRotation() {
-        blockRotation = prevBlockRotation;
-        prevBlockRotation = Direction.UP;
+    void setRotation(Direction newBlockRotation) {
+        blockRotation = newBlockRotation;
     }
 
     // =====================
@@ -93,6 +67,9 @@ public class BlockData {
     // =====================
 
     // rotateArrayRight → used by rotateBlockNTimes → used by getRotatedBlockCopy
+    public Cell[][] getRotatedCellCopy(Direction blockRotation) {
+        return rotateBlockNTimes(blockRotation.ordinal());
+    }
 
     public Cell[][] getRotatedCellCopy() {
         return rotateBlockNTimes(blockRotation.ordinal());
@@ -145,17 +122,27 @@ public class BlockData {
     }
 
     // =====================
-    // Size / Position Info
+    // Size / Position / Rotation Info
     // =====================
-    public int blockRow() {
+    public int getBlockRow() {
         return blockRow;
     }
 
-    public int blockCol() {
+    void setBlockRow(int blockRow) {
+        this.blockRow = blockRow;
+    }
+
+    public int getBlockCol() {
         return blockCol;
+    }
+
+    void setBlockCol(int blockCol) {
+        this.blockCol = blockCol;
     }
 
     public int blockSize() {
         return block.length;
     }
+
+    public Direction rotation() { return blockRotation; }
 }
