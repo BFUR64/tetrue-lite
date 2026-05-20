@@ -11,20 +11,18 @@ https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 
 ## Features
 - Falling Blocks - Standard falling tetrominoes
-- Gravity - Drops move down per second
+- Gravity - Drops move down per second and speeds up per line clear
 - Lock Grace - Allows adjustment before it gets placed
-- Rotation - Rotate blocks clockwise and counterclockwise
+- SRS Rotation - Based on the SRS Table
 - Movement - Move blocks left and right
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
 - Block Queueing (7 Bag System) - Next pieces preview and fair randomization
+- Configurable Settigns
 
 ## Limitations
 - No game / score tracking after the game is closed
-- Inaccurate block rotation (Not the same as modern Tetris)
 - Inaccurate scoring / gravity
-- No gravity speedup when scoring
-- No configurable settings
 - Minimal main menu only, featuring `New Game`, `About`, and `Exit`
 - No sound
 
