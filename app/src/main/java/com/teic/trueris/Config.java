@@ -5,7 +5,7 @@ import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 
 public class Config {
-    public static final String GAME_VERSION = "v2.5.0";
+    public static final String GAME_VERSION = "v2.5.1";
 
     public static final int TARGET_FPS = 60;
 
