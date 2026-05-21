@@ -9,15 +9,15 @@ import io.github.bfur64.menu.item.ActionItem;
 import io.github.bfur64.menu.item.LineBreak;
 import io.github.bfur64.menu.item.Item;
 import io.github.bfur64.menu.item.StaticText;
-import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
+import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
 
-    private final Terminal terminal;
+    private final TerminalBackend terminal;
     
     private final GameRenderer gameRenderer;
     private final GameManager gameManager;
@@ -26,7 +26,7 @@ public class GameLoop {
     private boolean running;
     private final int nsPerFrame;
 
-    public GameLoop(Terminal terminal, GameRenderer gameRenderer, GameManager gameManager) {
+    public GameLoop(TerminalBackend terminal, GameRenderer gameRenderer, GameManager gameManager) {
         this.terminal = terminal;
 
         this.gameRenderer = gameRenderer;
@@ -77,7 +77,7 @@ public class GameLoop {
             return;
         }
 
-        if (keyStroke.getKeyType() == KeyType.ESCAPE) {
+        if (keyStroke.keyType() == KeyType.ESCAPE) {
             running = false;
             return;
         }

@@ -5,7 +5,7 @@ import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
-import io.github.bfur64.terminal.Terminal;
+import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public class GameRenderer {
     private final int BORDER_THICKNESS = 1;
     private final int BORDER_OFFSET = 2;
 
-    private final Terminal terminal;
+    private final TerminalBackend terminal;
     private final GridData gridData;
     private final GameState gameState;
 
     private RenderCell[][] previousBuffer;
     private RenderCell[][] currentBuffer;
 
-    public GameRenderer(Terminal terminal, GridData gridData, GameState gameState) {
+    public GameRenderer(TerminalBackend terminal, GridData gridData, GameState gameState) {
         this.terminal = terminal;
         this.gridData = gridData;
         this.gameState = gameState;
@@ -221,8 +221,8 @@ public class GameRenderer {
             out2 = ' ';
         }
 
-        terminal.putString(colOffset, row, String.valueOf(out1));
-        terminal.putString(colOffset + 1, row, String.valueOf(out2));
+        terminal.put(colOffset, row, String.valueOf(out1));
+        terminal.put(colOffset + 1, row, String.valueOf(out2));
 
         terminal.resetColorAndStyle();
     }
@@ -242,7 +242,7 @@ public class GameRenderer {
         };
     }
 
-    private static class RenderCell {
+    private static class  RenderCell {
         private final char symbol;
         private final Color color;
 

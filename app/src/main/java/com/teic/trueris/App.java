@@ -7,25 +7,27 @@ import com.teic.trueris.game.grid.GridData;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.*;
 import io.github.bfur64.terminal.Terminal;
+import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class App {
-    private final Terminal terminal;
+    private final TerminalBackend terminal;
 
     public static void main(String[] args) {
-        try (Terminal terminal = Terminal.auto()) {
+        try (TerminalBackend terminal = Terminal.auto()) {
+            terminal.start();
+
             App app = new App(terminal);
             app.newStart();
         }
-        catch (IOException error) {
+        catch (Exception error) {
             System.out.println("Failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
         }
     }
 
-    public App(Terminal terminal) {
+    public App(TerminalBackend terminal) {
         this.terminal = terminal;
     }
 
@@ -58,8 +60,6 @@ public class App {
     }
 
     private void runAbout() {
-        List<String> terminalInfo = terminal.getTerminalInfo();
-
         List<Item> items = List.of(
             new LineBreak(),
             new StaticText("<< About >>"),
@@ -68,11 +68,7 @@ public class App {
             new LineBreak(),
             new StaticText("| Rendering | "),
             new LineBreak(),
-            new StaticText("Meta Library: " + terminalInfo.getFirst()),
-            new StaticText(terminalInfo.get(1)),
-            new StaticText(terminalInfo.getLast()),
-            new LineBreak(),
-            new StaticText("Current Renderer: " + terminal.getCurrentTerminal()),
+            new StaticText("Meta Library: " + terminal.getTerminalInfo()),
             new LineBreak(),
             new DynamicText<>("Column: ", terminal::getXSize),
             new DynamicText<>("Row: ", terminal::getYSize),
@@ -130,6 +126,7 @@ public class App {
                 new KeyInputItem("Move Right", Config.moveRightKey),
                 new KeyInputItem("Rotate Left", Config.rotateLeftKey),
                 new KeyInputItem("Rotate Right", Config.rotateRightKey),
+                new KeyInputItem("Hold Block", Config.holdKey),
                 new LineBreak(),
                 new ActionItem("[ Return ]", Config::saveState, true)
         ));
