@@ -18,6 +18,7 @@ https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
 - Block Queueing (7 Bag System) - Next pieces preview and fair randomization
+- Hold block
 - Configurable Settigns
 
 ## Limitations
@@ -35,6 +36,7 @@ https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
 - LEFT / RIGHT Arrow Keys - Move tetromino left / right within the grid
 - Q Key - Rotate tetromino clockwise
 - E Key - Rotate tetromino counter-clockwise
+- C key - Hold block
 
 In the main menu, press `0` or `ESC` to exit the application <br>
 In the game, press `ESC` to exit the game
@@ -82,8 +84,8 @@ java -jar app/build/libs/app-all.jar
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
-  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 1.4.0 (Personal Dual Engine Library UI for Termux and Everything Else)
-  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.4.0 (Personal Composite-based Menu Management)
+  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 2.0.1 (Lanterna-like Abstraction Library for JLine3)
+  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.6.0 (Personal Composite-based Menu Management)
 - Build Tools: Gradle 9.3.1
 
 ## Version Releasing
