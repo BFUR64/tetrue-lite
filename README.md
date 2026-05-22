@@ -1,6 +1,6 @@
 <h1 align="center">Tetrue Lite</h1>
 
-<h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal API</h3>
+<h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal Abstraction Library</h3>
 
 <div align="center">
   <img width="726" height="523" alt="image" src="https://github.com/user-attachments/assets/f4197ad3-7d01-472a-9ae7-a3ff4feb6d16" />
