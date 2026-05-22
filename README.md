@@ -6,8 +6,10 @@
   <img width="726" height="523" alt="image" src="https://github.com/user-attachments/assets/f4197ad3-7d01-472a-9ae7-a3ff4feb6d16" />
 </div>
 
-## Demo 
-https://github.com/user-attachments/assets/e46d20ce-e5b8-4c25-82fe-f63627509c34
+## Demo
+
+<img width="748" height="524" alt="ezgif-71000bef1676a9a9" src="https://github.com/user-attachments/assets/77b5f3d7-73dc-4f48-9db0-9fa68d2bd674" />
+
 
 ## Features
 - Falling Blocks - Standard falling tetrominoes
