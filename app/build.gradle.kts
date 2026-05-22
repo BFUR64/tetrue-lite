@@ -26,10 +26,10 @@ dependencies {
     implementation(libs.guava)
 
     // Rendering Pipeline
-    implementation("io.github.bfur64:tetrue-terminal:2.0.1")
+    implementation("io.github.bfur64:tetrue-terminal:2.2.1")
 
     // Menu Manager
-    implementation("io.github.bfur64:menu-manager:0.6.0")
+    implementation("io.github.bfur64:menu-manager:0.6.2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
