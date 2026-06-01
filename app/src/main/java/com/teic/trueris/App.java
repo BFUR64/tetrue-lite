@@ -140,6 +140,7 @@ public class App {
 
     private void runAdvancedOptions() {
         MenuManager menu = new MenuManager(terminal, List.of(
+                new LineBreak(),
                 new StaticText("<< Advanced Options >>"),
                 new LineBreak(),
                 new ToggleItem("Mobile Controls", Config.mobileControls),
