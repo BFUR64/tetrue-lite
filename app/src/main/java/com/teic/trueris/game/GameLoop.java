@@ -6,15 +6,14 @@ import java.util.concurrent.locks.LockSupport;
 import com.teic.trueris.Config;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
-import io.github.bfur64.menu.item.LineBreak;
+import io.github.bfur64.menu.item.display.LineBreak;
 import io.github.bfur64.menu.item.Item;
-import io.github.bfur64.menu.item.StaticText;
+import io.github.bfur64.menu.item.display.StaticText;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
 public class GameLoop {
-    @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
 
     private final TerminalBackend terminal;
@@ -116,6 +115,6 @@ public class GameLoop {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
-        menu.run();
+        menu.start();
     }
 }

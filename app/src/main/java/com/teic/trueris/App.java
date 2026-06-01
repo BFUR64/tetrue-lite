@@ -6,6 +6,9 @@ import com.teic.trueris.game.GameRenderer;
 import com.teic.trueris.game.grid.GridData;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.*;
+import io.github.bfur64.menu.item.display.*;
+import io.github.bfur64.menu.item.input.*;
+import io.github.bfur64.terminal.BufferedTerminal;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
@@ -16,7 +19,7 @@ public class App {
     private final TerminalBackend terminal;
 
     public static void main(String[] args) {
-        try (TerminalBackend terminal = Terminal.auto()) {
+        try (TerminalBackend terminal = BufferedTerminal.auto()) {
             terminal.start();
 
             App app = new App(terminal);
@@ -47,7 +50,7 @@ public class App {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
-        menu.run();
+        menu.start();
     }
 
     private void runNewGame() {
@@ -83,7 +86,7 @@ public class App {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
-        menu.run();
+        menu.start();
     }
 
     private void runOptions() {
@@ -100,7 +103,7 @@ public class App {
                 new ActionItem("[ Save & Return ]", Config::saveState, true)
         ));
 
-        menu.run();
+        menu.start();
     }
 
     private void runGameOptions() {
@@ -113,7 +116,7 @@ public class App {
                 new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
-        menu.run();
+        menu.start();
     }
 
     private void runKeyBinds() {
@@ -132,12 +135,14 @@ public class App {
                 new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
-        menu.run();
+        menu.start();
     }
 
     private void runAdvancedOptions() {
         MenuManager menu = new MenuManager(terminal, List.of(
                 new StaticText("<< Advanced Options >>"),
+                new LineBreak(),
+                new ToggleItem("Mobile Controls", Config.mobileControls),
                 new LineBreak(),
                 new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
                 new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
@@ -148,6 +153,6 @@ public class App {
                 new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
-        menu.run();
+        menu.start();
     }
 }
