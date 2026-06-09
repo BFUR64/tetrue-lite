@@ -91,16 +91,16 @@ public class App {
 
     private void runOptions() {
         MenuManager menu = new MenuManager(terminal, List.of(
-                new LineBreak(),
-                new StaticText("<< Options >>"),
-                new LineBreak(),
-                new ActionItem("[ Game Options ]", this::runGameOptions),
-                new LineBreak(),
-                new ActionItem("[ Key Binds ]", this::runKeyBinds),
-                new LineBreak(),
-                new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
-                new LineBreak(),
-                new ActionItem("[ Save & Return ]", Config::saveState, true)
+            new LineBreak(),
+            new StaticText("<< Options >>"),
+            new LineBreak(),
+            new ActionItem("[ Game Options ]", this::runGameOptions),
+            new LineBreak(),
+            new ActionItem("[ Key Binds ]", this::runKeyBinds),
+            new LineBreak(),
+            new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
+            new LineBreak(),
+            new ActionItem("[ Save & Return ]", Config::saveState, true)
         ));
 
         menu.start();
@@ -108,12 +108,12 @@ public class App {
 
     private void runGameOptions() {
         MenuManager menu = new MenuManager(terminal, List.of(
-                new LineBreak(),
-                new StaticText("<< Game Options >>"),
-                new LineBreak(),
-                new InputItem<>("Gravity", ": ", Config.gravity, "ms"),
-                new LineBreak(),
-                new ActionItem("[ Return ]", Config::saveState, true)
+            new LineBreak(),
+            new StaticText("<< Game Options >>"),
+            new LineBreak(),
+            new InputItem<>("Gravity", ": ", Config.gravity, "ms"),
+            new LineBreak(),
+            new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
         menu.start();
@@ -121,20 +121,20 @@ public class App {
 
     private void runKeyBinds() {
         MenuManager menu = new MenuManager(terminal, List.of(
-                new LineBreak(),
-                new StaticText("<< Key Binds >>"),
-                new LineBreak(),
-                new ToggleItem("Mobile Controls", Config.mobileControls),
-                new LineBreak(),
-                new KeyInputItem("Hard Drop", Config.hardDropKey),
-                new KeyInputItem("Soft Drop", Config.softDropKey),
-                new KeyInputItem("Move Left", Config.moveLeftKey),
-                new KeyInputItem("Move Right", Config.moveRightKey),
-                new KeyInputItem("Rotate Left", Config.rotateLeftKey),
-                new KeyInputItem("Rotate Right", Config.rotateRightKey),
-                new KeyInputItem("Hold Block", Config.holdKey),
-                new LineBreak(),
-                new ActionItem("[ Return ]", Config::saveState, true)
+            new LineBreak(),
+            new StaticText("<< Key Binds >>"),
+            new LineBreak(),
+            new ToggleItem("Mobile Controls", Config.mobileControls),
+            new LineBreak(),
+            new KeyInputItem("Hard Drop", Config.hardDropKey),
+            new KeyInputItem("Soft Drop", Config.softDropKey),
+            new KeyInputItem("Move Left", Config.moveLeftKey),
+            new KeyInputItem("Move Right", Config.moveRightKey),
+            new KeyInputItem("Rotate Left", Config.rotateLeftKey),
+            new KeyInputItem("Rotate Right", Config.rotateRightKey),
+            new KeyInputItem("Hold Block", Config.holdKey),
+            new LineBreak(),
+            new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
         menu.start();
@@ -142,16 +142,16 @@ public class App {
 
     private void runAdvancedOptions() {
         MenuManager menu = new MenuManager(terminal, List.of(
-                new LineBreak(),
-                new StaticText("<< Advanced Options >>"),
-                new LineBreak(),
-                new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
-                new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
-                new LineBreak(),
-                new ToggleItem("Show Gravity", Config.showGravity),
-                new ToggleItem("No SRS", Config.noSRS),
-                new LineBreak(),
-                new ActionItem("[ Return ]", Config::saveState, true)
+            new LineBreak(),
+            new StaticText("<< Advanced Options >>"),
+            new LineBreak(),
+            new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
+            new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
+            new LineBreak(),
+            new ToggleItem("Show Gravity", Config.showGravity),
+            new ToggleItem("No SRS", Config.noSRS),
+            new LineBreak(),
+            new ActionItem("[ Return ]", Config::saveState, true)
         ));
 
         menu.start();
