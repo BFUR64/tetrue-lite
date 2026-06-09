@@ -81,7 +81,6 @@ public class App {
             new LineBreak(),
             new StaticText("Menu Manager: " + MenuManager.getVersion()),
             new LineBreak(),
-            new ActionItem("[ Refresh ]", false),
             new ActionItem("[ Return ]", true)
         );
 
