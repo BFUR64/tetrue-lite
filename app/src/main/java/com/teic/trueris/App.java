@@ -23,7 +23,7 @@ public class App {
             terminal.start();
 
             App app = new App(terminal);
-            app.newStart();
+            app.start();
         }
         catch (Exception error) {
             System.out.println("Failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
@@ -34,7 +34,7 @@ public class App {
         this.terminal = terminal;
     }
 
-    private void newStart() {
+    private void start() {
         List<Item> items = List.of(
             new LineBreak(),
             new StaticText("<< Tetrue Lite " + Config.GAME_VERSION + " >>"),
