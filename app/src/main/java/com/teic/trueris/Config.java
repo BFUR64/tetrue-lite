@@ -84,9 +84,9 @@ public class Config {
     }
 
     public static Property<Boolean> mobileControls = Property.of(false)
-            .setter(Config::switchControls)
-            .getter(Config::isMobileMode)
-            .build();
+        .setter(Config::switchControls)
+        .getter(Config::isMobileMode)
+        .build();
 
     public static void mobileControls() {
         hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));

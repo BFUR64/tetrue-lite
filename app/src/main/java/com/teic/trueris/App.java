@@ -124,6 +124,8 @@ public class App {
                 new LineBreak(),
                 new StaticText("<< Key Binds >>"),
                 new LineBreak(),
+                new ToggleItem("Mobile Controls", Config.mobileControls),
+                new LineBreak(),
                 new KeyInputItem("Hard Drop", Config.hardDropKey),
                 new KeyInputItem("Soft Drop", Config.softDropKey),
                 new KeyInputItem("Move Left", Config.moveLeftKey),
@@ -142,8 +144,6 @@ public class App {
         MenuManager menu = new MenuManager(terminal, List.of(
                 new LineBreak(),
                 new StaticText("<< Advanced Options >>"),
-                new LineBreak(),
-                new ToggleItem("Mobile Controls", Config.mobileControls),
                 new LineBreak(),
                 new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
                 new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
