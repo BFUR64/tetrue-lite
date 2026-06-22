@@ -5,7 +5,8 @@ import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.grid.GridData;
-import io.github.bfur64.terminal.interfaces.TerminalBackend;
+import io.github.bfur64.terminal.Terminal;
+import io.github.bfur64.terminal.output.TextColor;
 
 import java.util.List;
 
@@ -16,18 +17,18 @@ public class GameRenderer {
     private final int BORDER_THICKNESS = 1;
     private final int BORDER_OFFSET = 2;
 
-    private final TerminalBackend terminal;
+    private final Terminal terminal;
     private final GridData gridData;
     private final GameState gameState;
 
-    public GameRenderer(TerminalBackend terminal, GridData gridData, GameState gameState) {
+    public GameRenderer(Terminal terminal, GridData gridData, GameState gameState) {
         this.terminal = terminal;
         this.gridData = gridData;
         this.gameState = gameState;
     }
 
-    public void update() {
-        terminal.clearScreen();
+    public void update(long delta) {
+        terminal.clear();
 
         int gameBorderWidth = Config.gridWidth.get() + BORDER_OFFSET;
         int gameBorderHeight = Config.gridHeight.get() + BORDER_OFFSET;
@@ -35,6 +36,8 @@ public class GameRenderer {
         // Game & Blocks
         writeBorder(0, 0, gameBorderWidth, gameBorderHeight);
         writeGameCells();
+
+        terminal.put(0, 23, String.valueOf(Math.round(1_000_000_000.0d / delta)));
 
         // Score & Difficulty / Gravity
         int leftPadding = gameBorderWidth + 1;
@@ -153,12 +156,12 @@ public class GameRenderer {
         int colOffset = col * 2;
 
         int[] textColor = getTextColor(color);
-        terminal.setForegroundColor(textColor[0], textColor[1], textColor[2]);
+        terminal.setFg(textColor[0], textColor[1], textColor[2]);
 
         terminal.put(colOffset, row, out);
         terminal.put(colOffset + 1, row, out);
 
-        terminal.resetColorAndStyle();
+        terminal.reset();
     }
 
     private void putString(int col, int row, String out) {
@@ -166,13 +169,13 @@ public class GameRenderer {
 
         char[] charArray = out.toCharArray();
 
-        terminal.setForegroundColor(255, 255, 255);
+        terminal.setFg(TextColor.WHITE);
 
         for (int pointer = 0; pointer < charArray.length; pointer++) {
             terminal.put(colOffset + pointer * 2, row, String.valueOf(charArray[pointer]));
         }
 
-        terminal.resetColorAndStyle();
+        terminal.reset();
     }
 
     private int[] getTextColor(Color color) {

@@ -6,21 +6,24 @@ import com.teic.trueris.game.GameRenderer;
 import com.teic.trueris.game.grid.GridData;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.*;
-import io.github.bfur64.menu.item.display.*;
-import io.github.bfur64.menu.item.input.*;
-import io.github.bfur64.terminal.BufferedTerminal;
+import io.github.bfur64.menu.item.display.DynamicText;
+import io.github.bfur64.menu.item.display.LineBreak;
+import io.github.bfur64.menu.item.display.StaticText;
+import io.github.bfur64.menu.item.input.InputItem;
+import io.github.bfur64.menu.item.input.KeyInputItem;
+import io.github.bfur64.menu.item.input.ToggleItem;
 import io.github.bfur64.terminal.Terminal;
-import io.github.bfur64.terminal.interfaces.TerminalBackend;
+import io.github.bfur64.terminal.interfaces.TerminalRuntime;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class App {
-    private final TerminalBackend terminal;
+    private final Terminal terminal;
 
     public static void main(String[] args) {
-        try (TerminalBackend terminal = BufferedTerminal.auto()) {
-            terminal.start();
+        try (TerminalRuntime runtime = Terminal.builder().auto().build()) {
+            Terminal terminal = runtime.terminal();
 
             App app = new App(terminal);
             app.start();
@@ -30,7 +33,7 @@ public class App {
         }
     }
 
-    public App(TerminalBackend terminal) {
+    public App(Terminal terminal) {
         this.terminal = terminal;
     }
 
@@ -71,11 +74,11 @@ public class App {
             new LineBreak(),
             new StaticText("| Rendering | "),
             new LineBreak(),
-            new StaticText("Abstraction Library: " + Terminal.getLibraryInfo()),
-            new StaticText("Renderer: " + terminal.getTerminalInfo()),
+            new StaticText("Abstraction Library: " + terminal.libraryInfo()),
+            new StaticText("Renderer: " + terminal.terminalInfo()),
             new LineBreak(),
-            new DynamicText<>("Column: ", terminal::getXSize),
-            new DynamicText<>("Row: ", terminal::getYSize),
+            new DynamicText<>("Column: ", terminal::xSize),
+            new DynamicText<>("Row: ", terminal::ySize),
             new LineBreak(),
             new StaticText("| Menu |"),
             new LineBreak(),
