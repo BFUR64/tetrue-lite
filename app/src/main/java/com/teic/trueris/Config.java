@@ -63,6 +63,8 @@ public class Config {
 
     public static Property<Boolean> noSRS = Property.of(false).build();
 
+    public static Property<Boolean> showFPS = Property.of(false).build();
+
     // =====================
     // Control Switching
     // =====================

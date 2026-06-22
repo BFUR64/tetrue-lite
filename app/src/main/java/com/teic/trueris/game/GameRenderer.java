@@ -37,7 +37,9 @@ public class GameRenderer {
         writeBorder(0, 0, gameBorderWidth, gameBorderHeight);
         writeGameCells();
 
-        terminal.put(0, 23, String.valueOf(Math.round(1_000_000_000.0d / delta)));
+        if (Config.showFPS.get()) {
+            terminal.put(0, 23, String.valueOf(Math.round(1_000_000_000.0d / delta)));
+        }
 
         // Score & Difficulty / Gravity
         int leftPadding = gameBorderWidth + 1;

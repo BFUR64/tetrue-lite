@@ -152,6 +152,7 @@ public class App {
             new LineBreak(),
             new ToggleItem("Show Gravity", Config.showGravity),
             new ToggleItem("No SRS", Config.noSRS),
+            new ToggleItem("Show FPS", Config.showFPS),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
         ));
