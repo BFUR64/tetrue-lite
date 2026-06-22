@@ -15,6 +15,7 @@ import io.github.bfur64.menu.item.input.ToggleItem;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.interfaces.TerminalRuntime;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,15 +23,29 @@ public class App {
     private final Terminal terminal;
 
     public static void main(String[] args) {
-        try (TerminalRuntime runtime = Terminal.builder().auto().build()) {
-            Terminal terminal = runtime.terminal();
+        List<String> argsList = Arrays.asList(args);
 
+        try (TerminalRuntime runtime = createRuntime(argsList)) {
+            Terminal terminal = runtime.terminal();
             App app = new App(terminal);
             app.start();
         }
         catch (Exception error) {
-            System.out.println("Failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
+            System.err.println("Terminal initialization failed: " + error.getMessage());
+            System.exit(1);
         }
+    }
+
+    private static TerminalRuntime createRuntime(List<String> args) throws IOException {
+        Terminal.Builder builder = Terminal.builder();
+
+        if (args.contains("-jline")) {
+            builder = builder.jline();
+        } else if (args.contains("-lanterna")) {
+            builder = builder.lanterna();
+        }
+
+        return builder.build();
     }
 
     public App(Terminal terminal) {
