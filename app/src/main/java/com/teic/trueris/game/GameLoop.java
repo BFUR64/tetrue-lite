@@ -50,8 +50,8 @@ public class GameLoop {
             long deadline = frameStart + nsPerFrame;
             long now = System.nanoTime();
 
-            long sleepNs = (deadline - now) / 2;
-            if (sleepNs > deadline) {
+            long remaining = (deadline - now) / 2;
+            if (remaining > 1_000_000) {
                 LockSupport.parkNanos(deadline - now);
             }
 
