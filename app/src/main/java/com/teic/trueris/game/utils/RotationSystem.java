@@ -28,7 +28,7 @@ public class RotationSystem {
             nextRotation = ((currentRotation.ordinal() - 1) % 4 + 4) % 4;
         }
 
-        Cell[][] cellBlock = blockData.getRotatedCellCopy(Direction.fromId(nextRotation));
+        Cell[][] cellBlock = blockData.getRawBlock();
         Map<String, int[][]> kickTable;
 
         if (!Config.noSRS.get()) {
@@ -47,7 +47,7 @@ public class RotationSystem {
             int targetRow = blockData.getBlockRow() + dy;
             int targetCol = blockData.getBlockCol() + dx;
 
-            if (collision.isPositionValid(cellBlock, targetRow, targetCol)) {
+            if (collision.isPositionValid(cellBlock, nextRotation, targetRow, targetCol)) {
                 rowOffset += dy;
                 colOffset += dx;
                 success = true;

@@ -89,6 +89,11 @@ public class BlockData {
         return newBlock;
     }
 
+    public Cell[][] getRawBlock() {
+        return this.block;
+    }
+
+
     private Cell[][] rotateArrayRight(Cell[][] block) {
         int blockSize = block.length;
         Cell[][] newBlock = new Cell[blockSize][blockSize];
