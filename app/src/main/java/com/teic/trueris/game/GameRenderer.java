@@ -15,6 +15,7 @@ public class GameRenderer {
     private static final String GHOST = "░";
 
     private final int BORDER_THICKNESS = 1;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int BORDER_OFFSET = 2;
 
     private final Terminal terminal;
@@ -71,6 +72,7 @@ public class GameRenderer {
     // =====================
     // Border
     // =====================
+    @SuppressWarnings("SameParameterValue")
     private void writeBorder(int x, int y, int xSize, int ySize) {
         for (int row = 0; row < ySize; row++) {
             for (int col = 0; col < xSize; col++) {
@@ -108,7 +110,7 @@ public class GameRenderer {
                 int colOffset = col + BORDER_THICKNESS;
 
                 if (!cell.isEmpty()) {
-                    putCell(colOffset, rowOffset,SOLID, cell.color);
+                    putCell(colOffset, rowOffset,SOLID, cell.color());
                 }
             }
         }
@@ -140,7 +142,7 @@ public class GameRenderer {
             for (int col = 0; col < block[0].length; col++) {
                 Cell cell = block[row][col];
                 if (!cell.isEmpty()) {
-                    putCell(col + colStart, row + rowStart, out, cell.color);
+                    putCell(col + colStart, row + rowStart, out, cell.color());
                 }
             }
         }
