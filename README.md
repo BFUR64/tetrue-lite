@@ -86,9 +86,9 @@ java -jar app/build/libs/app-all.jar
 ## Tech Stack
 - Programming Language: Java 21 (Adoptium OpenJDK 21.0.11)
 - Libraries:
-  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 2.0.1 (Lanterna-like Abstraction Library for JLine4 and Lanterna)
-  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.6.0 (Personal Composite-based Menu Management)
-- Build Tools: Gradle 9.3.1
+  - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 3.2.1 (Lanterna-like Abstraction Library for JLine4 and Lanterna)
+  - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.9.2 (Personal Composite-based Menu Management)
+- Build Tools: Gradle 9.7.0
 
 ## Version Releasing
 MAJOR . MINOR . PATCH
