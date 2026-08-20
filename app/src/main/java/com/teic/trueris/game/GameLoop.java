@@ -110,6 +110,8 @@ public class GameLoop {
     }
 
     private void handleGameOver() {
+        gameManager.cleanUp();
+
         List<Item> items = List.of(
             new LineBreak(),
             new StaticText("Game Over!"),
