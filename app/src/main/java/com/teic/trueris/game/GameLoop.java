@@ -6,18 +6,17 @@ import java.util.concurrent.locks.LockSupport;
 import com.teic.trueris.Config;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
-import io.github.bfur64.menu.item.LineBreak;
+import io.github.bfur64.menu.item.display.LineBreak;
 import io.github.bfur64.menu.item.Item;
-import io.github.bfur64.menu.item.StaticText;
+import io.github.bfur64.menu.item.display.StaticText;
+import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
-import io.github.bfur64.terminal.interfaces.TerminalBackend;
 
 public class GameLoop {
-    @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
 
-    private final TerminalBackend terminal;
+    private final Terminal terminal;
     
     private final GameRenderer gameRenderer;
     private final GameManager gameManager;
@@ -26,7 +25,7 @@ public class GameLoop {
     private boolean running;
     private final int nsPerFrame;
 
-    public GameLoop(TerminalBackend terminal, GameRenderer gameRenderer, GameManager gameManager) {
+    public GameLoop(Terminal terminal, GameRenderer gameRenderer, GameManager gameManager) {
         this.terminal = terminal;
 
         this.gameRenderer = gameRenderer;
@@ -38,7 +37,7 @@ public class GameLoop {
     }
 
     public void run() {
-        terminal.clearScreen();
+        terminal.clear();
 
         long delta = 0;
 
@@ -51,8 +50,13 @@ public class GameLoop {
             long deadline = frameStart + nsPerFrame;
             long now = System.nanoTime();
 
-            while (now < deadline) {
+            long remaining = (deadline - now) / 2;
+            if (remaining > 1_000_000) {
                 LockSupport.parkNanos(deadline - now);
+            }
+
+            while (now < deadline) {
+                Thread.onSpinWait();
                 now = System.nanoTime();
             }
 
@@ -63,9 +67,9 @@ public class GameLoop {
     }
 
     private void update(long delta) {
-        handleGameState(terminal.pollInput());
+        handleGameState(terminal.poll());
         gameManager.update(delta);
-        gameRenderer.update();
+        gameRenderer.update(delta);
 
         if (gameState.isGameOver()) {
             running = false;
@@ -106,6 +110,8 @@ public class GameLoop {
     }
 
     private void handleGameOver() {
+        gameManager.cleanUp();
+
         List<Item> items = List.of(
             new LineBreak(),
             new StaticText("Game Over!"),
@@ -116,6 +122,6 @@ public class GameLoop {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
-        menu.run();
+        menu.start();
     }
 }

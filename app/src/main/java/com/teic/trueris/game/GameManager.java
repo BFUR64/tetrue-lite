@@ -42,6 +42,10 @@ public class GameManager implements GameState {
         generateGhostBlock();
     }
 
+    public void cleanUp() {
+        Config.gravity.set(Config.gravityDef);
+    }
+
     // =====================
     // Movement
     // =====================
@@ -202,7 +206,6 @@ public class GameManager implements GameState {
         activeBlock = blockQueue.getFirstBlock();
 
         if (!blockManager.isPositionValid(activeBlock)) {
-            Config.gravity.set(Config.gravityDef);
             gameOver = true;
         }
     }

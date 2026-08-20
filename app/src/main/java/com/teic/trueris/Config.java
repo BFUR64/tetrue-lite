@@ -1,11 +1,11 @@
 package com.teic.trueris;
 
-import io.github.bfur64.menu.utils.Property;
+import io.github.bfur64.menu.Property;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
 
 public class Config {
-    public static final String GAME_VERSION = "v2.5.3";
+    public static final String GAME_VERSION = "v2.5.4";
 
     public static final int TARGET_FPS = 60;
 
@@ -62,4 +62,51 @@ public class Config {
     public static Property<Boolean> showGravity = Property.of(false).build();
 
     public static Property<Boolean> noSRS = Property.of(false).build();
+
+    public static Property<Boolean> showFPS = Property.of(false).build();
+
+    // =====================
+    // Control Switching
+    // =====================
+    private static boolean isMobileMode;
+
+    private static void switchControls(boolean bool) {
+        isMobileMode = bool;
+
+        if (isMobileMode) {
+            mobileControls();
+            return;
+        }
+
+        desktopControls();
+    }
+
+    private static boolean isMobileMode() {
+        return isMobileMode;
+    }
+
+    public static Property<Boolean> mobileControls = Property.of(false)
+        .setter(Config::switchControls)
+        .getter(Config::isMobileMode)
+        .build();
+
+    public static void mobileControls() {
+        hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
+        softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
+        moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
+        moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
+        rotateLeftKey.set(new KeyStroke(KeyType.HOME));
+        rotateRightKey.set(new KeyStroke(KeyType.END));
+        holdKey.set(new KeyStroke('-'));
+    }
+
+    public static void desktopControls() {
+        hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
+        softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
+        moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
+        moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
+        rotateLeftKey.set(new KeyStroke('q'));
+        rotateRightKey.set(new KeyStroke('e'));
+        holdKey.set(new KeyStroke('c'));
+    }
 }
