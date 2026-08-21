@@ -7,6 +7,7 @@ import java.util.List;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.CellRegistry;
 
+@Deprecated
 public class BlockRegistry {
     private static final List<BlockTemplate> BLOCK_SET = new ArrayList<>();
 
