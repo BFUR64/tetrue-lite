@@ -1,5 +1,6 @@
 package com.teic.trueris.game.cell;
 
+@Deprecated
 public class CellRegistry {
     public static final Cell EMPTY = new Cell();
     public static final Cell OCELL = new Cell(Color.YELLOW);
