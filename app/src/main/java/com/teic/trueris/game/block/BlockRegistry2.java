@@ -100,6 +100,4 @@ public class BlockRegistry2 {
     public BlockTemplate getBlock(CellType cellType) {
         return BLOCK_MAP.get(cellType);
     }
-
-    public record BlockTemplate(int size, @Nullable CellType[] cells) {}
 }
