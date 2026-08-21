@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     testImplementation(libs.junit)
+    implementation("org.jspecify:jspecify:1.0.0")
     implementation("io.github.bfur64:menu-manager:0.9.2")
 }
 
