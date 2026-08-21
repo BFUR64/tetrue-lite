@@ -4,6 +4,7 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.CellRegistry;
 
+@Deprecated
 public class GridData {
     private final Cell[][] grid;
 
