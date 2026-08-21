@@ -1,6 +1,19 @@
 package com.teic.trueris.game.block;
 
 import com.teic.trueris.game.cell.CellType;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-public record BlockTemplate(int size, @Nullable CellType[] cells) {}
+import java.util.Collections;
+import java.util.List;
+
+@NullMarked
+public record BlockTemplate(int size, List<@Nullable CellType> cells) {
+    public BlockTemplate {
+        cells = Collections.unmodifiableList(cells);
+    }
+
+    public @Nullable CellType getCell(int x, int y) {
+        return cells.get(y * size + x);
+    }
+}

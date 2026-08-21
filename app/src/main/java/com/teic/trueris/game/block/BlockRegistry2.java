@@ -4,6 +4,7 @@ import com.teic.trueris.game.cell.CellType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,10 +17,10 @@ public class BlockRegistry2 {
             CellType.O,
             new BlockTemplate(
                 2,
-                new CellType[]{
+                Arrays.asList(
                     CellType.O, CellType.O,
                     CellType.O, CellType.O
-                }
+                )
             )
         );
 
@@ -27,11 +28,11 @@ public class BlockRegistry2 {
             CellType.J,
             new BlockTemplate(
             3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     CellType.J, null,       null,
                     CellType.J, CellType.J, CellType.J,
                     null,       null,       null
-                }
+                )
             )
         );
 
@@ -39,11 +40,11 @@ public class BlockRegistry2 {
             CellType.L,
             new BlockTemplate(
             3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     null,       null,       CellType.L,
                     CellType.L, CellType.L, CellType.L,
                     null,       null,       null
-                }
+                )
             )
         );
 
@@ -51,11 +52,11 @@ public class BlockRegistry2 {
             CellType.S,
             new BlockTemplate(
                 3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     null,       CellType.S, CellType.S,
                     CellType.S, CellType.S, null,
                     null,       null,       null
-                }
+                )
             )
         );
 
@@ -63,11 +64,11 @@ public class BlockRegistry2 {
             CellType.Z,
             new BlockTemplate(
                 3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     CellType.Z, CellType.Z, null,
                     null,       CellType.Z, CellType.Z,
                     null,       null,       null
-                }
+                )
             )
         );
 
@@ -75,11 +76,11 @@ public class BlockRegistry2 {
             CellType.T,
             new BlockTemplate(
                 3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     null,       CellType.T, null,
                     CellType.T, CellType.T, CellType.T,
                     null,       null,       null
-                }
+                )
             )
         );
 
@@ -87,12 +88,12 @@ public class BlockRegistry2 {
             CellType.I,
             new BlockTemplate(
                 3,
-                new @Nullable CellType[]{
+                Arrays.asList(
                     null,       null,       null,       null,
                     CellType.I, CellType.I, CellType.I, CellType.I,
                     null,       null,       null,       null,
                     null,       null,       null,       null
-                }
+                )
             )
         );
     }
