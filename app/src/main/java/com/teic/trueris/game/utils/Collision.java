@@ -5,6 +5,7 @@ import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.grid.GridData;
 
+@Deprecated
 public class Collision {
     private final GridData gridData;
 
