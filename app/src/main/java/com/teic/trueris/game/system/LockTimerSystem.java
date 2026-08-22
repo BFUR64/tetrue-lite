@@ -6,10 +6,12 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.LockTimer;
 import com.teic.trueris.game.event.LockTimerExpired;
+import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 import java.util.List;
 
+@NullMarked
 public class LockTimerSystem {
     private final World world;
     private final EventBus eventBus;

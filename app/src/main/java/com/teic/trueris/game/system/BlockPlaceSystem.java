@@ -9,20 +9,17 @@ import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.MoveDownResponse;
-import com.teic.trueris.game.event.MoveXResponse;
 import com.teic.trueris.game.grid.GridData2;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static com.teic.trueris.game.utils.CellGrid.getCell;
 
+@NullMarked
 public class BlockPlaceSystem {
-    private final GridData2 gridData;
-
     public BlockPlaceSystem(GridData2 gridData, World world, EventBus eventBus) {
-        this.gridData = gridData;
-
         eventBus.subscribe(MoveDownResponse.class, event -> {
             if (!event.canDrop() && world.has(event.entityId(), Position.class, Rotation.class, Shape.class, OnGround.class)) {
                 if (!world.get(event.entityId(), OnGround.class).onGround()) return;

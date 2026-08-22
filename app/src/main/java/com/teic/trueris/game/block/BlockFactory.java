@@ -9,9 +9,11 @@ import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.GravityTimer;
 import com.teic.trueris.game.event.LockTimer;
+import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 
+@NullMarked
 public class BlockFactory {
     private final World world;
 

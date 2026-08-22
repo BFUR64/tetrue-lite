@@ -7,11 +7,12 @@ import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.GravityExpired;
 import com.teic.trueris.game.event.GravityTimer;
 import com.teic.trueris.game.event.MoveDownResponse;
-import com.teic.trueris.game.event.MoveXResponse;
+import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 import java.util.List;
 
+@NullMarked
 public class GravitySystem {
     private final World world;
     private final EventBus eventBus;

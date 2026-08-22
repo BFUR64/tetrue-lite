@@ -1,10 +1,12 @@
 package com.teic.trueris.game.utils;
 
 import com.teic.trueris.game.cell.CellType;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class CellGrid {
     public static @Nullable CellType getCell(@Nullable CellType[] cells, int width, int x, int y) {
         return cells[y * width + x];

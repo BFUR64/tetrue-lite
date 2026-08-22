@@ -11,12 +11,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BlockSpawnSystem {
     private final BlockFactory blockFactory;
-    private final World world;
     private final EventBus eventBus;
 
     public BlockSpawnSystem(BlockFactory blockFactory, World world, EventBus eventBus) {
         this.blockFactory = blockFactory;
-        this.world = world;
         this.eventBus = eventBus;
 
         eventBus.subscribe(BlockPlaceEvent.class, event -> {

@@ -5,9 +5,11 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.GroundCheckQuery;
 import com.teic.trueris.game.event.GroundCheckResponse;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class OnGroundSystem {
     private final World world;
     private final EventBus eventBus;
@@ -25,7 +27,7 @@ public class OnGroundSystem {
         });
     }
 
-    public void update(long delta) {
+    public void update() {
         List<Integer> entityIds = world.query(OnGround.class);
 
         for (Integer entityId : entityIds) {

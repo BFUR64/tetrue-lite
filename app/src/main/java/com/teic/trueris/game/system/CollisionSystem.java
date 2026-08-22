@@ -20,7 +20,6 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 public class CollisionSystem {
     private final GridData2 gridData;
     private final World world;
-    private final EventBus eventBus;
 
     private final int height = Config.gridHeight.get();
     private final int width = Config.gridWidth.get();
@@ -28,7 +27,6 @@ public class CollisionSystem {
     public CollisionSystem(GridData2 gridData, World world, EventBus eventBus) {
         this.gridData = gridData;
         this.world = world;
-        this.eventBus = eventBus;
 
         eventBus.subscribe(MoveXQuery.class, event -> {
             Boolean valid = isValid(event.entityId(), event.dx(), 0);

@@ -4,13 +4,13 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.event.*;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BlockMovementSystem {
-    private final World world;
     private final EventBus eventBus;
 
     public BlockMovementSystem(World world, EventBus eventBus) {
-        this.world = world;
         this.eventBus = eventBus;
 
         eventBus.subscribe(MoveXResponse.class, event -> {
@@ -51,13 +51,9 @@ public class BlockMovementSystem {
 
         });
 
-        eventBus.subscribe(GravityExpired.class, event -> {
-            moveBlockDown(event.entityId());
-        });
+        eventBus.subscribe(GravityExpired.class, event -> moveBlockDown(event.entityId()));
 
-        eventBus.subscribe(LockTimerExpired.class, event -> {
-            moveBlockDown(event.entityId());
-        });
+        eventBus.subscribe(LockTimerExpired.class, event -> moveBlockDown(event.entityId()));
     }
 
     public void moveBlockDown(Integer entityId) {

@@ -1,5 +1,8 @@
 package com.teic.trueris.game.cell;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public enum CellType {
     O(Color.YELLOW),
     J(Color.BLUE),

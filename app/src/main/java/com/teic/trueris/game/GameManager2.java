@@ -8,37 +8,28 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class GameManager2 {
-    private final World world;
-    private final EventBus eventBus;
-    private final BlockFactory blockFactory;
-
     private final GravitySystem gravitySystem;
-    private final BlockMovementSystem blockMovementSystem;
-    private final CollisionSystem collisionSystem;
-    private final BlockPlaceSystem gridSystem;
-    private final BlockSpawnSystem blockSpawnSystem;
     private final OnGroundSystem onGroundSystem;
     private final LockTimerSystem lockTimerSystem;
-
-    private final GameOverSystem gameOverSystem;
+    private final BlockMovementSystem blockMovementSystem;
 
     private Integer activeBlockId;
 
     public GameManager2(World world, EventBus eventBus, GridData2 gridData) {
-        this.world = world;
-        this.eventBus = eventBus;
-        this.blockFactory = new BlockFactory(world);
+        BlockFactory blockFactory = new BlockFactory(world);
 
-        this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
-        this.collisionSystem = new CollisionSystem(gridData, world, eventBus);
-        this.gridSystem = new BlockPlaceSystem(gridData, world, eventBus);
-        this.blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
-
-        this.onGroundSystem = new OnGroundSystem(world, eventBus);
         this.gravitySystem = new GravitySystem(world, eventBus);
+        this.onGroundSystem = new OnGroundSystem(world, eventBus);
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
-        this.gameOverSystem = new GameOverSystem(world, eventBus);
+        this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
+
+        new CollisionSystem(gridData, world, eventBus);
+        new BlockPlaceSystem(gridData, world, eventBus);
+
+        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
+
+        new GameOverSystem(eventBus);
 
         eventBus.subscribe(BlockSpawnEvent.class, event -> {
             activeBlockId = event.entityId();
@@ -48,7 +39,7 @@ public class GameManager2 {
     }
 
     public void update(long delta) {
-        onGroundSystem.update(delta);
+        onGroundSystem.update();
         gravitySystem.update(delta);
         lockTimerSystem.update(delta);
     }

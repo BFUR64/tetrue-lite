@@ -1,12 +1,14 @@
 package com.teic.trueris.game;
 
 import com.teic.trueris.game.event.EventListener;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 public class EventBus {
     private final Map<Class<?>, List<EventListener<?>>> listeners = new HashMap<>();
 
