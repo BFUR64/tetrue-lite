@@ -6,7 +6,6 @@ import java.util.*;
 
 @NullMarked
 public class World {
-    private final EventBus events = new EventBus();
     private final Map<Class<?>, Map<Integer, Object>> components = new HashMap<>();
 
     public void put(Integer entityId, Object component) {
@@ -82,9 +81,5 @@ public class World {
         }
 
         return new ArrayList<>(result);
-    }
-
-    public EventBus getEvents() {
-        return events;
     }
 }
