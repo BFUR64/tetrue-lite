@@ -40,6 +40,8 @@ public class GameRenderer2 {
 
             writeBlock(position.x(), position.y(), shape.blockTemplate().size(), rotatedCells, "█");
         }
+
+        terminal.flush();
     }
 
     private void writeBlock(int colStart, int rowStart, int width, List<@Nullable CellType> cells, String out) {
