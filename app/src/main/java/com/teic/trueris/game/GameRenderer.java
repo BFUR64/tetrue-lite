@@ -10,6 +10,7 @@ import io.github.bfur64.terminal.output.TextColor;
 
 import java.util.List;
 
+@Deprecated
 public class GameRenderer {
     private static final String SOLID = "█";
     private static final String GHOST = "░";

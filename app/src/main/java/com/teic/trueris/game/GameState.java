@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.teic.trueris.game.block.BlockData;
 
+@Deprecated
 public interface GameState {
     List<BlockData> viewBlockQueue();
     int getScore();
