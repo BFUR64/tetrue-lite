@@ -10,11 +10,11 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class BlockSpawnSystem {
-    private final BlockFactory blockFactory;
+    private final SevenBagSystem sevenBagSystem;
     private final EventBus eventBus;
 
-    public BlockSpawnSystem(BlockFactory blockFactory, World world, EventBus eventBus) {
-        this.blockFactory = blockFactory;
+    public BlockSpawnSystem(SevenBagSystem sevenBagSystem, World world, EventBus eventBus) {
+        this.sevenBagSystem = sevenBagSystem;
         this.eventBus = eventBus;
 
         eventBus.subscribe(BlockPlaceEvent.class, event -> {
@@ -24,7 +24,7 @@ public class BlockSpawnSystem {
     }
 
     public int spawnBlock() {
-        Integer entityId = blockFactory.createBlock(CellType.S);
+        Integer entityId = sevenBagSystem.getFirstBlock();
 
         eventBus.publish(new BlockSpawnEvent(entityId));
 

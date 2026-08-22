@@ -16,7 +16,6 @@ public class GameManager2 {
     private Integer activeBlockId;
 
     public GameManager2(World world, EventBus eventBus, GridData2 gridData) {
-        BlockFactory blockFactory = new BlockFactory(world);
 
         this.gravitySystem = new GravitySystem(world, eventBus);
         this.onGroundSystem = new OnGroundSystem(world, eventBus);
@@ -25,7 +24,10 @@ public class GameManager2 {
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
-        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
+
+        BlockFactory blockFactory = new BlockFactory(world);
+        SevenBagSystem sevenBagSystem = new SevenBagSystem(blockFactory);
+        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
 
         new LineClearSystem(gridData, eventBus);
         new ScoreTrackerSystem(eventBus);
