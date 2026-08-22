@@ -35,6 +35,22 @@ public class BlockMovementSystem {
             }
         });
 
+        eventBus.subscribe(DropDownResponse.class, event -> {
+            if (world.has(event.entityId(), Position.class)) {
+                if (event.canDrop()) {
+                    Position oldPosition = world.get(event.entityId(), Position.class);
+
+                    world.put(event.entityId(), new Position(
+                        oldPosition.x(),
+                        oldPosition.y() + 1
+                    ));
+                    
+                    dropBlock(event.entityId());
+                }
+            }
+
+        });
+
         eventBus.subscribe(GravityExpired.class, event -> {
             moveBlockDown(event.entityId());
         });
@@ -46,6 +62,10 @@ public class BlockMovementSystem {
 
     public void moveBlockDown(Integer entityId) {
         eventBus.publish(new MoveDownQuery(entityId));
+    }
+
+    public void dropBlock(Integer entityId) {
+        eventBus.publish(new DropDownQuery(entityId));
     }
 
     public void moveBlockLeft(Integer entityId) {

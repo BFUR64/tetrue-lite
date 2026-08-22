@@ -46,6 +46,14 @@ public class CollisionSystem {
             }
         });
 
+        eventBus.subscribe(DropDownQuery.class, event -> {
+            Boolean valid = isValid(event.entityId(), 0, 1);
+
+            if (valid != null) {
+                eventBus.publish(new DropDownResponse(event.entityId(), valid));
+            }
+        });
+
         eventBus.subscribe(GroundCheckQuery.class, event -> {
             Boolean clear = isValid(event.entityId(), 0, 1);
 

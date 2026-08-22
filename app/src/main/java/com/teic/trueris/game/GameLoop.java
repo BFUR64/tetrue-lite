@@ -97,11 +97,12 @@ public class GameLoop {
             return;
         }
 
-        if (keyStroke.equals(Config.hardDropKey.get())) {
-//            gameManager.dropBlock();
-        }
-        else if (keyStroke.equals(Config.softDropKey.get())) {
+
+        if (keyStroke.equals(Config.softDropKey.get())) {
             gameManager.moveBlockDown();
+        }
+        else if (keyStroke.equals(Config.hardDropKey.get())) {
+            gameManager.dropBlock();
         }
         else if (keyStroke.equals(Config.moveLeftKey.get())) {
             gameManager.moveBlockLeft();

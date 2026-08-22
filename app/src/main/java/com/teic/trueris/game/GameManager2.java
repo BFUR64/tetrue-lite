@@ -57,6 +57,10 @@ public class GameManager2 {
         blockMovementSystem.moveBlockDown(activeBlockId);
     }
 
+    public void dropBlock() {
+        blockMovementSystem.dropBlock(activeBlockId);
+    }
+
     public void moveBlockLeft() {
         blockMovementSystem.moveBlockLeft(activeBlockId);
     }
