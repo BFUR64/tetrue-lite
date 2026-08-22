@@ -21,7 +21,7 @@ public class GravitySystem {
         eventBus.subscribe(MoveBlockAccepted.class, event -> {
             if (event.dy() > 0) {
                 if (world.has(event.entityId(), GravityTimer.class)) {
-                    world.add(event.entityId(), new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
+                    world.put(event.entityId(), new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
                 }
             }
         });
@@ -39,7 +39,7 @@ public class GravitySystem {
                 newGravityDuration = Duration.ofMillis(Config.gravity.get()).toNanos();
             }
 
-            world.add(entityId, new GravityTimer(newGravityDuration));
+            world.put(entityId, new GravityTimer(newGravityDuration));
         }
     }
 }
