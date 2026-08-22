@@ -5,6 +5,7 @@ import java.util.concurrent.locks.LockSupport;
 
 import com.teic.trueris.Config;
 import com.teic.trueris.game.event.GameOverEvent;
+import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridData2;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
@@ -24,6 +25,8 @@ public class GameLoop {
 //    private final GameManager gameManager;
 //    private final GameState gameState;
     private final EventBus eventBus;
+
+    private int score = 0;
 
     private final GameRenderer2 gameRenderer;
     private final GameManager2 gameManager;
@@ -46,9 +49,8 @@ public class GameLoop {
         int targetFps = Config.TARGET_FPS;
         this.nsPerFrame = NSEC / targetFps;
 
-        eventBus.subscribe(GameOverEvent.class, event -> {
-            running = false;
-        });
+        eventBus.subscribe(GameOverEvent.class, event -> running = false);
+        eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
     }
 
     public void run() {
@@ -128,7 +130,7 @@ public class GameLoop {
             new LineBreak(),
             new StaticText("Game Over!"),
             new LineBreak(),
-//            new StaticText("Score: " + gameState.getScore()),
+            new StaticText("Score: " + score),
             new LineBreak(),
             new ActionItem("[ Return ] ", true)
         );

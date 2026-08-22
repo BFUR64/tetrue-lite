@@ -28,6 +28,7 @@ public class GameManager2 {
         BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
 
         new LineClearSystem(gridData, eventBus);
+        new ScoreTrackerSystem(eventBus);
 
         new GameOverSystem(eventBus);
 
