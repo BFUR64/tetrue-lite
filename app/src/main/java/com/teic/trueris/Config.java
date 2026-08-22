@@ -29,6 +29,9 @@ public class Config {
             .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
             .parser(Integer::parseInt).build();
 
+    public static Property<Integer> lockTimer = Property.of(500)
+            .parser(Integer::parseInt).build();
+
     public static Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
             .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
             .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")

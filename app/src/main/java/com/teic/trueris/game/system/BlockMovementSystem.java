@@ -4,6 +4,7 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.event.GravityExpired;
+import com.teic.trueris.game.event.LockTimerExpired;
 import com.teic.trueris.game.event.MoveBlockAccepted;
 import com.teic.trueris.game.event.MoveBlockCommand;
 
@@ -20,13 +21,17 @@ public class BlockMovementSystem {
                 Position oldPosition = world.get(event.entityId(), Position.class);
 
                 world.put(event.entityId(), new Position(
-                        oldPosition.x() + event.dx(),
-                        oldPosition.y() + event.dy())
+                    oldPosition.x() + event.dx(),
+                    oldPosition.y() + event.dy())
                 );
             }
         });
 
         eventBus.subscribe(GravityExpired.class, event -> {
+            moveBlockDown(event.entityId());
+        });
+
+        eventBus.subscribe(LockTimerExpired.class, event -> {
             moveBlockDown(event.entityId());
         });
     }

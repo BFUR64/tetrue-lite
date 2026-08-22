@@ -18,6 +18,8 @@ public class GameManager2 {
     private final CollisionSystem collisionSystem;
     private final BlockPlaceSystem gridSystem;
     private final BlockSpawnSystem blockSpawnSystem;
+    private final OnGroundSystem onGroundSystem;
+    private final LockTimerSystem lockTimerSystem;
 
     private Integer activeBlockId;
 
@@ -26,11 +28,14 @@ public class GameManager2 {
         this.eventBus = new EventBus();
         this.blockFactory = new BlockFactory(world);
 
-        this.gravitySystem = new GravitySystem(world, eventBus);
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
-        this.collisionSystem = new CollisionSystem(world, eventBus);
+        this.collisionSystem = new CollisionSystem(gridData, world, eventBus);
         this.gridSystem = new BlockPlaceSystem(gridData, world, eventBus);
         this.blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
+
+        this.onGroundSystem = new OnGroundSystem(world, eventBus);
+        this.gravitySystem = new GravitySystem(world, eventBus);
+        this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
         eventBus.subscribe(BlockSpawnEvent.class, event -> {
             activeBlockId = event.entityId();
@@ -40,7 +45,9 @@ public class GameManager2 {
     }
 
     public void update(long delta) {
+        onGroundSystem.update(delta);
         gravitySystem.update(delta);
+        lockTimerSystem.update(delta);
     }
 
     public void moveBlockDown() {
