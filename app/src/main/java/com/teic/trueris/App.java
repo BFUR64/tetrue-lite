@@ -40,9 +40,9 @@ public class App {
         Terminal.Builder builder = Terminal.builder();
 
         if (args.contains("-jline")) {
-            builder = builder.jline();
+            builder.jline();
         } else if (args.contains("-lanterna")) {
-            builder = builder.lanterna();
+            builder.lanterna();
         }
 
         return builder.build();
@@ -72,11 +72,11 @@ public class App {
     }
 
     private void runNewGame() {
-        GridData gridData = new GridData();
-        GameManager gameManager = new GameManager(gridData);
-        GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
-
-        GameLoop gameLoop = new GameLoop(terminal, gameRenderer, gameManager);
+//        GridData gridData = new GridData();
+//        GameManager gameManager = new GameManager(gridData);
+//        GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
+//
+        GameLoop gameLoop = new GameLoop(terminal);
         gameLoop.run();
     }
 
