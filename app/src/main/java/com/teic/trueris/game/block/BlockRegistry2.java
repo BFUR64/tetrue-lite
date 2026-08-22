@@ -98,7 +98,7 @@ public class BlockRegistry2 {
         );
     }
 
-    public BlockTemplate getBlock(CellType cellType) {
+    public static BlockTemplate getBlock(CellType cellType) {
         return BLOCK_MAP.get(cellType);
     }
 }
