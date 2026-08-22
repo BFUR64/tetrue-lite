@@ -1,12 +1,9 @@
 package com.teic.trueris.game;
 
 import com.teic.trueris.game.block.BlockFactory;
-import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.event.BlockSpawnEvent;
 import com.teic.trueris.game.grid.GridData2;
-import com.teic.trueris.game.system.BlockMovementSystem;
-import com.teic.trueris.game.system.CollisionSystem;
-import com.teic.trueris.game.system.GravitySystem;
-import com.teic.trueris.game.system.GridSystem;
+import com.teic.trueris.game.system.*;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -19,7 +16,8 @@ public class GameManager2 {
     private final GravitySystem gravitySystem;
     private final BlockMovementSystem blockMovementSystem;
     private final CollisionSystem collisionSystem;
-    private final GridSystem gridSystem;
+    private final BlockPlaceSystem gridSystem;
+    private final BlockSpawnSystem blockSpawnSystem;
 
     private Integer activeBlockId;
 
@@ -31,9 +29,14 @@ public class GameManager2 {
         this.gravitySystem = new GravitySystem(world, eventBus);
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
         this.collisionSystem = new CollisionSystem(world, eventBus);
-        this.gridSystem = new GridSystem(gridData, world, eventBus);
+        this.gridSystem = new BlockPlaceSystem(gridData, world, eventBus);
+        this.blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
 
-        activeBlockId = blockFactory.createBlock(CellType.I);
+        eventBus.subscribe(BlockSpawnEvent.class, event -> {
+            activeBlockId = event.entityId();
+        });
+
+        this.activeBlockId = blockSpawnSystem.spawnBlock();
     }
 
     public void update(long delta) {

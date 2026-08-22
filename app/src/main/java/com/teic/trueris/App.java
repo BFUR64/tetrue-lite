@@ -31,7 +31,7 @@ public class App {
             app.start();
         }
         catch (Exception error) {
-            System.err.println("Terminal initialization failed: " + error.getMessage());
+            System.err.println("Terminal initialization failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
             System.exit(1);
         }
     }

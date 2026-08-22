@@ -16,12 +16,14 @@ public class BlockMovementSystem {
         this.eventBus = eventBus;
 
         eventBus.subscribe(MoveBlockAccepted.class, event -> {
-            Position oldPosition = world.get(event.entityId(), Position.class);
+            if (world.has(event.entityId(), Position.class)) {
+                Position oldPosition = world.get(event.entityId(), Position.class);
 
-            world.put(event.entityId(), new Position(
-                oldPosition.x() + event.dx(),
-                oldPosition.y() + event.dy())
-            );
+                world.put(event.entityId(), new Position(
+                        oldPosition.x() + event.dx(),
+                        oldPosition.y() + event.dy())
+                );
+            }
         });
 
         eventBus.subscribe(GravityExpired.class, event -> {
