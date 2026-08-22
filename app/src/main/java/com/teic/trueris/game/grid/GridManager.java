@@ -5,6 +5,7 @@ import com.teic.trueris.game.block.BlockData;
 import com.teic.trueris.game.cell.Cell;
 import com.teic.trueris.game.cell.CellRegistry;
 
+@Deprecated
 public class GridManager {
     private final GridData gridData;
 
