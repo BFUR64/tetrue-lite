@@ -9,5 +9,13 @@ public enum CellType {
     T(Color.PURPLE),
     I(Color.CYAN);
 
-    CellType(Color color) {}
+    private final Color color;
+
+    CellType(Color color) {
+        this.color = color;
+    }
+
+    public Color color() {
+        return color;
+    }
 }
