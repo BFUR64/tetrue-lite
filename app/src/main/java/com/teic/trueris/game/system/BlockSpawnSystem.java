@@ -4,8 +4,8 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.BlockSpawnEvent;
-import com.teic.trueris.game.event.MoveBlockRejected;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -19,11 +19,9 @@ public class BlockSpawnSystem {
         this.world = world;
         this.eventBus = eventBus;
 
-        eventBus.subscribe(MoveBlockRejected.class, event -> {
-            if (event.grounded()) {
-                world.remove(event.entityId());
-                spawnBlock();
-            }
+        eventBus.subscribe(BlockPlaceEvent.class, event -> {
+            world.remove(event.entityId());
+            spawnBlock();
         });
     }
 
