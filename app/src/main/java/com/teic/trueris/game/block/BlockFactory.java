@@ -1,10 +1,14 @@
 package com.teic.trueris.game.block;
 
+import com.teic.trueris.Config;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
+import com.teic.trueris.game.event.GravityTimer;
+
+import java.time.Duration;
 
 public class BlockFactory {
     private final World world;
@@ -21,6 +25,7 @@ public class BlockFactory {
         world.add(id, new Position(0, 0));
         world.add(id, new Rotation(Direction.UP));
         world.add(id, new Shape(BlockRegistry2.getBlock(cell)));
+        world.add(id, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
 
         return id;
     }
