@@ -24,6 +24,12 @@ public class World {
         }
     }
 
+    public void remove(Integer entityId) {
+        for (Map<Integer, Object> storage : components.values()) {
+            storage.remove(entityId);
+        }
+    }
+
     public <T> T get(Integer entityId, Class<T> componentType) {
         Map<Integer, Object> storage = components.get(componentType);
 
