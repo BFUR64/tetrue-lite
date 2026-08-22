@@ -1,7 +1,6 @@
 package com.teic.trueris.game;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -10,7 +9,7 @@ public class World {
     private final EventBus events = new EventBus();
     private final Map<Class<?>, Map<Integer, Object>> components = new HashMap<>();
 
-    public void add(Integer entityId, Object component) {
+    public void put(Integer entityId, Object component) {
         components
             .computeIfAbsent(component.getClass(), ignored -> new HashMap<>())
             .put(entityId, component);

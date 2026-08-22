@@ -22,10 +22,10 @@ public class BlockFactory {
     public Integer createBlock(CellType cell) {
         int id = nextBlockId++;
 
-        world.add(id, new Position(0, 0));
-        world.add(id, new Rotation(Direction.UP));
-        world.add(id, new Shape(BlockRegistry2.getBlock(cell)));
-        world.add(id, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
+        world.put(id, new Position(0, 0));
+        world.put(id, new Rotation(Direction.UP));
+        world.put(id, new Shape(BlockRegistry2.getBlock(cell)));
+        world.put(id, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
 
         return id;
     }
