@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 
 import com.teic.trueris.Config;
+import com.teic.trueris.game.grid.GridData2;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
 import io.github.bfur64.menu.item.display.LineBreak;
@@ -35,8 +36,9 @@ public class GameLoop {
 //        this.gameManager = gameManager;
 //        this.gameState = gameManager;
         World world = new World();
-        gameRenderer = new GameRenderer2(terminal, world);
-        gameManager = new GameManager2(world);
+        GridData2 gridData = new GridData2();
+        gameRenderer = new GameRenderer2(terminal, world, gridData);
+        gameManager = new GameManager2(world, gridData);
 
         int targetFps = Config.TARGET_FPS;
         this.nsPerFrame = NSEC / targetFps;

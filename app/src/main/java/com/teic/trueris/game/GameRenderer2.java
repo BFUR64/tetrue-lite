@@ -1,10 +1,12 @@
 package com.teic.trueris.game;
 
+import com.teic.trueris.Config;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
+import com.teic.trueris.game.grid.GridData2;
 import com.teic.trueris.game.system.RotationSystem;
 import io.github.bfur64.terminal.Terminal;
 import org.jspecify.annotations.NullMarked;
@@ -16,12 +18,16 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 
 @NullMarked
 public class GameRenderer2 {
+    private static final String SOLID = "█";
+
     private final Terminal terminal;
     private final World world;
+    private final GridData2 gridData;
 
-    public GameRenderer2(Terminal terminal, World world) {
+    public GameRenderer2(Terminal terminal, World world, GridData2 gridData) {
         this.terminal = terminal;
         this.world = world;
+        this.gridData = gridData;
     }
 
     public void update(long delta) {
@@ -41,13 +47,15 @@ public class GameRenderer2 {
             writeBlock(position.x(), position.y(), shape.blockTemplate().size(), rotatedCells, "█");
         }
 
+        writeLockedCells();
+
         terminal.flush();
     }
 
     private void writeBlock(int colStart, int rowStart, int width, List<@Nullable CellType> cells, String out) {
         for (int row = 0; row < width; row++) {
             for (int col = 0; col < width; col++) {
-                CellType cell = getCell(cells, width, row, col);
+                CellType cell = getCell(cells, width, col, row);
                 if (cell != null) {
                     putCell(col + colStart, row + rowStart, out, cell.color());
                 }
@@ -65,6 +73,20 @@ public class GameRenderer2 {
         terminal.put(colOffset + 1, row, out);
 
         terminal.reset();
+    }
+
+    private void writeLockedCells() {
+        for (int row = 0; row < Config.gridHeight.get(); row++) {
+            for (int col = 0; col < Config.gridWidth.get(); col++) {
+                CellType cell = gridData.getCell(col, row);
+                int rowOffset = row + 0;
+                int colOffset = col + 0;
+
+                if (cell != null) {
+                    putCell(colOffset, rowOffset, SOLID, cell.color());
+                }
+            }
+        }
     }
 
     private int[] getTextColor(Color color) {

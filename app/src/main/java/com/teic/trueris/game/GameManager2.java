@@ -2,9 +2,11 @@ package com.teic.trueris.game;
 
 import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.grid.GridData2;
 import com.teic.trueris.game.system.BlockMovementSystem;
 import com.teic.trueris.game.system.CollisionSystem;
 import com.teic.trueris.game.system.GravitySystem;
+import com.teic.trueris.game.system.GridSystem;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -17,10 +19,11 @@ public class GameManager2 {
     private final GravitySystem gravitySystem;
     private final BlockMovementSystem blockMovementSystem;
     private final CollisionSystem collisionSystem;
+    private final GridSystem gridSystem;
 
     private Integer activeBlockId;
 
-    public GameManager2(World world) {
+    public GameManager2(World world, GridData2 gridData) {
         this.world = world;
         this.eventBus = new EventBus();
         this.blockFactory = new BlockFactory(world);
@@ -28,6 +31,7 @@ public class GameManager2 {
         this.gravitySystem = new GravitySystem(world, eventBus);
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
         this.collisionSystem = new CollisionSystem(world, eventBus);
+        this.gridSystem = new GridSystem(gridData, world, eventBus);
 
         activeBlockId = blockFactory.createBlock(CellType.I);
     }
