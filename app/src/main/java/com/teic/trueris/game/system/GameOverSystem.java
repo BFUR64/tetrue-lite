@@ -2,6 +2,8 @@ package com.teic.trueris.game.system;
 
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.event.*;
+import com.teic.trueris.game.event.position.PositionValidQuery;
+import com.teic.trueris.game.event.position.PositionValidResponse;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

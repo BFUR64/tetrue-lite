@@ -31,9 +31,7 @@ public class GameManager2 {
 
         new GameOverSystem(eventBus);
 
-        eventBus.subscribe(BlockSpawnEvent.class, event -> {
-            activeBlockId = event.entityId();
-        });
+        eventBus.subscribe(BlockSpawnEvent.class, event -> activeBlockId = event.entityId());
 
         this.activeBlockId = blockSpawnSystem.spawnBlock();
     }

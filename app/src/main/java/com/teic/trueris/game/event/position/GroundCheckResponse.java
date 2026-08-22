@@ -1,4 +1,4 @@
-package com.teic.trueris.game.event;
+package com.teic.trueris.game.event.position;
 
 import org.jspecify.annotations.NullMarked;
 

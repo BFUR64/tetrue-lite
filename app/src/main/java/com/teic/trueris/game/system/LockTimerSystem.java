@@ -4,8 +4,8 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
-import com.teic.trueris.game.event.LockTimer;
-import com.teic.trueris.game.event.LockTimerExpired;
+import com.teic.trueris.game.event.timer.LockTimer;
+import com.teic.trueris.game.event.timer.LockTimerExpired;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;

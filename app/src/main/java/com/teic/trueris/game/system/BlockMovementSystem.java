@@ -3,7 +3,9 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
-import com.teic.trueris.game.event.*;
+import com.teic.trueris.game.event.position.*;
+import com.teic.trueris.game.event.timer.GravityExpired;
+import com.teic.trueris.game.event.timer.LockTimerExpired;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

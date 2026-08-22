@@ -7,8 +7,8 @@ import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
-import com.teic.trueris.game.event.GravityTimer;
-import com.teic.trueris.game.event.LockTimer;
+import com.teic.trueris.game.event.timer.GravityTimer;
+import com.teic.trueris.game.event.timer.LockTimer;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;

@@ -8,7 +8,7 @@ import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.BlockPlaceEvent;
-import com.teic.trueris.game.event.MoveDownResponse;
+import com.teic.trueris.game.event.position.MoveDownResponse;
 import com.teic.trueris.game.grid.GridData2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

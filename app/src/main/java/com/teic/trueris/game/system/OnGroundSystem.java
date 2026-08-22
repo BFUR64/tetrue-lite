@@ -3,8 +3,8 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
-import com.teic.trueris.game.event.GroundCheckQuery;
-import com.teic.trueris.game.event.GroundCheckResponse;
+import com.teic.trueris.game.event.position.GroundCheckQuery;
+import com.teic.trueris.game.event.position.GroundCheckResponse;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
