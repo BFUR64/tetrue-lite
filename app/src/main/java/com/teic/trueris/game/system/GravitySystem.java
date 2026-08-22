@@ -6,7 +6,8 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.GravityExpired;
 import com.teic.trueris.game.event.GravityTimer;
-import com.teic.trueris.game.event.MoveBlockAccepted;
+import com.teic.trueris.game.event.MoveDownResponse;
+import com.teic.trueris.game.event.MoveXResponse;
 
 import java.time.Duration;
 import java.util.List;
@@ -19,8 +20,8 @@ public class GravitySystem {
         this.world = world;
         this.eventBus = eventBus;
 
-        eventBus.subscribe(MoveBlockAccepted.class, event -> {
-            if (event.dy() > 0) {
+        eventBus.subscribe(MoveDownResponse.class, event -> {
+            if (event.canDrop()) {
                 if (world.has(event.entityId(), GravityTimer.class)) {
                     world.put(event.entityId(), new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
                 }

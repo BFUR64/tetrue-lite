@@ -30,36 +30,49 @@ public class CollisionSystem {
         this.world = world;
         this.eventBus = eventBus;
 
-        eventBus.subscribe(MoveBlockCommand.class, event -> {
-            Integer entityId = event.entityId();
+        eventBus.subscribe(MoveXQuery.class, event -> {
+            Boolean valid = isValid(event.entityId(), event.dx(), 0);
 
-            if (world.has(entityId, Position.class, Rotation.class, Shape.class)) {
-                Position position = world.get(entityId, Position.class);
-                Rotation rotation = world.get(entityId, Rotation.class);
-                Shape shape = world.get(entityId, Shape.class);
-
-                boolean grounded = event.dy() > 0;
-
-                if (!isValid(position, rotation, shape, event.dx(), event.dy())) {
-                    eventBus.publish(new MoveBlockRejected(entityId, grounded));
-                    return;
-                }
-
-                eventBus.publish(new MoveBlockAccepted(event.entityId(), event.dx(), event.dy()));
+            if (valid != null) {
+                eventBus.publish(new MoveXResponse(event.entityId(), valid, event.dx()));
             }
         });
 
-        eventBus.subscribe(MoveBlockQuery.class, event -> {
-            Integer entityId = event.entityId();
+        eventBus.subscribe(MoveDownQuery.class, event -> {
+            Boolean valid = isValid(event.entityId(), 0, 1);
 
-            if (world.has(entityId, Position.class, Rotation.class, Shape.class)) {
-                Position position = world.get(entityId, Position.class);
-                Rotation rotation = world.get(entityId, Rotation.class);
-                Shape shape = world.get(entityId, Shape.class);
-
-                eventBus.publish(new MoveBlockQueryResponse(entityId, isValid(position, rotation, shape, event.dx(), event.dy())));
+            if (valid != null) {
+                eventBus.publish(new MoveDownResponse(event.entityId(), valid));
             }
         });
+
+        eventBus.subscribe(GroundCheckQuery.class, event -> {
+            Boolean clear = isValid(event.entityId(), 0, 1);
+
+            if (clear != null) {
+                eventBus.publish(new GroundCheckResponse(event.entityId(), clear));
+            }
+        });
+
+        eventBus.subscribe(PositionValidQuery.class, event -> {
+            Boolean valid = isValid(event.entityId(), 0, 0);
+
+            if (valid != null) {
+                eventBus.publish(new PositionValidResponse(event.entityId(), valid));
+            }
+        });
+    }
+
+    private @Nullable Boolean isValid(int entityId, int dx, int dy) {
+        if (!world.has(entityId, Position.class, Rotation.class, Shape.class)) {
+            return null;
+        }
+
+        Position position = world.get(entityId, Position.class);
+        Rotation rotation = world.get(entityId, Rotation.class);
+        Shape shape = world.get(entityId, Shape.class);
+
+        return isValid(position, rotation, shape, dx, dy);
     }
 
     public boolean isValid(Position position, Rotation rotation, Shape shape, int dx, int dy) {

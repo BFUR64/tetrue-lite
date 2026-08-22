@@ -3,11 +3,13 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.BlockPlaceEvent;
-import com.teic.trueris.game.event.MoveBlockRejected;
+import com.teic.trueris.game.event.MoveDownResponse;
+import com.teic.trueris.game.event.MoveXResponse;
 import com.teic.trueris.game.grid.GridData2;
 import org.jspecify.annotations.Nullable;
 
@@ -21,8 +23,10 @@ public class BlockPlaceSystem {
     public BlockPlaceSystem(GridData2 gridData, World world, EventBus eventBus) {
         this.gridData = gridData;
 
-        eventBus.subscribe(MoveBlockRejected.class, event -> {
-            if (event.grounded() && world.has(event.entityId(), Position.class, Rotation.class, Shape.class)) {
+        eventBus.subscribe(MoveDownResponse.class, event -> {
+            if (!event.canDrop() && world.has(event.entityId(), Position.class, Rotation.class, Shape.class, OnGround.class)) {
+                if (!world.get(event.entityId(), OnGround.class).onGround()) return;
+
                 Position position = world.get(event.entityId(), Position.class);
                 Rotation rotation = world.get(event.entityId(), Rotation.class);
                 Shape shape = world.get(event.entityId(), Shape.class);

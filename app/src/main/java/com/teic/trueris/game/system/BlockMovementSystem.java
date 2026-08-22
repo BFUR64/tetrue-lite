@@ -3,10 +3,7 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
-import com.teic.trueris.game.event.GravityExpired;
-import com.teic.trueris.game.event.LockTimerExpired;
-import com.teic.trueris.game.event.MoveBlockAccepted;
-import com.teic.trueris.game.event.MoveBlockCommand;
+import com.teic.trueris.game.event.*;
 
 public class BlockMovementSystem {
     private final World world;
@@ -16,14 +13,25 @@ public class BlockMovementSystem {
         this.world = world;
         this.eventBus = eventBus;
 
-        eventBus.subscribe(MoveBlockAccepted.class, event -> {
-            if (world.has(event.entityId(), Position.class)) {
+        eventBus.subscribe(MoveXResponse.class, event -> {
+            if (event.isValid() && world.has(event.entityId(), Position.class)) {
                 Position oldPosition = world.get(event.entityId(), Position.class);
 
                 world.put(event.entityId(), new Position(
                     oldPosition.x() + event.dx(),
-                    oldPosition.y() + event.dy())
-                );
+                    oldPosition.y()
+                ));
+            }
+        });
+
+        eventBus.subscribe(MoveDownResponse.class, event -> {
+            if (event.canDrop() && world.has(event.entityId(), Position.class)) {
+                Position oldPosition = world.get(event.entityId(), Position.class);
+
+                world.put(event.entityId(), new Position(
+                    oldPosition.x(),
+                    oldPosition.y() + 1
+                ));
             }
         });
 
@@ -37,14 +45,14 @@ public class BlockMovementSystem {
     }
 
     public void moveBlockDown(Integer entityId) {
-        eventBus.publish(new MoveBlockCommand(entityId, 0, 1));
+        eventBus.publish(new MoveDownQuery(entityId));
     }
 
     public void moveBlockLeft(Integer entityId) {
-        eventBus.publish(new MoveBlockCommand(entityId, -1, 0));
+        eventBus.publish(new MoveXQuery(entityId, -1));
     }
 
     public void moveBlockRight(Integer entityId) {
-        eventBus.publish(new MoveBlockCommand(entityId, 1, 0));
+        eventBus.publish(new MoveXQuery(entityId, 1));
     }
 }

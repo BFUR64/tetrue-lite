@@ -10,7 +10,6 @@ import org.jspecify.annotations.NullMarked;
 public class GameManager2 {
     private final World world;
     private final EventBus eventBus;
-
     private final BlockFactory blockFactory;
 
     private final GravitySystem gravitySystem;
@@ -21,11 +20,13 @@ public class GameManager2 {
     private final OnGroundSystem onGroundSystem;
     private final LockTimerSystem lockTimerSystem;
 
+    private final GameOverSystem gameOverSystem;
+
     private Integer activeBlockId;
 
-    public GameManager2(World world, GridData2 gridData) {
+    public GameManager2(World world, EventBus eventBus, GridData2 gridData) {
         this.world = world;
-        this.eventBus = new EventBus();
+        this.eventBus = eventBus;
         this.blockFactory = new BlockFactory(world);
 
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
@@ -36,6 +37,8 @@ public class GameManager2 {
         this.onGroundSystem = new OnGroundSystem(world, eventBus);
         this.gravitySystem = new GravitySystem(world, eventBus);
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
+
+        this.gameOverSystem = new GameOverSystem(world, eventBus);
 
         eventBus.subscribe(BlockSpawnEvent.class, event -> {
             activeBlockId = event.entityId();
