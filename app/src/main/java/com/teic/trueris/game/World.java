@@ -24,12 +24,13 @@ public class World {
         }
     }
 
-    @Nullable
     public <T> T get(Integer entityId, Class<T> componentType) {
         Map<Integer, Object> storage = components.get(componentType);
 
         if (storage == null) {
-            return null;
+            throw new IllegalStateException(
+                "Entity " + entityId + "does not have " +
+                componentType.getSimpleName() + ". Have you done `query` first?");
         }
 
         return componentType.cast(storage.get(entityId));
