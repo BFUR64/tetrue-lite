@@ -23,11 +23,11 @@ public class GameManager2 {
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
-
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
-
         BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(blockFactory, world, eventBus);
+
+        new LineClearSystem(gridData, eventBus);
 
         new GameOverSystem(eventBus);
 
