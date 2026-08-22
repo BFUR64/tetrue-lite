@@ -17,20 +17,26 @@ public class GameLoop {
     private static final int NSEC = 1_000_000_000;
 
     private final Terminal terminal;
-    
-    private final GameRenderer gameRenderer;
-    private final GameManager gameManager;
-    private final GameState gameState;
+
+//    private final GameRenderer gameRenderer;
+//    private final GameManager gameManager;
+//    private final GameState gameState;
+
+    private final GameRenderer2 gameRenderer;
+    private final GameManager2 gameManager;
 
     private boolean running;
     private final int nsPerFrame;
 
-    public GameLoop(Terminal terminal, GameRenderer gameRenderer, GameManager gameManager) {
+    public GameLoop(Terminal terminal) {
         this.terminal = terminal;
 
-        this.gameRenderer = gameRenderer;
-        this.gameManager = gameManager;
-        this.gameState = gameManager;
+//        this.gameRenderer = gameRenderer;
+//        this.gameManager = gameManager;
+//        this.gameState = gameManager;
+        World world = new World();
+        gameRenderer = new GameRenderer2(terminal, world);
+        gameManager = new GameManager2(world);
 
         int targetFps = Config.TARGET_FPS;
         this.nsPerFrame = NSEC / targetFps;
@@ -70,10 +76,10 @@ public class GameLoop {
         handleGameState(terminal.poll());
         gameManager.update(delta);
         gameRenderer.update(delta);
-
-        if (gameState.isGameOver()) {
-            running = false;
-        }
+//
+//        if (gameState.isGameOver()) {
+//            running = false;
+//        }
     }
 
     private void handleGameState(KeyStroke keyStroke) {
@@ -87,7 +93,7 @@ public class GameLoop {
         }
 
         if (keyStroke.equals(Config.hardDropKey.get())) {
-            gameManager.dropBlock();
+//            gameManager.dropBlock();
         }
         else if (keyStroke.equals(Config.softDropKey.get())) {
             gameManager.moveBlockDown();
@@ -99,24 +105,24 @@ public class GameLoop {
             gameManager.moveBlockRight();
         }
         else if (keyStroke.equals(Config.rotateLeftKey.get())) {
-            gameManager.rotateBlockLeft();
+//            gameManager.rotateBlockLeft();
         }
         else if (keyStroke.equals(Config.rotateRightKey.get())) {
-            gameManager.rotateBlockRight();
+//            gameManager.rotateBlockRight();
         }
         else if (keyStroke.equals(Config.holdKey.get())) {
-            gameManager.holdBlock();
+//            gameManager.holdBlock();
         }
     }
 
     private void handleGameOver() {
-        gameManager.cleanUp();
+//        gameManager.cleanUp();
 
         List<Item> items = List.of(
             new LineBreak(),
             new StaticText("Game Over!"),
             new LineBreak(),
-            new StaticText("Score: " + gameState.getScore()),
+//            new StaticText("Score: " + gameState.getScore()),
             new LineBreak(),
             new ActionItem("[ Return ] ", true)
         );
