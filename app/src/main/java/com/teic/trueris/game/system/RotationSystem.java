@@ -1,6 +1,7 @@
 package com.teic.trueris.game.system;
 
 import com.teic.trueris.game.block.BlockTemplate;
+import com.teic.trueris.game.block.Direction;
 import com.teic.trueris.game.cell.CellType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -37,5 +38,13 @@ public class RotationSystem {
         }
 
         return newCells;
+    }
+
+    public static int rotateLeft(Direction currentDirection) {
+        return ((currentDirection.ordinal() - 1) % 4 + 4) % 4;
+    }
+
+    public static int rotateRight(Direction currentDirection) {
+        return ((currentDirection.ordinal() + 1) % 4 + 4) % 4;
     }
 }

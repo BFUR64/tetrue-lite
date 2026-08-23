@@ -113,10 +113,10 @@ public class GameLoop {
             gameManager.moveBlockRight();
         }
         else if (keyStroke.equals(Config.rotateLeftKey.get())) {
-//            gameManager.rotateBlockLeft();
+            gameManager.rotateBlockLeft();
         }
         else if (keyStroke.equals(Config.rotateRightKey.get())) {
-//            gameManager.rotateBlockRight();
+            gameManager.rotateBlockRight();
         }
         else if (keyStroke.equals(Config.holdKey.get())) {
 //            gameManager.holdBlock();

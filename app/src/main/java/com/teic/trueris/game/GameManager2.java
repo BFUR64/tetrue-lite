@@ -12,6 +12,7 @@ public class GameManager2 {
     private final OnGroundSystem onGroundSystem;
     private final LockTimerSystem lockTimerSystem;
     private final BlockMovementSystem blockMovementSystem;
+    private final BlockRotationSystem blockRotationSystem;
 
     private Integer activeBlockId;
 
@@ -22,6 +23,7 @@ public class GameManager2 {
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
+        this.blockRotationSystem = new BlockRotationSystem(world, eventBus);
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
 
@@ -59,5 +61,13 @@ public class GameManager2 {
 
     public void moveBlockRight() {
         blockMovementSystem.moveBlockRight(activeBlockId);
+    }
+
+    public void rotateBlockLeft() {
+        blockRotationSystem.rotateLeft(activeBlockId);
+    }
+
+    public void rotateBlockRight() {
+        blockRotationSystem.rotateRight(activeBlockId);
     }
 }

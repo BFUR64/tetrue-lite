@@ -8,6 +8,8 @@ import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.position.*;
+import com.teic.trueris.game.event.rotation.MoveRotationQuery;
+import com.teic.trueris.game.event.rotation.MoveRotationResponse;
 import com.teic.trueris.game.grid.GridData2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -67,6 +69,23 @@ public class CollisionSystem {
                 eventBus.publish(new PositionValidResponse(event.entityId(), valid));
             }
         });
+
+        eventBus.subscribe(MoveRotationQuery.class, event -> {
+            Integer entityId = event.entityId();
+
+            if (world.has(entityId, Position.class, Shape.class)) {
+                Position position = world.get(entityId, Position.class);
+                Shape shape = world.get(entityId, Shape.class);
+
+                int direction = event.direction();
+                int dx = event.dx();
+                int dy = event.dy();
+
+                boolean valid = isValid(position, direction, shape, dx, dy);
+
+                eventBus.publish(new MoveRotationResponse(entityId, valid, direction, dx, dy));
+            }
+        });
     }
 
     private @Nullable Boolean isValid(int entityId, int dx, int dy) {
@@ -82,7 +101,11 @@ public class CollisionSystem {
     }
 
     public boolean isValid(Position position, Rotation rotation, Shape shape, int dx, int dy) {
-        List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(rotation.direction().ordinal(), shape.blockTemplate());
+        return isValid(position, rotation.direction().ordinal(), shape, dx, dy);
+    }
+
+    public boolean isValid(Position position, int direction, Shape shape, int dx, int dy) {
+        List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
 
         int size = shape.blockTemplate().size();
 
