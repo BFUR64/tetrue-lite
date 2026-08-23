@@ -86,7 +86,7 @@ public class BlockRegistry2 {
         BLOCK_MAP.put(
             CellType.I,
             new BlockTemplate(
-                3,
+                4,
                 Arrays.asList(
                     null,       null,       null,       null,
                     CellType.I, CellType.I, CellType.I, CellType.I,
