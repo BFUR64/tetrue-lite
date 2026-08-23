@@ -54,6 +54,16 @@ public class World {
         return components.containsKey(componentType);
     }
 
+    public boolean exists(Integer entityId) {
+        for (Map<Integer, Object> component : components.values()) {
+            if (component.containsKey(entityId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<Integer> query(Class<?>... componentTypes) {
         if (componentTypes.length == 0) {
             return new ArrayList<>();

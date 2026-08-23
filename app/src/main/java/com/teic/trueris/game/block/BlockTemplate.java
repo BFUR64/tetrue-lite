@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 @NullMarked
-public record BlockTemplate(int size, List<@Nullable CellType> cells) {
+public record BlockTemplate(int size, List<@Nullable CellType> cells, CellType cellType) {
     public BlockTemplate {
         cells = Collections.unmodifiableList(cells);
     }

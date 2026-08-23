@@ -3,6 +3,7 @@ package com.teic.trueris.game;
 import com.teic.trueris.Config;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.cell.Color;
+import com.teic.trueris.game.component.IsGhost;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
@@ -12,6 +13,7 @@ import io.github.bfur64.terminal.Terminal;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.teic.trueris.game.utils.CellGrid.getCell;
@@ -19,6 +21,7 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 @NullMarked
 public class GameRenderer2 {
     private static final String SOLID = "█";
+    private static final String GHOST = "░";
 
     private final Terminal terminal;
     private final World world;
@@ -33,18 +36,38 @@ public class GameRenderer2 {
     public void update(long delta) {
         terminal.clear();
 
-        List<Integer> blocks = world.query(Position.class, Rotation.class, Shape.class);
+        List<Integer> ghostIds = world.query(Position.class, Rotation.class, Shape.class, IsGhost.class);
 
-        for (Integer block : blocks) {
-            Position position = world.get(block, Position.class);
-            Rotation rotation = world.get(block, Rotation.class);
-            Shape shape = world.get(block, Shape.class);
+        terminal.put(10, 10, ghostIds.toString());
+
+        for (Integer ghostId : ghostIds) {
+            Position position = world.get(ghostId, Position.class);
+            Rotation rotation = world.get(ghostId, Rotation.class);
+            Shape shape = world.get(ghostId, Shape.class);
 
             int direction = rotation.direction().ordinal();
 
             List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
 
-            writeBlock(position.x(), position.y(), shape.blockTemplate().size(), rotatedCells, "█");
+            writeBlock(position.x(), position.y(), shape.blockTemplate().size(), rotatedCells, GHOST);
+        }
+
+        List<Integer> blockIds = world.query(Position.class, Rotation.class, Shape.class);
+
+        terminal.put(10, 12, blockIds.toString());
+
+        for (Integer blockId : blockIds) {
+            if (world.has(blockId, IsGhost.class)) continue;
+
+            Position position = world.get(blockId, Position.class);
+            Rotation rotation = world.get(blockId, Rotation.class);
+            Shape shape = world.get(blockId, Shape.class);
+
+            int direction = rotation.direction().ordinal();
+
+            List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
+
+            writeBlock(position.x(), position.y(), shape.blockTemplate().size(), rotatedCells, SOLID);
         }
 
         writeLockedCells();

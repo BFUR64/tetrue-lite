@@ -33,13 +33,16 @@ public class LockTimerSystem {
 
                 if (newTime <= 0) {
                     eventBus.publish(new LockTimerExpired(entityId));
-                    newTime = Duration.ofMillis(Config.lockTimer.get()).toNanos();
+                    continue;
                 }
 
                 world.put(entityId, new LockTimer(newTime));
             }
             else {
-                world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
+                world.put(
+                    entityId,
+                    new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos())
+                );
             }
         }
     }

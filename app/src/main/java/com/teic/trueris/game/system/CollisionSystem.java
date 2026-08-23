@@ -4,9 +4,12 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.component.IsGhost;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
+import com.teic.trueris.game.event.GhostPositionQuery;
+import com.teic.trueris.game.event.GhostPositionResponse;
 import com.teic.trueris.game.event.position.*;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
@@ -84,6 +87,24 @@ public class CollisionSystem {
                 boolean valid = isValid(position, direction, shape, dx, dy);
 
                 eventBus.publish(new MoveRotationResponse(entityId, valid, direction, dx, dy));
+            }
+        });
+
+        eventBus.subscribe(GhostPositionQuery.class, event -> {
+            Integer entityId = event.entityId();
+
+            if (world.has(entityId, Position.class, Rotation.class, Shape.class, IsGhost.class)) {
+                Position position = world.get(entityId, Position.class);
+                Rotation rotation = world.get(entityId, Rotation.class);
+                Shape shape = world.get(entityId, Shape.class);
+
+                int dy = 0;
+                while (isValid(position, rotation, shape, 0, dy)) {
+                    dy++;
+                }
+                dy--;
+
+                eventBus.publish(new GhostPositionResponse(entityId, dy));
             }
         });
     }

@@ -15,6 +15,7 @@ public class GameManager2 {
     private final BlockMovementSystem blockMovementSystem;
     private final BlockRotationSystem blockRotationSystem;
     private final BlockHoldSystem blockHoldSystem;
+    private final GhostBlockSystem ghostBlockSystem;
 
     private Integer activeBlockId;
 
@@ -35,6 +36,8 @@ public class GameManager2 {
         BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
         this.blockHoldSystem = new BlockHoldSystem(blockFactory, world, eventBus);
 
+        this.ghostBlockSystem = new GhostBlockSystem(blockFactory, world, eventBus);
+
         new LineClearSystem(gridData, eventBus);
         new ScoreTrackerSystem(eventBus);
 
@@ -50,6 +53,7 @@ public class GameManager2 {
         onGroundSystem.update();
         gravitySystem.update(delta);
         lockTimerSystem.update(delta);
+        ghostBlockSystem.update();
     }
 
     public void moveBlockDown() {

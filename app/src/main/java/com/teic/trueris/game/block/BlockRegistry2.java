@@ -19,7 +19,8 @@ public class BlockRegistry2 {
                 Arrays.asList(
                     CellType.O, CellType.O,
                     CellType.O, CellType.O
-                )
+                ),
+                CellType.O
             )
         );
 
@@ -31,7 +32,8 @@ public class BlockRegistry2 {
                     CellType.J, null,       null,
                     CellType.J, CellType.J, CellType.J,
                     null,       null,       null
-                )
+                ),
+                CellType.J
             )
         );
 
@@ -43,7 +45,8 @@ public class BlockRegistry2 {
                     null,       null,       CellType.L,
                     CellType.L, CellType.L, CellType.L,
                     null,       null,       null
-                )
+                ),
+                CellType.L
             )
         );
 
@@ -55,7 +58,8 @@ public class BlockRegistry2 {
                     null,       CellType.S, CellType.S,
                     CellType.S, CellType.S, null,
                     null,       null,       null
-                )
+                ),
+                CellType.S
             )
         );
 
@@ -67,7 +71,8 @@ public class BlockRegistry2 {
                     CellType.Z, CellType.Z, null,
                     null,       CellType.Z, CellType.Z,
                     null,       null,       null
-                )
+                ),
+                CellType.Z
             )
         );
 
@@ -79,7 +84,8 @@ public class BlockRegistry2 {
                     null,       CellType.T, null,
                     CellType.T, CellType.T, CellType.T,
                     null,       null,       null
-                )
+                ),
+                CellType.T
             )
         );
 
@@ -92,7 +98,8 @@ public class BlockRegistry2 {
                     CellType.I, CellType.I, CellType.I, CellType.I,
                     null,       null,       null,       null,
                     null,       null,       null,       null
-                )
+                ),
+                CellType.I
             )
         );
     }

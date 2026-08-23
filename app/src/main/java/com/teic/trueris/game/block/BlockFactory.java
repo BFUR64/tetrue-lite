@@ -29,6 +29,22 @@ public class BlockFactory {
         return id;
     }
 
+    public Integer createGhostBlock(Integer parentId) {
+        int id = nextBlockId++;
+
+        if (world.has(parentId, Position.class, Rotation.class, Shape.class, HasGhost.class)) {
+            Rotation rotation = world.get(parentId, Rotation.class);
+            Shape shape = world.get(parentId, Shape.class);
+
+            world.put(id, new Position(0, 0));
+            world.put(id, new Rotation(rotation.direction()));
+            world.put(id, new Shape(BlockRegistry2.getBlock(shape.blockTemplate().cellType())));
+            world.put(id, new IsGhost(parentId));
+        }
+
+        return id;
+    }
+
     public void convertBagBlockToBlock(Integer entityId) {
         convertToBlock(entityId);
         world.remove(entityId, BagPosition.class);
@@ -38,10 +54,11 @@ public class BlockFactory {
         world.remove(entityId, Position.class);
         world.remove(entityId, Rotation.class);
         world.remove(entityId, OnGround.class);
+        world.remove(entityId, HasGhost.class);
         world.remove(entityId, GravityTimer.class);
         world.remove(entityId, LockTimer.class);
 
-        world.put(entityId, Held.class);
+        world.put(entityId, new Held());
     }
 
     public void convertHeldBlockToBlock(Integer entityId) {
@@ -54,6 +71,7 @@ public class BlockFactory {
         world.put(entityId, new Position(0, 0));
         world.put(entityId, new Rotation(Direction.UP));
         world.put(entityId, new OnGround(false));
+        world.put(entityId, new HasGhost(null));
         world.put(entityId, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
         world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
     }
