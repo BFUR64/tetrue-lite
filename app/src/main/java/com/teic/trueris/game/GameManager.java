@@ -20,7 +20,7 @@ public class GameManager {
     private Integer activeBlockId;
 
     public GameManager(World world, EventBus eventBus, GridData gridData) {
-
+        // Initialize Movement Systems
         this.gravitySystem = new GravitySystem(world, eventBus);
         this.onGroundSystem = new OnGroundSystem(world, eventBus);
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
@@ -28,24 +28,30 @@ public class GameManager {
         this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
         this.blockRotationSystem = new BlockRotationSystem(world, eventBus);
 
+        // Initialize Block Systems
+        BlockFactory blockFactory = new BlockFactory(world);
+
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
 
-        BlockFactory blockFactory = new BlockFactory(world);
         SevenBagSystem sevenBagSystem = new SevenBagSystem(blockFactory, eventBus);
-        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
+
         this.blockHoldSystem = new BlockHoldSystem(blockFactory, eventBus);
 
         this.ghostBlockSystem = new GhostBlockSystem(blockFactory, world, eventBus);
 
+        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
+
+        // Initialize Game Systems
         new LineClearSystem(gridData, eventBus);
         new ScoreTrackerSystem(eventBus);
-
         new GameOverSystem(eventBus);
 
+        // Register Events
         eventBus.subscribe(BlockSpawnEvent.class, event -> activeBlockId = event.entityId());
         eventBus.subscribe(BlockSwitchEvent.class, event -> activeBlockId = event.entityId());
 
+        // Start Game
         this.activeBlockId = blockSpawnSystem.spawnBlock();
     }
 
