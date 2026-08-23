@@ -13,7 +13,7 @@ import com.teic.trueris.game.event.position.GhostPositionResponse;
 import com.teic.trueris.game.event.position.*;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
-import com.teic.trueris.game.grid.GridData;
+import com.teic.trueris.game.grid.GridReader;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -24,7 +24,7 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 
 @NullMarked
 public class CollisionSystem {
-    private final GridData gridData;
+    private final GridReader gridReader;
     private final World world;
 
     private final int height = Config.gridHeight.get();
@@ -32,10 +32,10 @@ public class CollisionSystem {
 
     @SuppressFBWarnings(
         value = "EI2",
-        justification = "GridData, World, and EventBus is intentionally shared between systems."
+        justification = "World and EventBus is intentionally shared between systems."
     )
-    public CollisionSystem(GridData gridData, World world, EventBus eventBus) {
-        this.gridData = gridData;
+    public CollisionSystem(GridReader gridReader, World world, EventBus eventBus) {
+        this.gridReader = gridReader;
         this.world = world;
 
         eventBus.subscribe(MoveXQuery.class, event -> {
@@ -167,6 +167,6 @@ public class CollisionSystem {
     }
 
     private boolean isColliding(int gridRow, int gridCol) {
-        return gridData.getCell(gridCol, gridRow) != null;
+        return gridReader.getCell(gridCol, gridRow) != null;
     }
 }

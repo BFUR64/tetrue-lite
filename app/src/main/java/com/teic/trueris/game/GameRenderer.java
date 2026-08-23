@@ -6,7 +6,7 @@ import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.QueueChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
-import com.teic.trueris.game.grid.GridData;
+import com.teic.trueris.game.grid.GridReader;
 import com.teic.trueris.game.system.RotationSystem;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.terminal.Terminal;
@@ -32,19 +32,19 @@ public class GameRenderer {
 
     private final Terminal terminal;
     private final World world;
-    private final GridData gridData;
+    private final GridReader gridReader;
 
     private int score;
     private List<Integer> blockQueueIds = new LinkedList<>();
 
     @SuppressFBWarnings(
         value = "EI2",
-        justification = "Terminal, World, and GridData is intentionally shared between systems."
+        justification = "Terminal and World is intentionally shared between systems."
     )
-    public GameRenderer(Terminal terminal, World world, GridData gridData, EventBus eventBus) {
+    public GameRenderer(Terminal terminal, World world, GridReader gridReader, EventBus eventBus) {
         this.terminal = terminal;
         this.world = world;
-        this.gridData = gridData;
+        this.gridReader = gridReader;
 
         eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
         eventBus.subscribe(QueueChangeEvent.class, event -> blockQueueIds = event.entityIds());
@@ -132,7 +132,7 @@ public class GameRenderer {
     private void writeLockedCells() {
         for (int row = 0; row < Config.gridHeight.get(); row++) {
             for (int col = 0; col < Config.gridWidth.get(); col++) {
-                CellType cell = gridData.getCell(col, row);
+                CellType cell = gridReader.getCell(col, row);
                 int rowOffset = row + BORDER_OFFSET;
                 int colOffset = col + BORDER_OFFSET;
 
