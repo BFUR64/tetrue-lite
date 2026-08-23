@@ -1,157 +1,194 @@
 package com.teic.trueris.game;
 
 import com.teic.trueris.Config;
-import com.teic.trueris.game.block.BlockData;
-import com.teic.trueris.game.cell.Cell;
+import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.cell.Color;
+import com.teic.trueris.game.component.*;
+import com.teic.trueris.game.event.QueueChangeEvent;
+import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridData;
+import com.teic.trueris.game.system.RotationSystem;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.output.TextColor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.LinkedList;
 import java.util.List;
 
-@Deprecated
+import static com.teic.trueris.game.utils.CellGrid.getCell;
+
+@NullMarked
 public class GameRenderer {
     private static final String SOLID = "█";
     private static final String GHOST = "░";
 
-    private final int BORDER_THICKNESS = 1;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final int BORDER_OFFSET = 2;
+    private static final int BORDER_OFFSET = 1;
+    private static final int BORDER_PADDING = 2;
+
+    private static final int GAME_BORDER_WIDTH = Config.gridWidth.get() + BORDER_PADDING;
+    private static final int GAME_BORDER_HEIGHT = Config.gridHeight.get() + BORDER_PADDING;
 
     private final Terminal terminal;
+    private final World world;
     private final GridData gridData;
-    private final GameState gameState;
 
-    public GameRenderer(Terminal terminal, GridData gridData, GameState gameState) {
+    private int score;
+    private List<Integer> blockQueueIds = new LinkedList<>();
+
+    public GameRenderer(Terminal terminal, World world, GridData gridData, EventBus eventBus) {
         this.terminal = terminal;
+        this.world = world;
         this.gridData = gridData;
-        this.gameState = gameState;
+
+        eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
+        eventBus.subscribe(QueueChangeEvent.class, event -> blockQueueIds = event.entityIds());
     }
 
     public void update(long delta) {
         terminal.clear();
 
-        int gameBorderWidth = Config.gridWidth.get() + BORDER_OFFSET;
-        int gameBorderHeight = Config.gridHeight.get() + BORDER_OFFSET;
+        writeBorder(GAME_BORDER_WIDTH, GAME_BORDER_HEIGHT);
 
-        // Game & Blocks
-        writeBorder(0, 0, gameBorderWidth, gameBorderHeight);
-        writeGameCells();
+        writeGhostBlocks();
+        writeActiveBlocks();
+        writeLockedCells();
 
+        int leftPadding = GAME_BORDER_WIDTH + 1;
+        putString(leftPadding, 1, "Score: " + score);
+
+        int heldBlockY = 5;
+        writeHeldBlock(leftPadding, heldBlockY);
+
+        int textQueueY = 8;
+        putString(leftPadding, textQueueY, "Next");
+        writeBlockQueue(leftPadding + 2, textQueueY + 2);
+
+        // Optional
         if (Config.showFPS.get()) {
             terminal.put(0, 23, String.valueOf(Math.round(1_000_000_000.0d / delta)));
         }
 
-        // Score & Difficulty / Gravity
-        int leftPadding = gameBorderWidth + 1;
-        putString(leftPadding, 1, "Score: " + gameState.getScore());
-        if (!Config.showGravity.get()) {
-            putString(leftPadding, 3, "Difficulty: " + calculateDifficulty() + "x");
-        }
-        else {
-            putString(leftPadding, 3, "Gravity: " + gameState.getGravity().toMillis() + " ms");
-        }
-
-        // Hold Block
-        String holdName = "Hold";
-        int holdY = 5;
-        putString(leftPadding, holdY, holdName);
-        BlockData blockData = gameState.getHeldBlockCopy();
-        if (blockData != null) {
-            writeBlock(leftPadding + holdName.length() + 1, holdY, blockData.getCellCopy(), SOLID);
-        }
-
-        // Queue
-        int textQueueY = 8;
-        putString(leftPadding, textQueueY, "Next");
-        writeQueue(leftPadding + 2, textQueueY + 2);
-
         terminal.flush();
     }
 
-    // =====================
-    // Border
-    // =====================
-    @SuppressWarnings("SameParameterValue")
-    private void writeBorder(int x, int y, int xSize, int ySize) {
-        for (int row = 0; row < ySize; row++) {
-            for (int col = 0; col < xSize; col++) {
-                if ((row == 0 || row == ySize - 1 ||
-                        col == 0 || col == xSize - 1)
-                ) {
-                    putCell(col + x, row + y, SOLID, Color.GREY);
-                }
-            }
+    private void writeGhostBlocks() {
+        List<Integer> ghostIds = world.query(Position.class, Rotation.class, Shape.class, IsGhost.class);
+
+        for (Integer ghostId : ghostIds) {
+            Position position = world.get(ghostId, Position.class);
+            Rotation rotation = world.get(ghostId, Rotation.class);
+            Shape shape = world.get(ghostId, Shape.class);
+
+            int direction = rotation.direction().ordinal();
+
+            List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
+
+            writeBlock(
+                position.x() + BORDER_OFFSET,
+                position.y() + BORDER_OFFSET,
+                shape.blockTemplate().size(),
+                rotatedCells,
+                GHOST
+            );
         }
     }
 
-    // =====================
-    // Game Cells
-    // =====================
-    private void writeGameCells() {
-        writeLockedCells();
+    private void writeActiveBlocks() {
+        List<Integer> blockIds = world.query(Position.class, Rotation.class, Shape.class);
 
-        BlockData ghostBlock = gameState.getGhostBlockCopy();
-        int colShift = ghostBlock.getBlockCol() + BORDER_THICKNESS;
-        int rowShift = ghostBlock.getBlockRow() + BORDER_THICKNESS;
-        writeBlock(colShift, rowShift, ghostBlock.getRotatedCellCopy(), GHOST);
+        for (Integer blockId : blockIds) {
+            if (world.has(blockId, IsGhost.class)) continue;
 
-        BlockData activeBlock = gameState.getActiveBlockCopy();
-        colShift = activeBlock.getBlockCol() + BORDER_THICKNESS;
-        rowShift = activeBlock.getBlockRow() + BORDER_THICKNESS;
-        writeBlock(colShift, rowShift, activeBlock.getRotatedCellCopy(), SOLID);
+            Position position = world.get(blockId, Position.class);
+            Rotation rotation = world.get(blockId, Rotation.class);
+            Shape shape = world.get(blockId, Shape.class);
+
+            int direction = rotation.direction().ordinal();
+
+            List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
+
+            writeBlock(
+                position.x() + BORDER_OFFSET,
+                position.y() + BORDER_OFFSET,
+                shape.blockTemplate().size(),
+                rotatedCells,
+                SOLID
+            );
+        }
     }
 
     private void writeLockedCells() {
         for (int row = 0; row < Config.gridHeight.get(); row++) {
             for (int col = 0; col < Config.gridWidth.get(); col++) {
-                Cell cell = gridData.getCell(row, col);
-                int rowOffset = row + BORDER_THICKNESS;
-                int colOffset = col + BORDER_THICKNESS;
+                CellType cell = gridData.getCell(col, row);
+                int rowOffset = row + BORDER_OFFSET;
+                int colOffset = col + BORDER_OFFSET;
 
-                if (!cell.isEmpty()) {
-                    putCell(colOffset, rowOffset,SOLID, cell.color());
+                if (cell != null) {
+                    putCell(colOffset, rowOffset, SOLID, cell.color());
                 }
             }
         }
     }
 
-    // =====================
-    // Block Queue
-    // =====================
-    private void writeQueue(int x, int rowPointer) {
-        List<BlockData> blocks = gameState.viewBlockQueue();
+    private void writeBorder(int xSize, int ySize) {
+        for (int row = 0; row < ySize; row++) {
+            for (int col = 0; col < xSize; col++) {
+                if (
+                    row == 0 || row == ySize - 1 ||
+                    col == 0 || col == xSize - 1
+                ) {
+                    putCell(col, row, SOLID, Color.GREY);
+                }
+            }
+        }
+    }
 
+    private void writeHeldBlock(int x, int y) {
+        String holdName = "Held";
+        putString(x, y, holdName);
+
+        List<Integer> entityIds = world.query(Shape.class, Held.class);
+        if (entityIds.isEmpty()) return;
+
+        Integer heldBlockId = entityIds.getFirst();
+
+        Shape shape = world.get(heldBlockId, Shape.class);
+
+        writeBlock(
+            x + holdName.length() + 1,
+            y,
+            shape.blockTemplate().size(),
+            shape.blockTemplate().cells(),
+            SOLID
+        );
+
+    }
+    private void writeBlockQueue(int x, int rowPointer) {
         int blocksShown = 3;
 
-        for (int counter = 0; counter < blocksShown; counter++) {
-            Cell[][] cellBlock = blocks.get(counter).getRotatedCellCopy();
+        int counter = 0;
+        for (Integer blockQueueId : blockQueueIds) {
+            if (world.has(blockQueueId, Shape.class) && counter < blocksShown) {
+                Shape shape = world.get(blockQueueId, Shape.class);
 
-            writeBlock(x, rowPointer, cellBlock, SOLID);
+                int size = shape.blockTemplate().size();
 
-            int topPadding = 1;
-            rowPointer += cellBlock.length + topPadding;
-        }
-    }
+                writeBlock(
+                    x,
+                    rowPointer,
+                    size,
+                    shape.blockTemplate().cells(),
+                    SOLID
+                );
 
-    // =====================
-    // Helpers
-    // =====================
-    private void writeBlock(int colStart, int rowStart, Cell[][] block, String out) {
-        for (int row = 0; row < block.length; row++) {
-            for (int col = 0; col < block[0].length; col++) {
-                Cell cell = block[row][col];
-                if (!cell.isEmpty()) {
-                    putCell(col + colStart, row + rowStart, out, cell.color());
-                }
+                int topPadding = 1;
+                rowPointer += size + topPadding;
             }
-        }
-    }
 
-    private double calculateDifficulty() {
-        // Assume 500 is 500 ms and is 1x
-        return Math.ceil((double) 500 / gameState.getGravity().toMillis() * 100) / 100;
+            counter++;
+        }
     }
 
     // =====================
@@ -181,6 +218,20 @@ public class GameRenderer {
         }
 
         terminal.reset();
+    }
+
+    // =====================
+    // Helper Methods
+    // =====================
+    private void writeBlock(int colStart, int rowStart, int width, List<@Nullable CellType> cells, String out) {
+        for (int row = 0; row < width; row++) {
+            for (int col = 0; col < width; col++) {
+                CellType cell = getCell(cells, width, col, row);
+                if (cell != null) {
+                    putCell(col + colStart, row + rowStart, out, cell.color());
+                }
+            }
+        }
     }
 
     private int[] getTextColor(Color color) {

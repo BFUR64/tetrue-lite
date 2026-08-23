@@ -1,261 +1,86 @@
 package com.teic.trueris.game;
 
-import java.time.Duration;
-import java.util.List;
-
-import com.teic.trueris.Config;
-import com.teic.trueris.game.block.BlockData;
-import com.teic.trueris.game.block.BlockManager;
-import com.teic.trueris.game.block.BlockQueue;
+import com.teic.trueris.game.block.BlockFactory;
+import com.teic.trueris.game.event.BlockSpawnEvent;
+import com.teic.trueris.game.event.BlockSwitchEvent;
 import com.teic.trueris.game.grid.GridData;
-import com.teic.trueris.game.grid.GridManager;
-import com.teic.trueris.game.utils.ScoreTracker;
+import com.teic.trueris.game.system.*;
+import org.jspecify.annotations.NullMarked;
 
-@Deprecated
-public class GameManager implements GameState {
-    private final BlockManager blockManager;
-    private final GridManager gridManager;
-    private final BlockQueue blockQueue;
-    private final ScoreTracker scoreTracker;
+@NullMarked
+public class GameManager {
+    private final GravitySystem gravitySystem;
+    private final OnGroundSystem onGroundSystem;
+    private final LockTimerSystem lockTimerSystem;
+    private final BlockMovementSystem blockMovementSystem;
+    private final BlockRotationSystem blockRotationSystem;
+    private final BlockHoldSystem blockHoldSystem;
+    private final GhostBlockSystem ghostBlockSystem;
 
-    private BlockData activeBlock;
-    private BlockData ghostBlock;
-    private BlockData heldBlock;
+    private Integer activeBlockId;
 
-    // Game Variables
-    private boolean isBlockGrounded;
+    public GameManager(World world, EventBus eventBus, GridData gridData) {
 
-    private boolean isBlockHeld;
+        this.gravitySystem = new GravitySystem(world, eventBus);
+        this.onGroundSystem = new OnGroundSystem(world, eventBus);
+        this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
-    private long gravityTimer;
+        this.blockMovementSystem = new BlockMovementSystem(world, eventBus);
+        this.blockRotationSystem = new BlockRotationSystem(world, eventBus);
 
-    private long lockTimer;
+        new CollisionSystem(gridData, world, eventBus);
+        new BlockPlaceSystem(gridData, world, eventBus);
 
-    private boolean gameOver;
+        BlockFactory blockFactory = new BlockFactory(world);
+        SevenBagSystem sevenBagSystem = new SevenBagSystem(blockFactory, eventBus);
+        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
+        this.blockHoldSystem = new BlockHoldSystem(blockFactory, world, eventBus);
 
-    public GameManager(GridData gridData) {
-        this.blockManager = new BlockManager(gridData);
-        this.gridManager = new GridManager(gridData);
-        this.blockQueue = new BlockQueue();
-        this.scoreTracker = new ScoreTracker();
+        this.ghostBlockSystem = new GhostBlockSystem(blockFactory, world, eventBus);
 
-        generateActiveBlock();
-        generateGhostBlock();
+        new LineClearSystem(gridData, eventBus);
+        new ScoreTrackerSystem(eventBus);
+
+        new GameOverSystem(eventBus);
+
+        eventBus.subscribe(BlockSpawnEvent.class, event -> activeBlockId = event.entityId());
+        eventBus.subscribe(BlockSwitchEvent.class, event -> activeBlockId = event.entityId());
+
+        this.activeBlockId = blockSpawnSystem.spawnBlock();
     }
 
-    public void cleanUp() {
-        Config.gravity.set(Config.gravityDef);
+    public void update(long delta) {
+        onGroundSystem.update();
+        gravitySystem.update(delta);
+        lockTimerSystem.update(delta);
+        ghostBlockSystem.update();
     }
 
-    // =====================
-    // Movement
-    // =====================
     public void moveBlockDown() {
-        if (!blockManager.moveBlockDown(activeBlock)) {
-            gridManager.writeGrid(activeBlock);
-            scoreTracker.updateScore(gridManager.clearFilledRows());
-
-            generateActiveBlock();
-            generateGhostBlock();
-            isBlockHeld = false;
-
-            return;
-        }
-        
-        gravityTimer = 0;
+        blockMovementSystem.moveBlockDown(activeBlockId);
     }
 
     public void dropBlock() {
-        blockManager.dropBlock(activeBlock);
-
-        gridManager.writeGrid(activeBlock);
-        scoreTracker.updateScore(gridManager.clearFilledRows());
-
-        generateActiveBlock();
-        generateGhostBlock();
-        isBlockHeld = false;
-
-        gravityTimer = 0;
+        blockMovementSystem.dropBlock(activeBlockId);
     }
 
     public void moveBlockLeft() {
-        if (blockManager.moveBlockLeft(activeBlock)) {
-            generateGhostBlock();
-
-            lockTimer = 0;
-        }
+        blockMovementSystem.moveBlockLeft(activeBlockId);
     }
 
     public void moveBlockRight() {
-        if (blockManager.moveBlockRight(activeBlock)) {
-            generateGhostBlock();
-
-            lockTimer = 0;
-        }
+        blockMovementSystem.moveBlockRight(activeBlockId);
     }
 
-    // =====================
-    // Rotation
-    // =====================
     public void rotateBlockLeft() {
-        if (blockManager.rotateBlockLeft(activeBlock)) {
-            generateGhostBlock();
-
-            lockTimer = 0;
-        }
+        blockRotationSystem.rotateLeft(activeBlockId);
     }
 
     public void rotateBlockRight() {
-        if (blockManager.rotateBlockRight(activeBlock)) {
-            generateGhostBlock();
-
-            lockTimer = 0;
-        }
+        blockRotationSystem.rotateRight(activeBlockId);
     }
-    // =====================
-    // Block Holding
-    // =====================
+
     public void holdBlock() {
-        if (!isBlockHeld) {
-            switchHoldAndActiveBlocks();
-            isBlockHeld = true;
-        }
-    }
-
-    public void switchHoldAndActiveBlocks() {
-        BlockData tempBlock = new BlockData(activeBlock.getCellCopy());
-        activeBlock = heldBlock;
-        heldBlock = tempBlock;
-
-        if (activeBlock == null) {
-            generateActiveBlock();
-        }
-
-        generateGhostBlock();
-    }
-
-    // =====================
-    // Delta
-    // =====================
-    public void update(long delta) {
-        updateBlockGrounded();
-        updateGravityThreshold();
-        updateGravity(delta);
-        updateLockGrace(delta);
-    }
-
-    private void updateBlockGrounded() {
-        if (!blockManager.canMoveBlockDown(activeBlock)) {
-            isBlockGrounded = true;
-            return;
-        }
-
-        isBlockGrounded = false;
-    }
-
-    private void updateGravityThreshold() {
-        // TODO Replace `hasLineCleared()` with a better mode
-        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
-        long gravityMin = Duration.ofMillis(Config.GRAVITY_MIN).toNanos();
-
-        long gravityStep = Duration.ofMillis(20).toNanos();
-
-        if (gravity >= (gravityMin + gravityStep) && scoreTracker.hasLineCleared()) {
-            scoreTracker.setLineCleared(false);
-            Config.gravity.set(Math.toIntExact(Duration.ofNanos(gravity - gravityStep).toMillis()));
-        }
-    }
-
-    private void updateGravity(long delta) {
-        if (isBlockGrounded) {
-            gravityTimer = 0;
-            return;
-        }
-
-        gravityTimer += delta;
-
-        long gravity = Duration.ofMillis(Config.gravity.get()).toNanos();
-
-        while (gravityTimer >= gravity) {
-            gravityTimer -= gravity;
-            
-            moveBlockDown();
-        }
-    }
-
-    private void updateLockGrace(long delta) {
-        if (!isBlockGrounded) {
-            lockTimer = 0;
-            return;
-        }
-
-        lockTimer += delta;
-
-        long lockThreshold = 500_000_000; // 0.5 Seconds
-
-        while (lockTimer >= lockThreshold) {
-            lockTimer -= lockThreshold;
-
-            moveBlockDown();
-        }
-    }
-
-    // =====================
-    // Utilities
-    // =====================
-    private void generateActiveBlock() {
-        activeBlock = blockQueue.getFirstBlock();
-
-        if (!blockManager.isPositionValid(activeBlock)) {
-            gameOver = true;
-        }
-    }
-
-    private void generateGhostBlock() {
-        ghostBlock = activeBlock.copyBlockData();
-
-        blockManager.dropBlock(ghostBlock);
-    }
-
-    // =====================
-    // Game State Interface
-    // =====================
-    @Override
-    public List<BlockData> viewBlockQueue() {
-        return blockQueue.viewBlockQueue();
-    }
-
-    @Override
-    public int getScore() {
-        return scoreTracker.getScore();
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    @Override
-    public Duration getGravity() {
-        return Duration.ofMillis(Config.gravity.get());
-    }
-
-    @Override
-    public BlockData getActiveBlockCopy() {
-        return activeBlock.copyBlockData();
-    }
-
-    @Override
-    public BlockData getGhostBlockCopy() {
-        return ghostBlock.copyBlockData();
-    }
-
-    @Override
-    public BlockData getHeldBlockCopy() {
-        if (heldBlock != null) {
-             return heldBlock.copyBlockData();
-        }
-
-        return null;
+        blockHoldSystem.holdBlock(activeBlockId);
     }
 }

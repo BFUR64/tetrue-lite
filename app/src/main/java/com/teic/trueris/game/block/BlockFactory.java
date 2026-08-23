@@ -23,7 +23,7 @@ public class BlockFactory {
     public Integer createBagBlock(CellType cell) {
         int id = nextBlockId++;
 
-        world.put(id, new Shape(BlockRegistry2.getBlock(cell)));
+        world.put(id, new Shape(BlockRegistry.getBlock(cell)));
 
         return id;
     }
@@ -37,7 +37,7 @@ public class BlockFactory {
 
             world.put(id, new Position(0, 0));
             world.put(id, new Rotation(rotation.direction()));
-            world.put(id, new Shape(BlockRegistry2.getBlock(shape.blockTemplate().cellType())));
+            world.put(id, new Shape(BlockRegistry.getBlock(shape.blockTemplate().cellType())));
             world.put(id, new IsGhost(parentId));
         }
 

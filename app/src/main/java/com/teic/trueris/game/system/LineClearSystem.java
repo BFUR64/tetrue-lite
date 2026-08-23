@@ -5,15 +5,15 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.LineClearEvent;
-import com.teic.trueris.game.grid.GridData2;
+import com.teic.trueris.game.grid.GridData;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class LineClearSystem {
-    private final GridData2 gridData;
+    private final GridData gridData;
     private final EventBus eventBus;
 
-    public LineClearSystem(GridData2 gridData, EventBus eventBus) {
+    public LineClearSystem(GridData gridData, EventBus eventBus) {
         this.gridData = gridData;
         this.eventBus = eventBus;
 

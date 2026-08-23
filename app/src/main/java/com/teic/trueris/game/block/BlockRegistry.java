@@ -1,109 +1,110 @@
 package com.teic.trueris.game.block;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.teic.trueris.game.cell.CellType;
+import org.jspecify.annotations.NullMarked;
 
-import com.teic.trueris.game.cell.Cell;
-import com.teic.trueris.game.cell.CellRegistry;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-@Deprecated
+@NullMarked
 public class BlockRegistry {
-    private static final List<BlockTemplate> BLOCK_SET = new ArrayList<>();
+    private static final Map<CellType, BlockTemplate> BLOCK_MAP = new HashMap<>();
 
     static {
-        BLOCK_SET.add(new BlockTemplate(
-            2, 
-            List.of(
-                CellRegistry.OCELL, CellRegistry.OCELL, 
-                CellRegistry.OCELL, CellRegistry.OCELL
+        BLOCK_MAP.put(
+            CellType.O,
+            new BlockTemplate(
+                2,
+                Arrays.asList(
+                    CellType.O, CellType.O,
+                    CellType.O, CellType.O
+                ),
+                CellType.O
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            3, 
-            List.of(
-                CellRegistry.JCELL, CellRegistry.EMPTY, CellRegistry.EMPTY, 
-                CellRegistry.JCELL, CellRegistry.JCELL, CellRegistry.JCELL, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.J,
+            new BlockTemplate(
+            3,
+                Arrays.asList(
+                    CellType.J, null,       null,
+                    CellType.J, CellType.J, CellType.J,
+                    null,       null,       null
+                ),
+                CellType.J
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            3, 
-            List.of(
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.LCELL, 
-                CellRegistry.LCELL, CellRegistry.LCELL, CellRegistry.LCELL, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.L,
+            new BlockTemplate(
+            3,
+                Arrays.asList(
+                    null,       null,       CellType.L,
+                    CellType.L, CellType.L, CellType.L,
+                    null,       null,       null
+                ),
+                CellType.L
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            3, 
-            List.of(
-                CellRegistry.EMPTY, CellRegistry.SCELL, CellRegistry.SCELL, 
-                CellRegistry.SCELL, CellRegistry.SCELL, CellRegistry.EMPTY, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.S,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    null,       CellType.S, CellType.S,
+                    CellType.S, CellType.S, null,
+                    null,       null,       null
+                ),
+                CellType.S
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            3, 
-            List.of(
-                CellRegistry.ZCELL, CellRegistry.ZCELL, CellRegistry.EMPTY, 
-                CellRegistry.EMPTY, CellRegistry.ZCELL, CellRegistry.ZCELL, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.Z,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    CellType.Z, CellType.Z, null,
+                    null,       CellType.Z, CellType.Z,
+                    null,       null,       null
+                ),
+                CellType.Z
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            3, 
-            List.of(
-                CellRegistry.EMPTY, CellRegistry.TCELL, CellRegistry.EMPTY, 
-                CellRegistry.TCELL, CellRegistry.TCELL, CellRegistry.TCELL, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.T,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    null,       CellType.T, null,
+                    CellType.T, CellType.T, CellType.T,
+                    null,       null,       null
+                ),
+                CellType.T
             )
-        ));
+        );
 
-        BLOCK_SET.add(new BlockTemplate(
-            4, 
-            List.of(
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY, 
-                CellRegistry.ICELL, CellRegistry.ICELL, CellRegistry.ICELL, CellRegistry.ICELL, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY, 
-                CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY, CellRegistry.EMPTY
+        BLOCK_MAP.put(
+            CellType.I,
+            new BlockTemplate(
+                4,
+                Arrays.asList(
+                    null,       null,       null,       null,
+                    CellType.I, CellType.I, CellType.I, CellType.I,
+                    null,       null,       null,       null,
+                    null,       null,       null,       null
+                ),
+                CellType.I
             )
-        ));
+        );
     }
 
-    public static List<BlockTemplate> values() {
-        return Collections.unmodifiableList(BLOCK_SET);
-    }
-
-    public static int size() {
-        return BLOCK_SET.size();
-    }
-
-    public static class BlockTemplate {
-        private final int size;
-        private final List<Cell> cells;
-
-        protected BlockTemplate(int size, List<Cell> cells) {
-            this.size = size;
-            this.cells = cells;
-        }
-        
-        public Cell[][] copyBlock() {
-            Cell[][] blockCopy = new Cell[size][size];
-
-            for (int row = 0; row < size; row++) {
-                for (int col = 0; col < size; col++) {
-                    int idx = row * size + col;
-                    blockCopy[row][col] = cells.get(idx);
-                }
-            }
-
-            return blockCopy;
-        }
+    public static BlockTemplate getBlock(CellType cellType) {
+        return BLOCK_MAP.get(cellType);
     }
 }

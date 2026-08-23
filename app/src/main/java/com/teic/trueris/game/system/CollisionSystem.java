@@ -13,7 +13,7 @@ import com.teic.trueris.game.event.GhostPositionResponse;
 import com.teic.trueris.game.event.position.*;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
-import com.teic.trueris.game.grid.GridData2;
+import com.teic.trueris.game.grid.GridData;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -23,13 +23,13 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 
 @NullMarked
 public class CollisionSystem {
-    private final GridData2 gridData;
+    private final GridData gridData;
     private final World world;
 
     private final int height = Config.gridHeight.get();
     private final int width = Config.gridWidth.get();
 
-    public CollisionSystem(GridData2 gridData, World world, EventBus eventBus) {
+    public CollisionSystem(GridData gridData, World world, EventBus eventBus) {
         this.gridData = gridData;
         this.world = world;
 
