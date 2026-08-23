@@ -2,6 +2,12 @@ plugins {
     application
     id("eclipse")
     id("com.gradleup.shadow") version "9.3.1"
+    id("com.github.spotbugs") version "6.5.11"
+}
+
+spotbugs {
+    toolVersion = "4.10.2"
+    ignoreFailures = false
 }
 
 repositories {
