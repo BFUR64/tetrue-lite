@@ -11,11 +11,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BlockSpawnSystem {
     private final SevenBagSystem sevenBagSystem;
-    private final EventBus eventBus;
 
     public BlockSpawnSystem(SevenBagSystem sevenBagSystem, World world, EventBus eventBus) {
         this.sevenBagSystem = sevenBagSystem;
-        this.eventBus = eventBus;
 
         eventBus.subscribe(BlockPlaceEvent.class, event -> {
             world.remove(event.entityId());
