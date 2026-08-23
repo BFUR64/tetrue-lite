@@ -4,7 +4,7 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
-import com.teic.trueris.game.event.timer.GravityExpired;
+import com.teic.trueris.game.event.timer.GravityTimerExpired;
 import com.teic.trueris.game.event.timer.GravityTimer;
 import com.teic.trueris.game.event.position.MoveDownResponse;
 import org.jspecify.annotations.NullMarked;
@@ -41,7 +41,7 @@ public class GravitySystem {
                 long newGravityDuration = oldGravity.duration() - delta;
 
                 if (newGravityDuration <= 0) {
-                    eventBus.publish(new GravityExpired(entityId));
+                    eventBus.publish(new GravityTimerExpired(entityId));
                     newGravityDuration = Duration.ofMillis(Config.gravity.get()).toNanos();
                 }
 
