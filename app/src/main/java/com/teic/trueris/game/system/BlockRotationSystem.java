@@ -7,6 +7,7 @@ import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -14,6 +15,10 @@ public class BlockRotationSystem {
     private final World world;
     private final EventBus eventBus;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "World and EventBus is intentionally shared between systems."
+    )
     public BlockRotationSystem(World world, EventBus eventBus) {
         this.world = world;
         this.eventBus = eventBus;

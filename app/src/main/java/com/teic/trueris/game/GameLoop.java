@@ -7,6 +7,7 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.event.GameOverEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridData;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.ActionItem;
 import io.github.bfur64.menu.item.display.LineBreak;
@@ -33,6 +34,10 @@ public class GameLoop {
     private boolean running;
     private final int nsPerFrame;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Terminal is intentionally shared between systems."
+    )
     public GameLoop(Terminal terminal) {
         this.terminal = terminal;
 

@@ -6,6 +6,7 @@ import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.timer.GravityTimer;
 import com.teic.trueris.game.event.timer.LockTimer;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
@@ -16,6 +17,10 @@ public class BlockFactory {
 
     private int nextBlockId = 0;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "World is intentionally shared between systems."
+    )
     public BlockFactory(World world) {
         this.world = world;
     }

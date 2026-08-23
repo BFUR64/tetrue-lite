@@ -8,6 +8,7 @@ import com.teic.trueris.game.event.QueueChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.system.RotationSystem;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.output.TextColor;
 import org.jspecify.annotations.NullMarked;
@@ -36,6 +37,10 @@ public class GameRenderer {
     private int score;
     private List<Integer> blockQueueIds = new LinkedList<>();
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Terminal, World, and GridData is intentionally shared between systems."
+    )
     public GameRenderer(Terminal terminal, World world, GridData gridData, EventBus eventBus) {
         this.terminal = terminal;
         this.world = world;

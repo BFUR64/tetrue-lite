@@ -6,7 +6,7 @@ plugins {
 }
 
 spotbugs {
-    toolVersion = "4.10.2"
+    toolVersion = "4.10.4"
     ignoreFailures = false
 }
 
@@ -19,6 +19,7 @@ dependencies {
     testImplementation(libs.junit)
     implementation("org.jspecify:jspecify:1.0.0")
     implementation("io.github.bfur64:menu-manager:0.9.2")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.4")
 }
 
 java {

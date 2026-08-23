@@ -6,6 +6,7 @@ import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.position.GhostPositionQuery;
 import com.teic.trueris.game.event.position.GhostPositionResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -16,6 +17,10 @@ public class GhostBlockSystem {
     private final World world;
     private final EventBus eventBus;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "BlockFactory, World, and EventBus is intentionally shared between systems."
+    )
     public GhostBlockSystem(BlockFactory blockFactory, World world, EventBus eventBus) {
         this.blockFactory = blockFactory;
         this.world = world;

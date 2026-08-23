@@ -6,6 +6,7 @@ import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.LineClearEvent;
 import com.teic.trueris.game.grid.GridData;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -13,6 +14,10 @@ public class LineClearSystem {
     private final GridData gridData;
     private final EventBus eventBus;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "World and EventBus is intentionally shared between systems."
+    )
     public LineClearSystem(GridData gridData, EventBus eventBus) {
         this.gridData = gridData;
         this.eventBus = eventBus;

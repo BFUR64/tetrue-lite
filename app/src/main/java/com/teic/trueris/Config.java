@@ -12,8 +12,8 @@ public class Config {
     public static final int TARGET_FPS = 60;
 
     // milliseconds
-    public static int gravityDef = 500;
-    public static final int GRAVITY_MIN = 40;
+    private static int gravityDef = 500;
+    private static final int GRAVITY_MIN = 40;
     private static final int GRAVITY_MAX = 5000;
 
     private static final int GRID_HEIGHT_MIN = 20;
@@ -26,20 +26,20 @@ public class Config {
         gravityDef = gravity.get();
     }
 
-    public static Property<Integer> gravity = Property.of(gravityDef)
+    public static final Property<Integer> gravity = Property.of(gravityDef)
             .require(threshold -> threshold >= GRAVITY_MIN, "Time should be more than " + GRAVITY_MIN + " ms")
             .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
             .parser(Integer::parseInt).build();
 
-    public static Property<Integer> lockTimer = Property.of(500)
+    public static final Property<Integer> lockTimer = Property.of(500)
             .parser(Integer::parseInt).build();
 
-    public static Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
+    public static final Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
             .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
             .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
 
-    public static Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN)
+    public static final Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN)
             .require(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
             .require(value -> value <= GRID_WIDTH_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
@@ -47,26 +47,24 @@ public class Config {
     // =====================
     // Gameplay Buttons
     // =====================
-    public static Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
+    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
 
-    public static Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
+    public static final Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
 
-    public static Property<KeyStroke> moveLeftKey = Property.of(new KeyStroke(KeyType.ARROW_LEFT)).build();
+    public static final Property<KeyStroke> moveLeftKey = Property.of(new KeyStroke(KeyType.ARROW_LEFT)).build();
 
-    public static Property<KeyStroke> moveRightKey = Property.of(new KeyStroke(KeyType.ARROW_RIGHT)).build();
+    public static final Property<KeyStroke> moveRightKey = Property.of(new KeyStroke(KeyType.ARROW_RIGHT)).build();
 
-    public static Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('q')).build();
+    public static final Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('q')).build();
 
-    public static Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
+    public static final Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
 
-    public static Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
+    public static final Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
 
     // =====================
     // Game Flags
     // =====================
-    public static Property<Boolean> showGravity = Property.of(false).build();
-
-    public static Property<Boolean> showDebug = Property.of(false).build();
+    public static final Property<Boolean> showDebug = Property.of(false).build();
 
     // =====================
     // Control Switching
@@ -88,12 +86,12 @@ public class Config {
         return isMobileMode;
     }
 
-    public static Property<Boolean> mobileControls = Property.of(false)
+    public static final Property<Boolean> mobileControls = Property.of(false)
         .setter(Config::switchControls)
         .getter(Config::isMobileMode)
         .build();
 
-    public static void mobileControls() {
+    private static void mobileControls() {
         hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
@@ -103,7 +101,7 @@ public class Config {
         holdKey.set(new KeyStroke('-'));
     }
 
-    public static void desktopControls() {
+    private static void desktopControls() {
         hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));

@@ -1,6 +1,7 @@
 package com.teic.trueris;
 
 import com.teic.trueris.game.GameLoop;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.*;
 import io.github.bfur64.menu.item.display.DynamicText;
@@ -47,6 +48,10 @@ public class App {
         return builder.build();
     }
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Terminal is intentionally shared between systems."
+    )
     public App(Terminal terminal) {
         this.terminal = terminal;
     }
@@ -160,7 +165,6 @@ public class App {
             new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
             new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
             new LineBreak(),
-            new ToggleItem("Show Gravity", Config.showGravity),
             new ToggleItem("Show Debug", Config.showDebug),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)

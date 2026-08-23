@@ -5,6 +5,7 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.position.GroundCheckQuery;
 import com.teic.trueris.game.event.position.GroundCheckResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -14,6 +15,10 @@ public class OnGroundSystem {
     private final World world;
     private final EventBus eventBus;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "World and EventBus is intentionally shared between systems."
+    )
     public OnGroundSystem(World world, EventBus eventBus) {
         this.world = world;
         this.eventBus = eventBus;

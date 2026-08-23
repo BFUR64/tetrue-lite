@@ -7,6 +7,7 @@ import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.event.timer.GravityTimerExpired;
 import com.teic.trueris.game.event.timer.GravityTimer;
 import com.teic.trueris.game.event.position.MoveDownResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
@@ -17,6 +18,10 @@ public class GravitySystem {
     private final World world;
     private final EventBus eventBus;
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "World and EventBus is intentionally shared between systems."
+    )
     public GravitySystem(World world, EventBus eventBus) {
         this.world = world;
         this.eventBus = eventBus;

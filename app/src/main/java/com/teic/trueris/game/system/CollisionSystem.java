@@ -14,6 +14,7 @@ import com.teic.trueris.game.event.position.*;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
 import com.teic.trueris.game.grid.GridData;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -29,6 +30,10 @@ public class CollisionSystem {
     private final int height = Config.gridHeight.get();
     private final int width = Config.gridWidth.get();
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "GridData, World, and EventBus is intentionally shared between systems."
+    )
     public CollisionSystem(GridData gridData, World world, EventBus eventBus) {
         this.gridData = gridData;
         this.world = world;
