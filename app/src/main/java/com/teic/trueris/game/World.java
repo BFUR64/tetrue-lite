@@ -66,7 +66,13 @@ public class World {
 
     public List<Integer> query(Class<?>... componentTypes) {
         if (componentTypes.length == 0) {
-            return new ArrayList<>();
+
+            Set<Integer> result = new HashSet<>();
+            for (Map<Integer, Object> component: components.values()) {
+                result.addAll(component.keySet());
+            }
+
+            return new ArrayList<>(result);
         }
 
         Class<?> first = componentTypes[0];
@@ -75,8 +81,7 @@ public class World {
             return new ArrayList<>();
         }
 
-        Set<Integer> result =
-                new HashSet<>(components.get(first).keySet());
+        Set<Integer> result = new HashSet<>(components.get(first).keySet());
 
         for (int i = 1; i < componentTypes.length; i++) {
             Class<?> componentType = componentTypes[i];
@@ -85,8 +90,7 @@ public class World {
                 return new ArrayList<>();
             }
 
-            result.retainAll(
-                    components.get(componentType).keySet()
+            result.retainAll(components.get(componentType).keySet()
             );
         }
 

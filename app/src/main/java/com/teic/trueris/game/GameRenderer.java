@@ -75,7 +75,7 @@ public class GameRenderer {
     private void showDebug(long delta) {
         int offset = 23;
         terminal.put(0, offset, "FPS: " + Math.round(1_000_000_000.0d / delta));
-        terminal.put(0, ++offset, "Entities: " + world.query(Shape.class));
+        terminal.put(0, ++offset, "Entities: " + world.query());
     }
 
     private void writeGhostBlocks() {
