@@ -1,7 +1,9 @@
 package com.teic.trueris.game.system;
 
+import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.event.QueueChangeEvent;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
@@ -13,9 +15,11 @@ public class SevenBagSystem {
     private static final int MIN_BLOCK_QUEUE_SIZE = 4;
     private final List<Integer> blockIdQueue = new LinkedList<>();
     private final BlockFactory blockFactory;
+    private final EventBus eventBus;
 
-    public SevenBagSystem(BlockFactory blockFactory) {
+    public SevenBagSystem(BlockFactory blockFactory, EventBus eventBus) {
         this.blockFactory = blockFactory;
+        this.eventBus = eventBus;
     }
 
     public Integer getFirstBlock() {
@@ -28,16 +32,16 @@ public class SevenBagSystem {
 
         blockFactory.convertBagBlockToBlock(blockId);
 
+        eventBus.publish(new QueueChangeEvent(blockIdQueue));
+
         return blockId;
     }
 
     private List<Integer> createRandomizedBag() {
         List<Integer> blockIds = new LinkedList<>();
 
-        int position = MIN_BLOCK_QUEUE_SIZE;
         for (CellType cell : CellType.values()) {
-            blockIds.add(blockFactory.createBagBlock(cell, position));
-            position++;
+            blockIds.add(blockFactory.createBagBlock(cell));
         }
 
         Collections.shuffle(blockIds);

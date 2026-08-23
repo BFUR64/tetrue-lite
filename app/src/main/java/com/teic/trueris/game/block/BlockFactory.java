@@ -20,11 +20,10 @@ public class BlockFactory {
         this.world = world;
     }
 
-    public Integer createBagBlock(CellType cell, int position) {
+    public Integer createBagBlock(CellType cell) {
         int id = nextBlockId++;
 
         world.put(id, new Shape(BlockRegistry2.getBlock(cell)));
-        world.put(id, new BagPosition(position));
 
         return id;
     }
@@ -47,7 +46,6 @@ public class BlockFactory {
 
     public void convertBagBlockToBlock(Integer entityId) {
         convertToBlock(entityId);
-        world.remove(entityId, BagPosition.class);
     }
 
     public void convertBlockToHeldBlock(Integer entityId) {

@@ -43,7 +43,7 @@ public class GameLoop {
         World world = new World();
         this.eventBus = new EventBus();
         GridData2 gridData = new GridData2();
-        gameRenderer = new GameRenderer2(terminal, world, gridData);
+        gameRenderer = new GameRenderer2(terminal, world, gridData, eventBus);
         gameManager = new GameManager2(world, eventBus, gridData);
 
         int targetFps = Config.TARGET_FPS;
