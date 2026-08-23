@@ -4,8 +4,8 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.component.*;
-import com.teic.trueris.game.event.GhostPositionQuery;
-import com.teic.trueris.game.event.GhostPositionResponse;
+import com.teic.trueris.game.event.position.GhostPositionQuery;
+import com.teic.trueris.game.event.position.GhostPositionResponse;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
