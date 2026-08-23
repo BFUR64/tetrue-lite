@@ -29,11 +29,32 @@ public class BlockFactory {
         return id;
     }
 
-    public void convertBagBlockToBlock(Integer id) {
-        world.put(id, new Position(0, 0));
-        world.put(id, new Rotation(Direction.UP));
-        world.put(id, new OnGround(false));
-        world.put(id, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
-        world.put(id, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
+    public void convertBagBlockToBlock(Integer entityId) {
+        convertToBlock(entityId);
+        world.remove(entityId, BagPosition.class);
+    }
+
+    public void convertBlockToHeldBlock(Integer entityId) {
+        world.remove(entityId, Position.class);
+        world.remove(entityId, Rotation.class);
+        world.remove(entityId, OnGround.class);
+        world.remove(entityId, GravityTimer.class);
+        world.remove(entityId, LockTimer.class);
+
+        world.put(entityId, Held.class);
+    }
+
+    public void convertHeldBlockToBlock(Integer entityId) {
+        convertToBlock(entityId);
+
+        world.remove(entityId, Held.class);
+    }
+
+    public void convertToBlock(Integer entityId) {
+        world.put(entityId, new Position(0, 0));
+        world.put(entityId, new Rotation(Direction.UP));
+        world.put(entityId, new OnGround(false));
+        world.put(entityId, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
+        world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
     }
 }

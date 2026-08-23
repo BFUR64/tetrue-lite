@@ -119,7 +119,7 @@ public class GameLoop {
             gameManager.rotateBlockRight();
         }
         else if (keyStroke.equals(Config.holdKey.get())) {
-//            gameManager.holdBlock();
+            gameManager.holdBlock();
         }
     }
 
