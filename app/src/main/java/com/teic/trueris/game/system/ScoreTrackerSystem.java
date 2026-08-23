@@ -3,7 +3,9 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.event.LineClearEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class ScoreTrackerSystem {
     private int score;
 

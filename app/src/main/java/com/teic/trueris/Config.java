@@ -3,7 +3,9 @@ package com.teic.trueris;
 import io.github.bfur64.menu.Property;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class Config {
     public static final String GAME_VERSION = "v2.5.4";
 
@@ -64,9 +66,7 @@ public class Config {
     // =====================
     public static Property<Boolean> showGravity = Property.of(false).build();
 
-    public static Property<Boolean> noSRS = Property.of(false).build();
-
-    public static Property<Boolean> showFPS = Property.of(false).build();
+    public static Property<Boolean> showDebug = Property.of(false).build();
 
     // =====================
     // Control Switching

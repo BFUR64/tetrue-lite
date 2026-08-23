@@ -65,11 +65,17 @@ public class GameRenderer {
         writeBlockQueue(leftPadding + 2, textQueueY + 2);
 
         // Optional
-        if (Config.showFPS.get()) {
-            terminal.put(0, 23, String.valueOf(Math.round(1_000_000_000.0d / delta)));
+        if (Config.showDebug.get()) {
+            showDebug(delta);
         }
 
         terminal.flush();
+    }
+
+    private void showDebug(long delta) {
+        int offset = 23;
+        terminal.put(0, offset, "FPS: " + Math.round(1_000_000_000.0d / delta));
+        terminal.put(0, ++offset, "Entities: " + world.query(Shape.class));
     }
 
     private void writeGhostBlocks() {
@@ -132,6 +138,7 @@ public class GameRenderer {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void writeBorder(int xSize, int ySize) {
         for (int row = 0; row < ySize; row++) {
             for (int col = 0; col < xSize; col++) {

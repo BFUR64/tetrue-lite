@@ -17,9 +17,7 @@ public class LineClearSystem {
         this.gridData = gridData;
         this.eventBus = eventBus;
 
-        eventBus.subscribe(BlockPlaceEvent.class, event -> {
-            clearFilledRows();
-        });
+        eventBus.subscribe(BlockPlaceEvent.class, event -> clearFilledRows());
     }
 
     public void clearFilledRows() {

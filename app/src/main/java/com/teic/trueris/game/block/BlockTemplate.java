@@ -12,8 +12,4 @@ public record BlockTemplate(int size, List<@Nullable CellType> cells, CellType c
     public BlockTemplate {
         cells = Collections.unmodifiableList(cells);
     }
-
-    public @Nullable CellType getCell(int x, int y) {
-        return cells.get(y * size + x);
-    }
 }

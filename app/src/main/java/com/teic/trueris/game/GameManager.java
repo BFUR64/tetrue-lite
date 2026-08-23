@@ -34,7 +34,7 @@ public class GameManager {
         BlockFactory blockFactory = new BlockFactory(world);
         SevenBagSystem sevenBagSystem = new SevenBagSystem(blockFactory, eventBus);
         BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
-        this.blockHoldSystem = new BlockHoldSystem(blockFactory, world, eventBus);
+        this.blockHoldSystem = new BlockHoldSystem(blockFactory, eventBus);
 
         this.ghostBlockSystem = new GhostBlockSystem(blockFactory, world, eventBus);
 

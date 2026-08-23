@@ -15,7 +15,10 @@ import io.github.bfur64.menu.item.display.StaticText;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
@@ -82,7 +85,7 @@ public class GameLoop {
         gameRenderer.update(delta);
     }
 
-    private void handleGameState(KeyStroke keyStroke) {
+    private void handleGameState(@Nullable KeyStroke keyStroke) {
         if (keyStroke == null) {
             return;
         }
@@ -91,7 +94,6 @@ public class GameLoop {
             running = false;
             return;
         }
-
 
         if (keyStroke.equals(Config.softDropKey.get())) {
             gameManager.moveBlockDown();

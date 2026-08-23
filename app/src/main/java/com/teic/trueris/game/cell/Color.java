@@ -7,5 +7,5 @@ public enum Color {
     DEFAULT, GREY, YELLOW,
     BLUE, ORANGE, GREEN,
     RED, PURPLE, CYAN,
-    WHITE;
+    WHITE
 }

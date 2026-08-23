@@ -6,9 +6,11 @@ import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.GhostPositionQuery;
 import com.teic.trueris.game.event.GhostPositionResponse;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class GhostBlockSystem {
     private final BlockFactory blockFactory;
     private final World world;
