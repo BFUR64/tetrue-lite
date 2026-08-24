@@ -9,8 +9,6 @@ import org.jspecify.annotations.NullMarked;
 public class Config {
     public static final String GAME_VERSION = "v3.0.1";
 
-    public static final int TARGET_FPS = 60;
-
     // milliseconds
     private static int gravityDef = 500;
     public static final int GRAVITY_MIN = 40;
@@ -70,6 +68,8 @@ public class Config {
     public static final Property<Boolean> showDebug = Property.of(false).build();
     public static final Property<Boolean> gravityEnabled = Property.of(true).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
+
+    public static final Property<Integer> targetFps = Property.of(60).parser(Integer::parseInt).build();
 
     // =====================
     // Control Switching

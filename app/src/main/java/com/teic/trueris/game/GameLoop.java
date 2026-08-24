@@ -47,7 +47,7 @@ public class GameLoop {
         gameRenderer = new GameRenderer(terminal, world, gridData, eventBus);
         gameManager = new GameManager(world, eventBus, gridData);
 
-        int targetFps = Config.TARGET_FPS;
+        int targetFps = Config.targetFps.get();
         this.nsPerFrame = NSEC / targetFps;
 
         eventBus.subscribe(GameOverEvent.class, event -> running = false);
@@ -66,16 +66,21 @@ public class GameLoop {
             update(delta);
 
             long deadline = frameStart + nsPerFrame;
-            long now = System.nanoTime();
 
-            long remaining = (deadline - now) / 2;
-            if (remaining > 1_000_000) {
-                LockSupport.parkNanos(remaining);
-            }
+            while (true) {
+                long now = System.nanoTime();
+                long remaining = deadline - now;
 
-            while (now < deadline) {
-                Thread.onSpinWait();
-                now = System.nanoTime();
+                if (remaining <= 0) {
+                    break;
+                }
+
+                if (remaining > 8_000_000) { // 8ms
+                    LockSupport.parkNanos(remaining - 2_000_000);
+                }
+                else {
+                    Thread.onSpinWait();
+                }
             }
 
             delta = System.nanoTime() - frameStart;
