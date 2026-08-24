@@ -26,11 +26,7 @@ public class LineClearSystem {
     }
 
     public void clearFilledRows() {
-        boolean[] filledRows = returnFilledRows();
-
-        clearFilledRows(filledRows);
-
-        eventBus.publish(new LineClearEvent(filledRows));
+        clearFilledRows(returnFilledRows());
     }
 
     private void clearFilledRows(boolean[] filledRows) {
@@ -42,7 +38,10 @@ public class LineClearSystem {
             shiftSolidGridRowFrom(row);
         }
 
-        if (hasFilled) clearFirstRow();
+        if (hasFilled) {
+            clearFirstRow();
+            eventBus.publish(new LineClearEvent(filledRows));
+        }
     }
 
     private boolean[] returnFilledRows() {
