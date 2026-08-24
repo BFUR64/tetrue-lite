@@ -167,6 +167,7 @@ public class App {
             new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
+            new ToggleItem("Gravity Enabled", Config.gravityEnabled),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
         ));

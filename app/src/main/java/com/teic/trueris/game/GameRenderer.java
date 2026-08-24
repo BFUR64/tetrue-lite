@@ -5,6 +5,7 @@ import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.BlockQueueChangeEvent;
+import com.teic.trueris.game.event.GravityChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridReader;
 import com.teic.trueris.game.utils.RotationHelper;
@@ -33,6 +34,7 @@ public class GameRenderer {
 
     private int score;
     private List<Integer> blockQueueIds = new LinkedList<>();
+    private int gravity = Config.gravity.get();
 
     @SuppressFBWarnings(
         value = "EI2",
@@ -45,6 +47,7 @@ public class GameRenderer {
 
         eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
         eventBus.subscribe(BlockQueueChangeEvent.class, event -> blockQueueIds = event.entityIds());
+        eventBus.subscribe(GravityChangeEvent.class, event -> gravity = event.gravity());
     }
 
     public void update(long delta) {
@@ -61,6 +64,8 @@ public class GameRenderer {
 
         int leftPadding = gameBorderWidth + 1;
         putString(leftPadding, 1, "Score: " + score);
+
+        putString(leftPadding, 3, "Gravity: " + gravity + "ms");
 
         int heldBlockY = 5;
         writeHeldBlock(leftPadding, heldBlockY);

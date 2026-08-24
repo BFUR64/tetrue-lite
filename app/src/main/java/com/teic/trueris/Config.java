@@ -13,7 +13,7 @@ public class Config {
 
     // milliseconds
     private static int gravityDef = 500;
-    private static final int GRAVITY_MIN = 40;
+    public static final int GRAVITY_MIN = 40;
     private static final int GRAVITY_MAX = 5000;
 
     private static final int GRID_HEIGHT_MIN = 20;
@@ -68,6 +68,7 @@ public class Config {
     // Game Flags
     // =====================
     public static final Property<Boolean> showDebug = Property.of(false).build();
+    public static final Property<Boolean> gravityEnabled = Property.of(true).build();
 
     // =====================
     // Control Switching

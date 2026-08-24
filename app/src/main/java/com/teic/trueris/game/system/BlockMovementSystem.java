@@ -1,5 +1,6 @@
 package com.teic.trueris.game.system;
 
+import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
@@ -53,7 +54,11 @@ public class BlockMovementSystem {
 
         });
 
-        eventBus.subscribe(GravityTimerExpired.class, event -> moveBlockDown(event.entityId()));
+        eventBus.subscribe(GravityTimerExpired.class, event -> {
+            if (Config.gravityEnabled.get()) {
+                moveBlockDown(event.entityId());
+            }
+        });
 
         eventBus.subscribe(LockTimerExpired.class, event -> moveBlockDown(event.entityId()));
     }
