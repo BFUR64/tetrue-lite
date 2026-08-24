@@ -4,7 +4,7 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.cell.Color;
 import com.teic.trueris.game.component.*;
-import com.teic.trueris.game.event.QueueChangeEvent;
+import com.teic.trueris.game.event.BlockQueueChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridReader;
 import com.teic.trueris.game.system.RotationSystem;
@@ -47,7 +47,7 @@ public class GameRenderer {
         this.gridReader = gridReader;
 
         eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
-        eventBus.subscribe(QueueChangeEvent.class, event -> blockQueueIds = event.entityIds());
+        eventBus.subscribe(BlockQueueChangeEvent.class, event -> blockQueueIds = event.entityIds());
     }
 
     public void update(long delta) {

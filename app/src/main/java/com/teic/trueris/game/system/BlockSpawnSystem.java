@@ -10,9 +10,9 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class BlockSpawnSystem {
-    private final SevenBagSystem sevenBagSystem;
+    private final BlockQueueSystem sevenBagSystem;
 
-    public BlockSpawnSystem(SevenBagSystem sevenBagSystem, World world, EventBus eventBus) {
+    public BlockSpawnSystem(BlockQueueSystem sevenBagSystem, World world, EventBus eventBus) {
         this.sevenBagSystem = sevenBagSystem;
 
         eventBus.subscribe(BlockPlaceEvent.class, event -> {

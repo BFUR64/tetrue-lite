@@ -3,7 +3,7 @@ package com.teic.trueris.game.system;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.cell.CellType;
-import com.teic.trueris.game.event.QueueChangeEvent;
+import com.teic.trueris.game.event.BlockQueueChangeEvent;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
@@ -11,13 +11,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 @NullMarked
-public class SevenBagSystem {
+public class BlockQueueSystem {
     private static final int MIN_BLOCK_QUEUE_SIZE = 4;
     private final List<Integer> blockIdQueue = new LinkedList<>();
     private final BlockFactory blockFactory;
     private final EventBus eventBus;
 
-    public SevenBagSystem(BlockFactory blockFactory, EventBus eventBus) {
+    public BlockQueueSystem(BlockFactory blockFactory, EventBus eventBus) {
         this.blockFactory = blockFactory;
         this.eventBus = eventBus;
     }
@@ -32,7 +32,7 @@ public class SevenBagSystem {
 
         blockFactory.convertBagBlockToBlock(blockId);
 
-        eventBus.publish(new QueueChangeEvent(blockIdQueue));
+        eventBus.publish(new BlockQueueChangeEvent(blockIdQueue));
 
         return blockId;
     }

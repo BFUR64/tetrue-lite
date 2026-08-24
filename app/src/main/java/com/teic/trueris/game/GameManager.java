@@ -34,7 +34,7 @@ public class GameManager {
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
 
-        SevenBagSystem sevenBagSystem = new SevenBagSystem(blockFactory, eventBus);
+        BlockQueueSystem sevenBagSystem = new BlockQueueSystem(blockFactory, eventBus);
 
         this.blockHoldSystem = new BlockHoldSystem(blockFactory, eventBus);
 
