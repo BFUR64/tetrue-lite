@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class GameManager {
-    private final GravitySystem gravitySystem;
+    private final GravityTimerSystem gravityTimerSystem;
     private final OnGroundSystem onGroundSystem;
     private final LockTimerSystem lockTimerSystem;
     private final BlockMovementSystem blockMovementSystem;
@@ -21,7 +21,7 @@ public class GameManager {
 
     public GameManager(World world, EventBus eventBus, GridData gridData) {
         // Initialize Movement Systems
-        this.gravitySystem = new GravitySystem(world, eventBus);
+        this.gravityTimerSystem = new GravityTimerSystem(world, eventBus);
         this.onGroundSystem = new OnGroundSystem(world, eventBus);
         this.lockTimerSystem = new LockTimerSystem(world, eventBus);
 
@@ -34,13 +34,13 @@ public class GameManager {
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);
 
-        BlockQueueSystem sevenBagSystem = new BlockQueueSystem(blockFactory, eventBus);
+        BlockQueueSystem blockQueueSystem = new BlockQueueSystem(blockFactory, eventBus);
 
         this.blockHoldSystem = new BlockHoldSystem(blockFactory, eventBus);
 
         this.ghostBlockSystem = new GhostBlockSystem(blockFactory, world, eventBus);
 
-        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(sevenBagSystem, world, eventBus);
+        BlockSpawnSystem blockSpawnSystem = new BlockSpawnSystem(blockQueueSystem, world, eventBus);
 
         // Initialize Game Systems
         new LineClearSystem(gridData, eventBus);
@@ -57,7 +57,7 @@ public class GameManager {
 
     public void update(long delta) {
         onGroundSystem.update();
-        gravitySystem.update(delta);
+        gravityTimerSystem.update(delta);
         lockTimerSystem.update(delta);
         ghostBlockSystem.update();
     }

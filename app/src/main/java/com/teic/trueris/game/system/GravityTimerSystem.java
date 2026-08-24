@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.List;
 
 @NullMarked
-public class GravitySystem {
+public class GravityTimerSystem {
     private final World world;
     private final EventBus eventBus;
 
@@ -22,7 +22,7 @@ public class GravitySystem {
         value = "EI2",
         justification = "World and EventBus is intentionally shared between systems."
     )
-    public GravitySystem(World world, EventBus eventBus) {
+    public GravityTimerSystem(World world, EventBus eventBus) {
         this.world = world;
         this.eventBus = eventBus;
 
