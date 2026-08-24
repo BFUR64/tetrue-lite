@@ -69,6 +69,7 @@ public class Config {
     // =====================
     public static final Property<Boolean> showDebug = Property.of(false).build();
     public static final Property<Boolean> gravityEnabled = Property.of(true).build();
+    public static final Property<Boolean> soundEnabled = Property.of(true).build();
 
     // =====================
     // Control Switching
