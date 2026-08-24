@@ -20,6 +20,7 @@ dependencies {
     implementation("org.jspecify:jspecify:1.0.0")
     implementation("io.github.bfur64:menu-manager:0.9.2")
     implementation("io.github.bfur64:micro-sound:0.1.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.26.0")
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.4")
 }
 
