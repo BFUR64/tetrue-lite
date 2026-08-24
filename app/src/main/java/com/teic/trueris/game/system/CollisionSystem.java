@@ -56,10 +56,11 @@ public class CollisionSystem {
         });
 
         eventBus.subscribe(DropDownQuery.class, event -> {
-            Boolean valid = isValid(event.entityId(), 0, 1);
+            Integer entityId = event.entityId();
+            Integer dropDisplacement = dropDisplacement(entityId);
 
-            if (valid != null) {
-                eventBus.publish(new DropDownResponse(event.entityId(), valid));
+            if (dropDisplacement != null) {
+                eventBus.publish(new DropDownResponse(entityId, dropDisplacement));
             }
         });
 
@@ -99,20 +100,32 @@ public class CollisionSystem {
         eventBus.subscribe(GhostPositionQuery.class, event -> {
             Integer entityId = event.entityId();
 
-            if (world.has(entityId, Position.class, Rotation.class, Shape.class, IsGhost.class)) {
-                Position position = world.get(entityId, Position.class);
-                Rotation rotation = world.get(entityId, Rotation.class);
-                Shape shape = world.get(entityId, Shape.class);
+            if (world.has(entityId, IsGhost.class)) {
+                Integer dropDisplacement = dropDisplacement(entityId);
 
-                int dy = 0;
-                while (isValid(position, rotation, shape, 0, dy)) {
-                    dy++;
+                if (dropDisplacement != null) {
+                    eventBus.publish(new GhostPositionResponse(entityId, dropDisplacement));
                 }
-                dy--;
-
-                eventBus.publish(new GhostPositionResponse(entityId, dy));
             }
         });
+    }
+
+    private @Nullable Integer dropDisplacement(int entityId) {
+        if (world.has(entityId, Position.class, Rotation.class, Shape.class)) {
+            Position position = world.get(entityId, Position.class);
+            Rotation rotation = world.get(entityId, Rotation.class);
+            Shape shape = world.get(entityId, Shape.class);
+
+            int dy = 0;
+            while (isValid(position, rotation, shape, 0, dy)) {
+                dy++;
+            }
+            dy--;
+
+            return dy;
+        }
+
+        return null;
     }
 
     private @Nullable Boolean isValid(int entityId, int dx, int dy) {

@@ -40,16 +40,12 @@ public class BlockMovementSystem {
 
         eventBus.subscribe(DropDownResponse.class, event -> {
             if (world.has(event.entityId(), Position.class)) {
-                if (event.canDrop()) {
-                    Position oldPosition = world.get(event.entityId(), Position.class);
+                Position oldPosition = world.get(event.entityId(), Position.class);
 
-                    world.put(event.entityId(), new Position(
-                        oldPosition.x(),
-                        oldPosition.y() + 1
-                    ));
-                    
-                    dropBlock(event.entityId());
-                }
+                world.put(event.entityId(), new Position(
+                    oldPosition.x(),
+                    oldPosition.y() + event.dy()
+                ));
             }
 
         });
