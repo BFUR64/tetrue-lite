@@ -15,19 +15,17 @@
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second and speeds up per line clear
 - Lock Grace - Allows adjustment before it gets placed
-- SRS Rotation - Based on the SRS Table
+- SRS Rotation - Based on the SRS Table (Not Implemented on V3.0.0)
 - Movement - Move blocks left and right
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
 - Block Queueing (7 Bag System) - Next pieces preview and fair randomization
 - Hold block
-- Configurable Settigns
+- Configurable Settings
+- Sound
 
 ## Limitations
 - No game / score tracking after the game is closed
-- Inaccurate scoring / gravity
-- Minimal main menu only, featuring `New Game`, `About`, and `Exit`
-- No sound
 
 ## Environment
 - Designed and tested primarily on Linux, Windows, and Termux (Android)
@@ -36,8 +34,9 @@
 - UP Arrow Key - Hard drop
 - DOWN Arrow Key - Move tetromino down
 - LEFT / RIGHT Arrow Keys - Move tetromino left / right within the grid
-- Q Key - Rotate tetromino clockwise
-- E Key - Rotate tetromino counter-clockwise
+- Z Key - Rotate tetromino counter-clockwise
+- X Key - Rotate tetromino clockwise
+- A key - Rotate tetromino 180 degrees
 - C key - Hold block
 
 In the main menu, press `0` or `ESC` to exit the application <br>
@@ -88,6 +87,7 @@ java -jar app/build/libs/app-all.jar
 - Libraries:
   - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 3.2.1 (Lanterna-like Abstraction Library for JLine4 and Lanterna)
   - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.9.2 (Personal Composite-based Menu Management)
+  - [MicroSound](https://github.com/BFUR64/MicroSound) 0.1.1 (Personal Minimal Sound Manager)
 - Build Tools: Gradle 9.7.0
 
 ## Version Releasing

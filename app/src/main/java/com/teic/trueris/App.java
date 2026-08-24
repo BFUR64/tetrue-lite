@@ -1,9 +1,7 @@
 package com.teic.trueris;
 
 import com.teic.trueris.game.GameLoop;
-import com.teic.trueris.game.GameManager;
-import com.teic.trueris.game.GameRenderer;
-import com.teic.trueris.game.grid.GridData;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
 import io.github.bfur64.menu.item.*;
 import io.github.bfur64.menu.item.display.DynamicText;
@@ -14,11 +12,13 @@ import io.github.bfur64.menu.item.input.KeyInputItem;
 import io.github.bfur64.menu.item.input.ToggleItem;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.interfaces.TerminalRuntime;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@NullMarked
 public class App {
     private final Terminal terminal;
 
@@ -31,7 +31,7 @@ public class App {
             app.start();
         }
         catch (Exception error) {
-            System.err.println("Terminal initialization failed: " + error.getMessage());
+            System.err.println("Terminal initialization failed: " + error.getMessage() + Arrays.toString(error.getStackTrace()));
             System.exit(1);
         }
     }
@@ -40,14 +40,18 @@ public class App {
         Terminal.Builder builder = Terminal.builder();
 
         if (args.contains("-jline")) {
-            builder = builder.jline();
+            builder.jline();
         } else if (args.contains("-lanterna")) {
-            builder = builder.lanterna();
+            builder.lanterna();
         }
 
         return builder.build();
     }
 
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Terminal is intentionally shared between systems."
+    )
     public App(Terminal terminal) {
         this.terminal = terminal;
     }
@@ -72,11 +76,7 @@ public class App {
     }
 
     private void runNewGame() {
-        GridData gridData = new GridData();
-        GameManager gameManager = new GameManager(gridData);
-        GameRenderer gameRenderer = new GameRenderer(terminal, gridData, gameManager);
-
-        GameLoop gameLoop = new GameLoop(terminal, gameRenderer, gameManager);
+        GameLoop gameLoop = new GameLoop(terminal);
         gameLoop.run();
     }
 
@@ -149,6 +149,7 @@ public class App {
             new KeyInputItem("Move Right", Config.moveRightKey),
             new KeyInputItem("Rotate Left", Config.rotateLeftKey),
             new KeyInputItem("Rotate Right", Config.rotateRightKey),
+            new KeyInputItem("Rotate 180", Config.rotate180Key),
             new KeyInputItem("Hold Block", Config.holdKey),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
@@ -165,9 +166,8 @@ public class App {
             new InputItem<>("Grid Height", ": ", Config.gridHeight, "Cells"),
             new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
             new LineBreak(),
-            new ToggleItem("Show Gravity", Config.showGravity),
-            new ToggleItem("No SRS", Config.noSRS),
-            new ToggleItem("Show FPS", Config.showFPS),
+            new ToggleItem("Show Debug", Config.showDebug),
+            new ToggleItem("Gravity Enabled", Config.gravityEnabled),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
         ));

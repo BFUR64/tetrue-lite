@@ -3,38 +3,44 @@ package com.teic.trueris;
 import io.github.bfur64.menu.Property;
 import io.github.bfur64.terminal.input.KeyStroke;
 import io.github.bfur64.terminal.input.KeyType;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class Config {
-    public static final String GAME_VERSION = "v2.5.4";
+    public static final String GAME_VERSION = "v3.0.0";
 
     public static final int TARGET_FPS = 60;
 
     // milliseconds
-    public static int gravityDef = 500;
+    private static int gravityDef = 500;
     public static final int GRAVITY_MIN = 40;
     private static final int GRAVITY_MAX = 5000;
 
     private static final int GRID_HEIGHT_MIN = 20;
     private static final int GRID_HEIGHT_MAX = 100;
 
-    private static final int GRID_WIDTH_MIN = 10;
+    private static final int GRID_WIDTH_MIN = 4;
+    private static final int GRID_WIDTH_MIN_DEF = 10;
     private static final int GRID_WIDTH_MAX = 100;
 
     public static void saveState() {
         gravityDef = gravity.get();
     }
 
-    public static Property<Integer> gravity = Property.of(gravityDef)
+    public static final Property<Integer> gravity = Property.of(gravityDef)
             .require(threshold -> threshold >= GRAVITY_MIN, "Time should be more than " + GRAVITY_MIN + " ms")
             .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
             .parser(Integer::parseInt).build();
 
-    public static Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
+    public static final Property<Integer> lockTimer = Property.of(500)
+            .parser(Integer::parseInt).build();
+
+    public static final Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
             .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
             .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
 
-    public static Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN)
+    public static final Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN_DEF)
             .require(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
             .require(value -> value <= GRID_WIDTH_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
@@ -42,28 +48,27 @@ public class Config {
     // =====================
     // Gameplay Buttons
     // =====================
-    public static Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
+    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
 
-    public static Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
+    public static final Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
 
-    public static Property<KeyStroke> moveLeftKey = Property.of(new KeyStroke(KeyType.ARROW_LEFT)).build();
+    public static final Property<KeyStroke> moveLeftKey = Property.of(new KeyStroke(KeyType.ARROW_LEFT)).build();
 
-    public static Property<KeyStroke> moveRightKey = Property.of(new KeyStroke(KeyType.ARROW_RIGHT)).build();
+    public static final Property<KeyStroke> moveRightKey = Property.of(new KeyStroke(KeyType.ARROW_RIGHT)).build();
 
-    public static Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('q')).build();
+    public static final Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('z')).build();
 
-    public static Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
+    public static final Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('x')).build();
 
-    public static Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
+    public static final Property<KeyStroke> rotate180Key = Property.of(new KeyStroke('a')).build();
+
+    public static final Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
 
     // =====================
     // Game Flags
     // =====================
-    public static Property<Boolean> showGravity = Property.of(false).build();
-
-    public static Property<Boolean> noSRS = Property.of(false).build();
-
-    public static Property<Boolean> showFPS = Property.of(false).build();
+    public static final Property<Boolean> showDebug = Property.of(false).build();
+    public static final Property<Boolean> gravityEnabled = Property.of(true).build();
 
     // =====================
     // Control Switching
@@ -85,28 +90,30 @@ public class Config {
         return isMobileMode;
     }
 
-    public static Property<Boolean> mobileControls = Property.of(false)
+    public static final Property<Boolean> mobileControls = Property.of(false)
         .setter(Config::switchControls)
         .getter(Config::isMobileMode)
         .build();
 
-    public static void mobileControls() {
+    private static void mobileControls() {
         hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
         rotateLeftKey.set(new KeyStroke(KeyType.HOME));
         rotateRightKey.set(new KeyStroke(KeyType.END));
+        rotate180Key.set(new KeyStroke(KeyType.PAGE_UP));
         holdKey.set(new KeyStroke('-'));
     }
 
-    public static void desktopControls() {
+    private static void desktopControls() {
         hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
-        rotateLeftKey.set(new KeyStroke('q'));
-        rotateRightKey.set(new KeyStroke('e'));
+        rotateLeftKey.set(new KeyStroke('z'));
+        rotateRightKey.set(new KeyStroke('x'));
+        rotate180Key.set(new KeyStroke('a'));
         holdKey.set(new KeyStroke('c'));
     }
 }

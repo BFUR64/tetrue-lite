@@ -2,6 +2,12 @@ plugins {
     application
     id("eclipse")
     id("com.gradleup.shadow") version "9.3.1"
+    id("com.github.spotbugs") version "6.5.11"
+}
+
+spotbugs {
+    toolVersion = "4.10.4"
+    ignoreFailures = false
 }
 
 repositories {
@@ -11,7 +17,11 @@ repositories {
 
 dependencies {
     testImplementation(libs.junit)
+    implementation("org.jspecify:jspecify:1.0.0")
     implementation("io.github.bfur64:menu-manager:0.9.2")
+    implementation("io.github.bfur64:micro-sound:0.1.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.26.0")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.4")
 }
 
 java {
