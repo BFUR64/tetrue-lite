@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class Config {
-    public static final String GAME_VERSION = "v3.0.0";
+    public static final String GAME_VERSION = "v3.0.1";
 
     public static final int TARGET_FPS = 60;
 
