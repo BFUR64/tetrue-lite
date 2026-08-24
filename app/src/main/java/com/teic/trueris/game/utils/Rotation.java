@@ -1,4 +1,4 @@
-package com.teic.trueris.game.system;
+package com.teic.trueris.game.utils;
 
 import com.teic.trueris.game.block.BlockTemplate;
 import com.teic.trueris.game.block.Direction;
@@ -14,7 +14,7 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 import static com.teic.trueris.game.utils.CellGrid.setCell;
 
 @NullMarked
-public class RotationSystem {
+public class Rotation {
     public static List<@Nullable CellType> rotateBlockNTimes(int amount, BlockTemplate blockTemplate) {
         int size = blockTemplate.size();
 

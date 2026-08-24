@@ -7,7 +7,7 @@ import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.BlockQueueChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridReader;
-import com.teic.trueris.game.system.RotationSystem;
+import com.teic.trueris.game.utils.Rotation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.output.TextColor;
@@ -84,16 +84,16 @@ public class GameRenderer {
     }
 
     private void writeGhostBlocks() {
-        List<Integer> ghostIds = world.query(Position.class, Rotation.class, Shape.class, IsGhost.class);
+        List<Integer> ghostIds = world.query(Position.class, com.teic.trueris.game.component.Rotation.class, Shape.class, IsGhost.class);
 
         for (Integer ghostId : ghostIds) {
             Position position = world.get(ghostId, Position.class);
-            Rotation rotation = world.get(ghostId, Rotation.class);
+            com.teic.trueris.game.component.Rotation rotation = world.get(ghostId, com.teic.trueris.game.component.Rotation.class);
             Shape shape = world.get(ghostId, Shape.class);
 
             int direction = rotation.direction().ordinal();
 
-            List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
+            List<@Nullable CellType> rotatedCells = Rotation.rotateBlockNTimes(direction, shape.blockTemplate());
 
             writeBlock(
                 position.x() + BORDER_OFFSET,
@@ -106,18 +106,18 @@ public class GameRenderer {
     }
 
     private void writeActiveBlocks() {
-        List<Integer> blockIds = world.query(Position.class, Rotation.class, Shape.class);
+        List<Integer> blockIds = world.query(Position.class, com.teic.trueris.game.component.Rotation.class, Shape.class);
 
         for (Integer blockId : blockIds) {
             if (world.has(blockId, IsGhost.class)) continue;
 
             Position position = world.get(blockId, Position.class);
-            Rotation rotation = world.get(blockId, Rotation.class);
+            com.teic.trueris.game.component.Rotation rotation = world.get(blockId, com.teic.trueris.game.component.Rotation.class);
             Shape shape = world.get(blockId, Shape.class);
 
             int direction = rotation.direction().ordinal();
 
-            List<@Nullable CellType> rotatedCells = RotationSystem.rotateBlockNTimes(direction, shape.blockTemplate());
+            List<@Nullable CellType> rotatedCells = Rotation.rotateBlockNTimes(direction, shape.blockTemplate());
 
             writeBlock(
                 position.x() + BORDER_OFFSET,
