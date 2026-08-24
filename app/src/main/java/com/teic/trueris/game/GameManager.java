@@ -33,7 +33,7 @@ public class GameManager {
         this.blockRotationSystem = new BlockRotationSystem(world, eventBus);
 
         // Initialize Block Systems
-        BlockFactory blockFactory = new BlockFactory(world);
+        BlockFactory blockFactory = new BlockFactory(world, eventBus);
 
         new CollisionSystem(gridData, world, eventBus);
         new BlockPlaceSystem(gridData, world, eventBus);

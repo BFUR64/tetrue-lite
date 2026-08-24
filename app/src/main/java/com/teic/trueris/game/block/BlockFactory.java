@@ -1,9 +1,11 @@
 package com.teic.trueris.game.block;
 
 import com.teic.trueris.Config;
+import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.component.*;
+import com.teic.trueris.game.event.GravityChangeEvent;
 import com.teic.trueris.game.event.timer.GravityTimer;
 import com.teic.trueris.game.event.timer.LockTimer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -16,13 +18,16 @@ public class BlockFactory {
     private final World world;
 
     private int nextBlockId = 0;
+    private int gravity = Config.gravity.get();
 
     @SuppressFBWarnings(
         value = "EI2",
         justification = "World is intentionally shared between systems."
     )
-    public BlockFactory(World world) {
+    public BlockFactory(World world, EventBus eventBus) {
         this.world = world;
+
+        eventBus.subscribe(GravityChangeEvent.class, event -> gravity = event.gravity());
     }
 
     public Integer createBagBlock(CellType cell) {
@@ -75,7 +80,7 @@ public class BlockFactory {
         world.put(entityId, new Rotation(Direction.UP));
         world.put(entityId, new OnGround(false));
         world.put(entityId, new HasGhost(null));
-        world.put(entityId, new GravityTimer(Duration.ofMillis(Config.gravity.get()).toNanos()));
+        world.put(entityId, new GravityTimer(Duration.ofMillis(gravity).toNanos()));
         world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
     }
 }
