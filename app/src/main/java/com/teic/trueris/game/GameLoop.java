@@ -70,7 +70,7 @@ public class GameLoop {
 
             long remaining = (deadline - now) / 2;
             if (remaining > 1_000_000) {
-                LockSupport.parkNanos(deadline - now);
+                LockSupport.parkNanos(remaining);
             }
 
             while (now < deadline) {
