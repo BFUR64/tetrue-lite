@@ -1,5 +1,6 @@
-package com.teic.trueris.game;
+package com.teic.trueris.game.system;
 
+import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.LineClearEvent;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -9,12 +10,12 @@ import io.github.bfur64.Sound;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
-public class SoundManager {
+public class SoundSystem {
     @SuppressFBWarnings(
         value = "DE",
         justification = "Logging has not been implemented yet."
     )
-    public SoundManager(EventBus eventBus) {
+    public SoundSystem(EventBus eventBus) {
         try {
             MicroSound sound = new MicroSound();
 

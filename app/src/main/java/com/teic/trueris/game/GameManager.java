@@ -7,10 +7,6 @@ import com.teic.trueris.game.grid.GridData;
 import com.teic.trueris.game.system.*;
 import org.jspecify.annotations.NullMarked;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-
 @NullMarked
 public class GameManager {
     private final GravityTimerSystem gravityTimerSystem;
@@ -58,7 +54,7 @@ public class GameManager {
         // Start Game
         this.activeBlockId = blockSpawnSystem.spawnBlock();
 
-        new SoundManager(eventBus);
+        new SoundSystem(eventBus);
     }
 
     public void update(long delta) {
