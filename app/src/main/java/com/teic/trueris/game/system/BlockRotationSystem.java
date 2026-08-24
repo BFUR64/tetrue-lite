@@ -4,9 +4,10 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.block.Direction;
 import com.teic.trueris.game.component.Position;
+import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.event.rotation.MoveRotationQuery;
 import com.teic.trueris.game.event.rotation.MoveRotationResponse;
-import com.teic.trueris.game.utils.Rotation;
+import com.teic.trueris.game.utils.RotationHelper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
@@ -26,7 +27,7 @@ public class BlockRotationSystem {
         eventBus.subscribe(MoveRotationResponse.class, event -> {
             Integer entityId = event.entityId();
 
-            if (event.isValid() && world.has(entityId, Position.class, com.teic.trueris.game.component.Rotation.class)) {
+            if (event.isValid() && world.has(entityId, Position.class, Rotation.class)) {
                 Position oldPosition = world.get(entityId, Position.class);
 
                 world.put(entityId, new Position(
@@ -34,24 +35,24 @@ public class BlockRotationSystem {
                     oldPosition.y() + event.dy()
                 ));
 
-                world.put(entityId, new com.teic.trueris.game.component.Rotation(Direction.fromId(event.direction())));
+                world.put(entityId, new Rotation(Direction.fromId(event.direction())));
             }
         });
     }
 
     public void rotateLeft(Integer entityId) {
-        if (world.has(entityId, Position.class, com.teic.trueris.game.component.Rotation.class)) {
-            com.teic.trueris.game.component.Rotation rotation = world.get(entityId, com.teic.trueris.game.component.Rotation.class);
-            int direction = Rotation.rotateLeft(rotation.direction());
+        if (world.has(entityId, Position.class, Rotation.class)) {
+            Rotation rotation = world.get(entityId, Rotation.class);
+            int direction = RotationHelper.rotateLeft(rotation.direction());
 
             eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
         }
     }
 
     public void rotateRight(Integer entityId) {
-        if (world.has(entityId, com.teic.trueris.game.component.Rotation.class)) {
-            com.teic.trueris.game.component.Rotation rotation = world.get(entityId, com.teic.trueris.game.component.Rotation.class);
-            int direction = Rotation.rotateRight(rotation.direction());
+        if (world.has(entityId, Rotation.class)) {
+            Rotation rotation = world.get(entityId, Rotation.class);
+            int direction = RotationHelper.rotateRight(rotation.direction());
 
             eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
         }

@@ -7,7 +7,7 @@ import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.BlockQueueChangeEvent;
 import com.teic.trueris.game.event.ScoreChangeEvent;
 import com.teic.trueris.game.grid.GridReader;
-import com.teic.trueris.game.utils.Rotation;
+import com.teic.trueris.game.utils.RotationHelper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.output.TextColor;
@@ -93,7 +93,7 @@ public class GameRenderer {
 
             int direction = rotation.direction().ordinal();
 
-            List<@Nullable CellType> rotatedCells = Rotation.rotateBlockNTimes(direction, shape.blockTemplate());
+            List<@Nullable CellType> rotatedCells = RotationHelper.rotateBlockNTimes(direction, shape.blockTemplate());
 
             writeBlock(
                 position.x() + BORDER_OFFSET,
@@ -117,7 +117,7 @@ public class GameRenderer {
 
             int direction = rotation.direction().ordinal();
 
-            List<@Nullable CellType> rotatedCells = Rotation.rotateBlockNTimes(direction, shape.blockTemplate());
+            List<@Nullable CellType> rotatedCells = RotationHelper.rotateBlockNTimes(direction, shape.blockTemplate());
 
             writeBlock(
                 position.x() + BORDER_OFFSET,

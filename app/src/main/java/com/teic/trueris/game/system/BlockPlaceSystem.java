@@ -5,11 +5,12 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.component.OnGround;
 import com.teic.trueris.game.component.Position;
+import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.event.BlockPlaceEvent;
 import com.teic.trueris.game.event.position.MoveDownResponse;
 import com.teic.trueris.game.grid.GridWriter;
-import com.teic.trueris.game.utils.Rotation;
+import com.teic.trueris.game.utils.RotationHelper;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -21,14 +22,14 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 public class BlockPlaceSystem {
     public BlockPlaceSystem(GridWriter gridWriter, World world, EventBus eventBus) {
         eventBus.subscribe(MoveDownResponse.class, event -> {
-            if (!event.canDrop() && world.has(event.entityId(), Position.class, com.teic.trueris.game.component.Rotation.class, Shape.class, OnGround.class)) {
+            if (!event.canDrop() && world.has(event.entityId(), Position.class, Rotation.class, Shape.class, OnGround.class)) {
                 if (!world.get(event.entityId(), OnGround.class).onGround()) return;
 
                 Position position = world.get(event.entityId(), Position.class);
-                com.teic.trueris.game.component.Rotation rotation = world.get(event.entityId(), com.teic.trueris.game.component.Rotation.class);
+                Rotation rotation = world.get(event.entityId(), Rotation.class);
                 Shape shape = world.get(event.entityId(), Shape.class);
 
-                List<@Nullable CellType> rotatedCells = Rotation.rotateBlockNTimes(rotation.direction().ordinal(), shape.blockTemplate());
+                List<@Nullable CellType> rotatedCells = RotationHelper.rotateBlockNTimes(rotation.direction().ordinal(), shape.blockTemplate());
 
                 int size = shape.blockTemplate().size();
 

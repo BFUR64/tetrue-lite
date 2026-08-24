@@ -14,7 +14,7 @@ import static com.teic.trueris.game.utils.CellGrid.getCell;
 import static com.teic.trueris.game.utils.CellGrid.setCell;
 
 @NullMarked
-public class Rotation {
+public class RotationHelper {
     public static List<@Nullable CellType> rotateBlockNTimes(int amount, BlockTemplate blockTemplate) {
         int size = blockTemplate.size();
 
