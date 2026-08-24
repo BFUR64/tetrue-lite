@@ -27,9 +27,6 @@ public class GameRenderer {
     private static final int BORDER_OFFSET = 1;
     private static final int BORDER_PADDING = 2;
 
-    private static final int GAME_BORDER_WIDTH = Config.gridWidth.get() + BORDER_PADDING;
-    private static final int GAME_BORDER_HEIGHT = Config.gridHeight.get() + BORDER_PADDING;
-
     private final Terminal terminal;
     private final World world;
     private final GridReader gridReader;
@@ -53,13 +50,16 @@ public class GameRenderer {
     public void update(long delta) {
         terminal.clear();
 
-        writeBorder(GAME_BORDER_WIDTH, GAME_BORDER_HEIGHT);
+        int gameBorderHeight = Config.gridHeight.get() + BORDER_PADDING;
+        int gameBorderWidth = Config.gridWidth.get() + BORDER_PADDING;
+
+        writeBorder(gameBorderWidth, gameBorderHeight);
 
         writeGhostBlocks();
         writeActiveBlocks();
         writeLockedCells();
 
-        int leftPadding = GAME_BORDER_WIDTH + 1;
+        int leftPadding = gameBorderWidth + 1;
         putString(leftPadding, 1, "Score: " + score);
 
         int heldBlockY = 5;

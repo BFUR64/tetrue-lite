@@ -86,6 +86,10 @@ public class GameManager {
         blockRotationSystem.rotateRight(activeBlockId);
     }
 
+    public void rotate180() {
+        blockRotationSystem.rotate180(activeBlockId);
+    }
+
     public void holdBlock() {
         blockHoldSystem.holdBlock(activeBlockId);
     }

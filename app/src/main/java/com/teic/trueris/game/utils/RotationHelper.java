@@ -45,6 +45,14 @@ public class RotationHelper {
     }
 
     public static int rotateRight(Direction currentDirection) {
-        return ((currentDirection.ordinal() + 1) % 4 + 4) % 4;
+        return rotateRight(currentDirection.ordinal());
+    }
+
+    public static int rotateRight(int currentDirection) {
+        return ((currentDirection + 1) % 4 + 4) % 4;
+    }
+
+    public static int rotate180(Direction currentDirection) {
+        return rotateRight(rotateRight(currentDirection));
     }
 }

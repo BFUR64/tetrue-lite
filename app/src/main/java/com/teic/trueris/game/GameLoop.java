@@ -118,6 +118,9 @@ public class GameLoop {
         else if (keyStroke.equals(Config.rotateRightKey.get())) {
             gameManager.rotateBlockRight();
         }
+        else if (keyStroke.equals(Config.rotate180Key.get())) {
+            gameManager.rotate180();
+        }
         else if (keyStroke.equals(Config.holdKey.get())) {
             gameManager.holdBlock();
         }

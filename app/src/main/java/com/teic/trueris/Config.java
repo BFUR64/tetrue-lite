@@ -19,7 +19,8 @@ public class Config {
     private static final int GRID_HEIGHT_MIN = 20;
     private static final int GRID_HEIGHT_MAX = 100;
 
-    private static final int GRID_WIDTH_MIN = 10;
+    private static final int GRID_WIDTH_MIN = 4;
+    private static final int GRID_WIDTH_MIN_DEF = 10;
     private static final int GRID_WIDTH_MAX = 100;
 
     public static void saveState() {
@@ -39,7 +40,7 @@ public class Config {
             .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
 
-    public static final Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN)
+    public static final Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN_DEF)
             .require(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
             .require(value -> value <= GRID_WIDTH_MAX, "...? Why?")
             .parser(Integer::parseInt).build();
@@ -55,9 +56,11 @@ public class Config {
 
     public static final Property<KeyStroke> moveRightKey = Property.of(new KeyStroke(KeyType.ARROW_RIGHT)).build();
 
-    public static final Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('q')).build();
+    public static final Property<KeyStroke> rotateLeftKey = Property.of(new KeyStroke('z')).build();
 
-    public static final Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('e')).build();
+    public static final Property<KeyStroke> rotateRightKey = Property.of(new KeyStroke('x')).build();
+
+    public static final Property<KeyStroke> rotate180Key = Property.of(new KeyStroke('a')).build();
 
     public static final Property<KeyStroke> holdKey = Property.of(new KeyStroke('c')).build();
 
@@ -98,6 +101,7 @@ public class Config {
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
         rotateLeftKey.set(new KeyStroke(KeyType.HOME));
         rotateRightKey.set(new KeyStroke(KeyType.END));
+        rotate180Key.set(new KeyStroke(KeyType.PAGE_UP));
         holdKey.set(new KeyStroke('-'));
     }
 
@@ -106,8 +110,9 @@ public class Config {
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
-        rotateLeftKey.set(new KeyStroke('q'));
-        rotateRightKey.set(new KeyStroke('e'));
+        rotateLeftKey.set(new KeyStroke('z'));
+        rotateRightKey.set(new KeyStroke('x'));
+        rotate180Key.set(new KeyStroke('a'));
         holdKey.set(new KeyStroke('c'));
     }
 }

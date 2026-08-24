@@ -57,4 +57,13 @@ public class BlockRotationSystem {
             eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
         }
     }
+
+    public void rotate180(Integer entityId) {
+        if (world.has(entityId, Rotation.class)) {
+            Rotation rotation = world.get(entityId, Rotation.class);
+            int direction = RotationHelper.rotate180(rotation.direction());
+
+            eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
+        }
+    }
 }

@@ -149,6 +149,7 @@ public class App {
             new KeyInputItem("Move Right", Config.moveRightKey),
             new KeyInputItem("Rotate Left", Config.rotateLeftKey),
             new KeyInputItem("Rotate Right", Config.rotateRightKey),
+            new KeyInputItem("Rotate 180", Config.rotate180Key),
             new KeyInputItem("Hold Block", Config.holdKey),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
