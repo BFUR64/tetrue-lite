@@ -133,6 +133,7 @@ public class App {
             new InputItem<>("Gravity", ": ", Config.gravity, "ms"),
             new LineBreak(),
             new ToggleItem("Gravity Enabled", Config.gravityEnabled),
+            new ToggleItem("Lock Timer Enabled", Config.lockTimerEnabled),
             new ToggleItem("Sound Enabled", Config.soundEnabled),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)

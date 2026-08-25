@@ -79,16 +79,14 @@ public class GameRenderer {
         putString(leftPadding, textQueueY, "Next");
         writeBlockQueue(leftPadding + 2, textQueueY + 2);
 
-        // Optional
         if (Config.showDebug.get()) {
-            showDebug(delta);
+            showDebug(delta, gameBorderHeight + 1);
         }
 
         terminal.flush();
     }
 
-    private void showDebug(long delta) {
-        int offset = 23;
+    private void showDebug(long delta, int offset) {
         terminal.put(0, offset, "FPS: " + Math.round(1_000_000_000.0d / delta));
         terminal.put(0, ++offset, "Entities: " + world.query());
     }

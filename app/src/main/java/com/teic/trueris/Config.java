@@ -67,6 +67,7 @@ public class Config {
     // =====================
     public static final Property<Boolean> showDebug = Property.of(false).build();
     public static final Property<Boolean> gravityEnabled = Property.of(true).build();
+    public static final Property<Boolean> lockTimerEnabled = Property.of(true).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
 
     public static final Property<Integer> targetFps = Property.of(60).parser(Integer::parseInt).build();

@@ -27,6 +27,10 @@ public class LockTimerSystem {
     }
 
     public void update(long delta) {
+        if (!Config.lockTimerEnabled.get()) {
+            return;
+        }
+
         List<Integer> entityIds = world.query(LockTimer.class, OnGround.class);
 
         for (Integer entityId : entityIds) {
