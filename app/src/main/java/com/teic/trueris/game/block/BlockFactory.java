@@ -20,6 +20,8 @@ public class BlockFactory {
     private int nextBlockId = 0;
     private int gravity = Config.gravity.get();
 
+    private final int BLOCK_X_OFFSET = (Config.gridWidth.get() / 2) - 2;
+
     @SuppressFBWarnings(
         value = "EI2",
         justification = "World is intentionally shared between systems."
@@ -45,7 +47,7 @@ public class BlockFactory {
             Rotation rotation = world.get(parentId, Rotation.class);
             Shape shape = world.get(parentId, Shape.class);
 
-            world.put(id, new Position(0, 0));
+            world.put(id, new Position(BLOCK_X_OFFSET, 0));
             world.put(id, new Rotation(rotation.direction()));
             world.put(id, new Shape(BlockRegistry.getBlock(shape.blockTemplate().cellType())));
             world.put(id, new IsGhost(parentId));
@@ -76,7 +78,7 @@ public class BlockFactory {
     }
 
     public void convertToBlock(Integer entityId) {
-        world.put(entityId, new Position(0, 0));
+        world.put(entityId, new Position(BLOCK_X_OFFSET, 0));
         world.put(entityId, new Rotation(Direction.UP));
         world.put(entityId, new OnGround(false));
         world.put(entityId, new HasGhost(null));
