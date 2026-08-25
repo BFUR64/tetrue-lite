@@ -21,8 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class GameLoop {
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final int NSEC = 1_000_000_000;
+    private static final int NANOSECOND = 1_000_000_000;
     private static final long PARK_THRESHOLD = 8_000_000L;
     private static final long PARK_MARGIN = 2_000_000L;
 
@@ -47,11 +46,12 @@ public class GameLoop {
         World world = new World();
         eventBus = new EventBus();
         GridData gridData = new GridData();
+
         gameRenderer = new GameRenderer(terminal, world, gridData, eventBus);
         gameManager = new GameManager(world, eventBus, gridData);
 
         int targetFps = Config.targetFps.get();
-        this.nsPerFrame = NSEC / targetFps;
+        this.nsPerFrame = NANOSECOND / targetFps;
 
         eventBus.subscribe(GameOverEvent.class, event -> running = false);
         eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
