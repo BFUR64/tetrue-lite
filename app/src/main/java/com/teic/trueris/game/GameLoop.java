@@ -30,6 +30,7 @@ public class GameLoop {
 
     private int score = 0;
 
+    private final EventBus eventBus;
     private final GameRenderer gameRenderer;
     private final GameManager gameManager;
 
@@ -44,7 +45,7 @@ public class GameLoop {
         this.terminal = terminal;
 
         World world = new World();
-        EventBus eventBus = new EventBus();
+        eventBus = new EventBus();
         GridData gridData = new GridData();
         gameRenderer = new GameRenderer(terminal, world, gridData, eventBus);
         gameManager = new GameManager(world, eventBus, gridData);
@@ -103,7 +104,7 @@ public class GameLoop {
         }
 
         if (keyStroke.keyType() == KeyType.ESCAPE) {
-            running = false;
+            eventBus.publish(new GameOverEvent());
             return;
         }
 
