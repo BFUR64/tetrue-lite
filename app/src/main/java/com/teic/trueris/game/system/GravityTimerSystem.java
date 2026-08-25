@@ -31,6 +31,10 @@ public class GravityTimerSystem {
         this.eventBus = eventBus;
 
         eventBus.subscribe(MoveDownResponse.class, event -> {
+            if (!Config.gravityEnabled.get()) {
+                return;
+            }
+
             if (event.canDrop()) {
                 if (world.has(event.entityId(), GravityTimer.class)) {
                     world.put(event.entityId(), new GravityTimer(gravity));
@@ -39,6 +43,10 @@ public class GravityTimerSystem {
         });
 
         eventBus.subscribe(LineClearEvent.class, event -> {
+            if (!Config.gravityEnabled.get()) {
+                return;
+            }
+
             gravity = Math.max(Config.GRAVITY_MIN, gravity - 40);
 
             eventBus.publish(new GravityChangeEvent(gravity));
@@ -46,6 +54,10 @@ public class GravityTimerSystem {
     }
 
     public void update(long delta) {
+        if (!Config.gravityEnabled.get()) {
+            return;
+        }
+
         List<Integer> entityIds = world.query(GravityTimer.class, OnGround.class);
 
         for (Integer entityId : entityIds) {

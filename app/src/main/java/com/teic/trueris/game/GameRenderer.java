@@ -65,7 +65,12 @@ public class GameRenderer {
         int leftPadding = gameBorderWidth + 1;
         putString(leftPadding, 1, "Score: " + score);
 
-        putString(leftPadding, 3, "Gravity: " + gravity + "ms");
+        if (Config.gravityEnabled.get()) {
+            putString(leftPadding, 3, "Gravity: " + gravity + "ms");
+        }
+        else {
+            putString(leftPadding, 3, "Gravity Disabled");
+        }
 
         int heldBlockY = 5;
         writeHeldBlock(leftPadding, heldBlockY);
