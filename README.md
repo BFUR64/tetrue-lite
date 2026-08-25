@@ -87,19 +87,19 @@ java -jar app/build/libs/app-all.jar
 
 The game is organized around a central game loop, a set of gameplay
 systems, and a shared world state. `GameManager` coordinates the systems
-and provides access to the `World` and inter-system communication.
+and provides access to the `World` and inter-system communication
 
 The systems are grouped according to their responsibilities:
 
 - **Gameplay** handles game rules and state progression such as scoring,
-  line clearing, and game-over detection.
+  line clearing, and game-over detection
 - **Lifecycle** manages the creation, holding, queuing, and placement of
-  blocks.
+  blocks
 - **Movement** handles block movement, rotation, collision detection, and
-  ground detection.
+  ground detection
 - **Presentation** handles behavior related to displaying or presenting
-  game state, such as the ghost block and sound.
-- **Timing** manages gravity and lock timers.
+  game state, such as the ghost block and sound
+- **Timing** manages gravity and lock timers
 
 ```mermaid
 flowchart LR
@@ -146,12 +146,12 @@ flowchart LR
 
 ### Inter-System Communication
 
-Systems communicate through two distinct mechanisms: events and queries.
+Systems communicate through two distinct mechanisms: events and queries
 
 Events are used for notifications. A system publishes an event when
 something has happened, and any interested listeners can react to it.
 The publisher does not expect a response or need to know which systems
-are listening.
+are listening
 
 ```mermaid
 sequenceDiagram
@@ -167,12 +167,12 @@ sequenceDiagram
 
 For example, `BlockPlaceSystem` can publish a `BlockPlaceEvent` without
 having a direct dependency on `SoundSystem`. `SoundSystem` can listen for
-that event and play the appropriate sound.
+that event and play the appropriate sound
 
 Queries are used when a system requires a response from another part of
 the game. The requesting system sends a query through the query bus,
 which dispatches it to the appropriate handler. The handler produces a
-response that is returned to the requesting system.
+response that is returned to the requesting system
 
 ```mermaid
 sequenceDiagram
