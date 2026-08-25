@@ -23,6 +23,8 @@ import org.jspecify.annotations.Nullable;
 public class GameLoop {
     @SuppressWarnings("SpellCheckingInspection")
     private static final int NSEC = 1_000_000_000;
+    private static final long PARK_THRESHOLD = 8_000_000L;
+    private static final long PARK_MARGIN = 2_000_000L;
 
     private final Terminal terminal;
 
@@ -75,8 +77,8 @@ public class GameLoop {
                     break;
                 }
 
-                if (remaining > 8_000_000) { // 8ms
-                    LockSupport.parkNanos(remaining - 2_000_000);
+                if (remaining > PARK_THRESHOLD) { // 8ms
+                    LockSupport.parkNanos(remaining - PARK_MARGIN);
                 }
                 else {
                     Thread.onSpinWait();
