@@ -77,7 +77,7 @@ tasks.register<Exec>("createRuntime") {
 tasks.register<Exec>("packageWindows") {
     description = "Make a jpackage application image for Windows"
 
-    dependsOn("build")
+    dependsOn("createRuntime", "build")
 
     delete(packageDir)
 
