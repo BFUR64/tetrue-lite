@@ -1,4 +1,4 @@
-package com.teic.trueris.timer;
+package com.teic.trueris.game.timer;
 
 import org.jspecify.annotations.NullMarked;
 

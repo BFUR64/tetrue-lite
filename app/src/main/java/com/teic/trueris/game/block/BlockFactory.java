@@ -6,8 +6,8 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.cell.CellType;
 import com.teic.trueris.game.component.*;
 import com.teic.trueris.game.event.GravityChangeEvent;
-import com.teic.trueris.timer.GravityTimer;
-import com.teic.trueris.timer.LockTimer;
+import com.teic.trueris.game.timer.GravityTimer;
+import com.teic.trueris.game.timer.LockTimer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 

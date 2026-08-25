@@ -4,8 +4,8 @@ import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.OnGround;
-import com.teic.trueris.timer.LockTimer;
-import com.teic.trueris.timer.LockTimerExpired;
+import com.teic.trueris.game.timer.LockTimer;
+import com.teic.trueris.game.timer.LockTimerExpired;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
