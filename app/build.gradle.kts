@@ -49,8 +49,12 @@ val iconPath = layout.projectDirectory
     .asFile
     .absolutePath
 
+tasks.register<Delete>("cleanRuntime") {
+    delete(runtimeDir)
+}
+
 tasks.register<Exec>("createRuntime") {
-    dependsOn(tasks.installDist)
+    dependsOn(tasks.installDist, "cleanRuntime")
 
     // To get the modules, run:
     // jdeps `
@@ -60,8 +64,6 @@ tasks.register<Exec>("createRuntime") {
     //     --class-path "..\install\app\lib\*" `
     //     (Get-ChildItem "..\install\app\lib\*.jar").FullName
     // On app/build/libs
-
-    delete(runtimeDir)
 
     commandLine(
         "jlink",
@@ -74,12 +76,12 @@ tasks.register<Exec>("createRuntime") {
     )
 }
 
-tasks.register<Exec>("packageWindows") {
-    description = "Make a jpackage application image for Windows"
-
-    dependsOn("createRuntime", "build")
-
+tasks.register<Delete>("cleanPackage") {
     delete(packageDir)
+}
+
+tasks.register<Exec>("packageWindows") {
+    dependsOn("createRuntime", "build", "cleanPackage")
 
     commandLine(
         "jpackage",
