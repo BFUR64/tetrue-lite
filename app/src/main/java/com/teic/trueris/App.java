@@ -128,6 +128,8 @@ public class App {
             new LineBreak(),
             new StaticText("<< Game Options >>"),
             new LineBreak(),
+            new InputItem<>("Target FPS", ": ", Config.targetFps),
+            new LineBreak(),
             new InputItem<>("Gravity", ": ", Config.gravity, "ms"),
             new LineBreak(),
             new ToggleItem("Gravity Enabled", Config.gravityEnabled),
@@ -170,7 +172,6 @@ public class App {
             new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
-            new InputItem<>("Target FPS", Config.targetFps),
             new LineBreak(),
             new ActionItem("[ Return ]", Config::saveState, true)
         ));
