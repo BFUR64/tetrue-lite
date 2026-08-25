@@ -18,6 +18,7 @@ public class EventBus {
             .add(listener);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void publish(T event) {
         List<EventListener<?>> listenersForEvent = listeners.get(event.getClass());
 
@@ -26,7 +27,6 @@ public class EventBus {
         }
 
         for (EventListener<?> listener : listenersForEvent) {
-            //noinspection unchecked
             ((EventListener<T>) listener).onEvent(event);
         }
     }
