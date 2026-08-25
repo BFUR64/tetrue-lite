@@ -4,7 +4,18 @@ import com.teic.trueris.game.block.BlockFactory;
 import com.teic.trueris.game.event.BlockSpawnEvent;
 import com.teic.trueris.game.event.BlockSwitchEvent;
 import com.teic.trueris.game.grid.GridData;
-import com.teic.trueris.game.system.*;
+import com.teic.trueris.game.system.lifecycle.BlockHoldSystem;
+import com.teic.trueris.game.system.lifecycle.BlockSpawnSystem;
+import com.teic.trueris.game.system.gameplay.GameOverSystem;
+import com.teic.trueris.game.system.gameplay.LineClearSystem;
+import com.teic.trueris.game.system.gameplay.ScoreTrackerSystem;
+import com.teic.trueris.game.system.movement.*;
+import com.teic.trueris.game.system.lifecycle.BlockPlaceSystem;
+import com.teic.trueris.game.system.lifecycle.BlockQueueSystem;
+import com.teic.trueris.game.system.presentation.GhostBlockSystem;
+import com.teic.trueris.game.system.presentation.SoundSystem;
+import com.teic.trueris.game.system.timing.GravityTimerSystem;
+import com.teic.trueris.game.system.timing.LockTimerSystem;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
