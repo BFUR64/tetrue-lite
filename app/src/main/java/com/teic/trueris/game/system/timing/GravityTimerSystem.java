@@ -39,7 +39,7 @@ public class GravityTimerSystem {
                 Integer entityId = event.entityId();
 
                 if (world.has(entityId, GravityTimer.class)) {
-                    setNewGravity(entityId, gravityMs);
+                    setNewGravityMs(entityId, gravityMs);
                 }
             }
         });
@@ -71,14 +71,23 @@ public class GravityTimerSystem {
 
                 if (newGravityDuration <= 0) {
                     eventBus.publish(new GravityTimerExpired(entityId));
+                    setNewGravityMs(entityId, gravityMs);
+                }
+                else {
+                    setNewGravityNs(entityId, newGravityDuration);
                 }
             }
-
-            setNewGravity(entityId, gravityMs);
+            else {
+                setNewGravityMs(entityId, gravityMs);
+            }
         }
     }
 
-    private void setNewGravity(Integer entityId, int gravityMs) {
+    private void setNewGravityMs(Integer entityId, int gravityMs) {
         world.put(entityId, new GravityTimer(Duration.ofMillis(gravityMs).toNanos()));
+    }
+
+    private void setNewGravityNs(Integer entityId, long gravityNs) {
+        world.put(entityId, new GravityTimer(gravityNs));
     }
 }
