@@ -3,7 +3,7 @@
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal Abstraction Library</h3>
 
 <div align="center">
-  <img width="726" height="523" alt="image" src="https://github.com/user-attachments/assets/f4197ad3-7d01-472a-9ae7-a3ff4feb6d16" />
+  <img width="530" height="418" alt="image" src="https://github.com/user-attachments/assets/9e495f8b-df6b-446d-8467-bfea240f98e2" />
 </div>
 
 ## Demo
