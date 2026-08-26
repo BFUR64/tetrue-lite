@@ -12,6 +12,7 @@ import com.teic.trueris.game.query.position.*;
 import com.teic.trueris.game.query.rotation.MoveRotationQuery;
 import com.teic.trueris.game.query.rotation.MoveRotationResponse;
 import com.teic.trueris.game.grid.GridReader;
+import com.teic.trueris.game.utils.Offset;
 import com.teic.trueris.game.utils.RotationHelper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
@@ -85,13 +86,22 @@ public class CollisionSystem {
                 Position position = world.get(entityId, Position.class);
                 Shape shape = world.get(entityId, Shape.class);
 
-                int direction = event.direction();
-                int dx = event.dx();
-                int dy = event.dy();
+                int direction = event.direction().ordinal();
 
-                boolean valid = isValid(position, direction, shape, dx, dy);
+                List<Offset> offsets = event.offsets();
 
-                eventBus.publish(new MoveRotationResponse(entityId, valid, direction, dx, dy));
+                int dx = 0;
+                int dy = 0;
+                boolean isValid = false;
+
+                for (int offsetIndex = 0; offsetIndex < offsets.size() && !isValid; offsetIndex++) {
+                    dx = offsets.get(offsetIndex).x();
+                    dy = offsets.get(offsetIndex).y();
+
+                    isValid = isValid(position, direction, shape, dx, dy);
+                }
+
+                eventBus.publish(new MoveRotationResponse(entityId, isValid, direction, dx, dy));
             }
         });
 

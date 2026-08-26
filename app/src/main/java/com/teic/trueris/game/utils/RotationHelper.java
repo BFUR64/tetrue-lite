@@ -40,19 +40,11 @@ public class RotationHelper {
         return newCells;
     }
 
-    public static int rotateLeft(Direction currentDirection) {
-        return ((currentDirection.ordinal() - 1) % 4 + 4) % 4;
+    public static Direction rotateLeft(Direction currentDirection) {
+        return Direction.fromId(((currentDirection.ordinal() - 1) % 4 + 4) % 4);
     }
 
-    public static int rotateRight(Direction currentDirection) {
-        return rotateRight(currentDirection.ordinal());
-    }
-
-    public static int rotateRight(int currentDirection) {
-        return ((currentDirection + 1) % 4 + 4) % 4;
-    }
-
-    public static int rotate180(Direction currentDirection) {
-        return rotateRight(rotateRight(currentDirection));
+    public static Direction rotateRight(Direction currentDirection) {
+        return Direction.fromId(((currentDirection.ordinal() + 1) % 4 + 4) % 4);
     }
 }

@@ -5,11 +5,17 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.block.Direction;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
+import com.teic.trueris.game.component.Shape;
 import com.teic.trueris.game.query.rotation.MoveRotationQuery;
 import com.teic.trueris.game.query.rotation.MoveRotationResponse;
+import com.teic.trueris.game.utils.Offset;
 import com.teic.trueris.game.utils.RotationHelper;
+import com.teic.trueris.game.utils.RotationPair;
+import com.teic.trueris.game.utils.SrsData;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
 
 @NullMarked
 public class BlockRotationSystem {
@@ -41,29 +47,36 @@ public class BlockRotationSystem {
     }
 
     public void rotateLeft(Integer entityId) {
-        if (world.has(entityId, Position.class, Rotation.class)) {
-            Rotation rotation = world.get(entityId, Rotation.class);
-            int direction = RotationHelper.rotateLeft(rotation.direction());
-
-            eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
-        }
+        rotate(entityId, false);
     }
 
     public void rotateRight(Integer entityId) {
-        if (world.has(entityId, Rotation.class)) {
-            Rotation rotation = world.get(entityId, Rotation.class);
-            int direction = RotationHelper.rotateRight(rotation.direction());
-
-            eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
-        }
+        rotate(entityId, true);
     }
 
-    public void rotate180(Integer entityId) {
-        if (world.has(entityId, Rotation.class)) {
+    private void rotate(Integer entityId, boolean rightTurn) {
+        if (world.has(entityId, Position.class, Rotation.class, Shape.class)) {
             Rotation rotation = world.get(entityId, Rotation.class);
-            int direction = RotationHelper.rotate180(rotation.direction());
+            Shape shape = world.get(entityId, Shape.class);
 
-            eventBus.publish(new MoveRotationQuery(entityId, direction, 0, 0));
+            Direction direction = rotation.direction();
+            Direction newDirection = rightTurn ?
+                RotationHelper.rotateRight(rotation.direction())
+                : RotationHelper.rotateLeft(rotation.direction());
+
+            RotationPair rotationPair = new RotationPair(direction, newDirection);
+
+            int size = shape.blockTemplate().size();
+
+            List<Offset> offsets;
+            if (size <= 3) {
+                offsets = SrsData.getThreeTable().get(rotationPair);
+            }
+            else {
+                offsets = SrsData.getITable().get(rotationPair);
+            }
+
+            eventBus.publish(new MoveRotationQuery(entityId, newDirection, offsets));
         }
     }
 }
