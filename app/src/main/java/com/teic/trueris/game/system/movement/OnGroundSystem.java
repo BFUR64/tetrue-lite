@@ -24,7 +24,7 @@ public class OnGroundSystem {
         this.eventBus = eventBus;
 
         eventBus.subscribe(GroundCheckResponse.class, event -> {
-            Integer entityId = event.entityId();
+            int entityId = event.entityId();
 
             if (world.has(entityId, OnGround.class)) {
                 world.put(entityId, new OnGround(!event.isClear()));
@@ -35,7 +35,7 @@ public class OnGroundSystem {
     public void update() {
         List<Integer> entityIds = world.query(OnGround.class);
 
-        for (Integer entityId : entityIds) {
+        for (int entityId : entityIds) {
             eventBus.publish(new GroundCheckQuery(entityId));
         }
     }

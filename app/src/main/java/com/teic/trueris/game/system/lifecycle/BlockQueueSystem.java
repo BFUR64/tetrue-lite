@@ -22,12 +22,12 @@ public class BlockQueueSystem {
         this.eventBus = eventBus;
     }
 
-    public Integer getFirstBlock() {
+    public int getFirstBlock() {
         if (blockIdQueue.size() < MIN_BLOCK_QUEUE_SIZE) {
             blockIdQueue.addAll(createRandomizedBag());
         }
 
-        Integer blockId = blockIdQueue.getFirst();
+        int blockId = blockIdQueue.getFirst();
         blockIdQueue.removeFirst();
 
         blockFactory.convertBagBlockToBlock(blockId);

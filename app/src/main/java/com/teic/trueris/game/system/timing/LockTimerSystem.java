@@ -33,7 +33,7 @@ public class LockTimerSystem {
 
         List<Integer> entityIds = world.query(LockTimer.class, OnGround.class);
 
-        for (Integer entityId : entityIds) {
+        for (int entityId : entityIds) {
             boolean onGround = world.get(entityId, OnGround.class).onGround();
             LockTimer oldLockTimer = world.get(entityId, LockTimer.class);
 

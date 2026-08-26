@@ -36,7 +36,7 @@ public class GravityTimerSystem {
             }
 
             if (event.canDrop()) {
-                Integer entityId = event.entityId();
+                int entityId = event.entityId();
 
                 if (world.has(entityId, GravityTimer.class)) {
                     setNewGravityMs(entityId, gravityMs);
@@ -62,7 +62,7 @@ public class GravityTimerSystem {
 
         List<Integer> entityIds = world.query(GravityTimer.class, OnGround.class);
 
-        for (Integer entityId : entityIds) {
+        for (int entityId : entityIds) {
             boolean onGround = world.get(entityId, OnGround.class).onGround();
 
             if (!onGround) {
@@ -83,11 +83,11 @@ public class GravityTimerSystem {
         }
     }
 
-    private void setNewGravityMs(Integer entityId, int gravityMs) {
+    private void setNewGravityMs(int entityId, int gravityMs) {
         world.put(entityId, new GravityTimer(Duration.ofMillis(gravityMs).toNanos()));
     }
 
-    private void setNewGravityNs(Integer entityId, long gravityNs) {
+    private void setNewGravityNs(int entityId, long gravityNs) {
         world.put(entityId, new GravityTimer(gravityNs));
     }
 }

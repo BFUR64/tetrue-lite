@@ -56,19 +56,19 @@ public class BlockMovementSystem {
         });
     }
 
-    public void moveBlockDown(Integer entityId) {
+    public void moveBlockDown(int entityId) {
         eventBus.publish(new MoveDownQuery(entityId));
     }
 
-    public void dropBlock(Integer entityId) {
+    public void dropBlock(int entityId) {
         eventBus.publish(new DropDownQuery(entityId));
     }
 
-    public void moveBlockLeft(Integer entityId) {
+    public void moveBlockLeft(int entityId) {
         eventBus.publish(new MoveXQuery(entityId, -1));
     }
 
-    public void moveBlockRight(Integer entityId) {
+    public void moveBlockRight(int entityId) {
         eventBus.publish(new MoveXQuery(entityId, 1));
     }
 }

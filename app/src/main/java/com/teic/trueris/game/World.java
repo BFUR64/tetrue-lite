@@ -8,13 +8,13 @@ import java.util.*;
 public class World {
     private final Map<Class<?>, Map<Integer, Object>> components = new HashMap<>();
 
-    public void put(Integer entityId, Object component) {
+    public void put(int entityId, Object component) {
         components
             .computeIfAbsent(component.getClass(), ignored -> new HashMap<>())
             .put(entityId, component);
     }
 
-    public void remove(Integer entityId, Class<?> componentType) {
+    public void remove(int entityId, Class<?> componentType) {
         Map<Integer, Object> storage = components.get(componentType);
 
         if (storage != null) {
@@ -22,13 +22,13 @@ public class World {
         }
     }
 
-    public void remove(Integer entityId) {
+    public void remove(int entityId) {
         for (Map<Integer, Object> storage : components.values()) {
             storage.remove(entityId);
         }
     }
 
-    public <T> T get(Integer entityId, Class<T> componentType) {
+    public <T> T get(int entityId, Class<T> componentType) {
         Map<Integer, Object> storage = components.get(componentType);
 
         if (storage == null) {
@@ -40,7 +40,7 @@ public class World {
         return componentType.cast(storage.get(entityId));
     }
 
-    public boolean has(Integer entityId, Class<?> ...componentTypes) {
+    public boolean has(int entityId, Class<?> ...componentTypes) {
         for (Class<?> componentType : componentTypes) {
             if (!contains(componentType)) return false;
             if (!components.get(componentType).containsKey(entityId)) return false;
@@ -54,7 +54,7 @@ public class World {
         return components.containsKey(componentType);
     }
 
-    public boolean exists(Integer entityId) {
+    public boolean exists(int entityId) {
         for (Map<Integer, Object> component : components.values()) {
             if (component.containsKey(entityId)) {
                 return true;

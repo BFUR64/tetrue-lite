@@ -4,4 +4,4 @@ import com.teic.trueris.game.block.Direction;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record RotateResponse(Integer entityId, boolean isValid, Direction direction, int dx, int dy) {}
+public record RotateResponse(int entityId, boolean isValid, Direction direction, int dx, int dy) {}

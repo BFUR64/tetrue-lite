@@ -3,4 +3,4 @@ package com.teic.trueris.game.event;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record BlockSwitchEvent(Integer entityId) {}
+public record BlockSwitchEvent(int entityId) {}

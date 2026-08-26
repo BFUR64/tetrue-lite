@@ -3,4 +3,4 @@ package com.teic.trueris.game.query.position;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record MoveDownQuery(Integer entityId) {}
+public record MoveDownQuery(int entityId) {}

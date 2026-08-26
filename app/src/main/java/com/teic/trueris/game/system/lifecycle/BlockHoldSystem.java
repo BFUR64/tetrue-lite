@@ -23,7 +23,7 @@ public class BlockHoldSystem {
         eventBus.subscribe(BlockSpawnEvent.class, event -> blockSwitched = false);
     }
 
-    public void holdBlock(Integer entityId) {
+    public void holdBlock(int entityId) {
         if (blockSwitched) return;
 
         Integer currentHeldBlock = this.entityId;

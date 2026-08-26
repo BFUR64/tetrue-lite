@@ -28,7 +28,7 @@ public class GameManager {
     private final BlockHoldSystem blockHoldSystem;
     private final GhostBlockSystem ghostBlockSystem;
 
-    private Integer activeBlockId;
+    private int activeBlockId;
 
     public GameManager(World world, EventBus eventBus, GridData gridData) {
         // Initialize Movement Systems

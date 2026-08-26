@@ -32,7 +32,7 @@ public class BlockFactory {
         eventBus.subscribe(GravityChangeEvent.class, event -> gravity = event.gravity());
     }
 
-    public Integer createBagBlock(CellType cell) {
+    public int createBagBlock(CellType cell) {
         int id = nextBlockId++;
 
         world.put(id, new Shape(BlockRegistry.getBlock(cell)));
@@ -40,7 +40,7 @@ public class BlockFactory {
         return id;
     }
 
-    public Integer createGhostBlock(Integer parentId) {
+    public int createGhostBlock(int parentId) {
         int id = nextBlockId++;
 
         if (world.has(parentId, Position.class, Rotation.class, Shape.class, HasGhost.class)) {
@@ -56,11 +56,11 @@ public class BlockFactory {
         return id;
     }
 
-    public void convertBagBlockToBlock(Integer entityId) {
+    public void convertBagBlockToBlock(int entityId) {
         convertToBlock(entityId);
     }
 
-    public void convertBlockToHeldBlock(Integer entityId) {
+    public void convertBlockToHeldBlock(int entityId) {
         world.remove(entityId, Position.class);
         world.remove(entityId, Rotation.class);
         world.remove(entityId, OnGround.class);
@@ -71,13 +71,13 @@ public class BlockFactory {
         world.put(entityId, new Held());
     }
 
-    public void convertHeldBlockToBlock(Integer entityId) {
+    public void convertHeldBlockToBlock(int entityId) {
         convertToBlock(entityId);
 
         world.remove(entityId, Held.class);
     }
 
-    public void convertToBlock(Integer entityId) {
+    public void convertToBlock(int entityId) {
         world.put(entityId, new Position(BLOCK_X_OFFSET, 0));
         world.put(entityId, new Rotation(Direction.UP));
         world.put(entityId, new OnGround(false));

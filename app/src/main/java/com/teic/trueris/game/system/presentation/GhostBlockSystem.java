@@ -27,7 +27,7 @@ public class GhostBlockSystem {
         this.eventBus = eventBus;
 
         eventBus.subscribe(GhostPositionResponse.class, event -> {
-            Integer entityId = event.entityId();
+            int entityId = event.entityId();
 
             if (world.has(entityId, Position.class)) {
                 Position oldPosition = world.get(entityId, Position.class);
@@ -43,20 +43,20 @@ public class GhostBlockSystem {
     public void update() {
         List<Integer> entityIds = world.query(HasGhost.class);
 
-        for (Integer entityId : entityIds) {
+        for (int entityId : entityIds) {
             HasGhost hasGhost = world.get(entityId, HasGhost.class);
 
             if (hasGhost.childId() == null) {
-                Integer ghostBlockId = blockFactory.createGhostBlock(entityId);
+                int ghostBlockId = blockFactory.createGhostBlock(entityId);
                 world.put(entityId, new HasGhost(ghostBlockId));
             }
         }
 
         List<Integer> ghostEntityIds = world.query(IsGhost.class);
 
-        for (Integer ghostEntityId : ghostEntityIds) {
+        for (int ghostEntityId : ghostEntityIds) {
             IsGhost isGhost = world.get(ghostEntityId, IsGhost.class);
-            Integer parentId = isGhost.parentId();
+            int parentId = isGhost.parentId();
 
             if (world.has(parentId, Held.class) || !world.exists(parentId)) {
                 world.remove(ghostEntityId);

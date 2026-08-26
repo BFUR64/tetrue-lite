@@ -94,7 +94,7 @@ public class GameRenderer {
     private void writeGhostBlocks() {
         List<Integer> ghostIds = world.query(Position.class, com.teic.trueris.game.component.Rotation.class, Shape.class, IsGhost.class);
 
-        for (Integer ghostId : ghostIds) {
+        for (int ghostId : ghostIds) {
             Position position = world.get(ghostId, Position.class);
             com.teic.trueris.game.component.Rotation rotation = world.get(ghostId, com.teic.trueris.game.component.Rotation.class);
             Shape shape = world.get(ghostId, Shape.class);
@@ -116,7 +116,7 @@ public class GameRenderer {
     private void writeActiveBlocks() {
         List<Integer> blockIds = world.query(Position.class, com.teic.trueris.game.component.Rotation.class, Shape.class);
 
-        for (Integer blockId : blockIds) {
+        for (int blockId : blockIds) {
             if (world.has(blockId, IsGhost.class)) continue;
 
             Position position = world.get(blockId, Position.class);
@@ -172,7 +172,7 @@ public class GameRenderer {
         List<Integer> entityIds = world.query(Shape.class, Held.class);
         if (entityIds.isEmpty()) return;
 
-        Integer heldBlockId = entityIds.getFirst();
+        int heldBlockId = entityIds.getFirst();
 
         Shape shape = world.get(heldBlockId, Shape.class);
 
@@ -189,7 +189,7 @@ public class GameRenderer {
         int blocksShown = 3;
 
         int counter = 0;
-        for (Integer blockQueueId : blockQueueIds) {
+        for (int blockQueueId : blockQueueIds) {
             if (world.has(blockQueueId, Shape.class) && counter < blocksShown) {
                 Shape shape = world.get(blockQueueId, Shape.class);
 

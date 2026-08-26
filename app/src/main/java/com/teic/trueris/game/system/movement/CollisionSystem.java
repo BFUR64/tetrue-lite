@@ -115,7 +115,7 @@ public class CollisionSystem {
         });
     }
 
-    private Integer dropDisplacement(Integer entityId) {
+    private int dropDisplacement(int entityId) {
         int dy = 0;
 
         while (isValid(entityId, 0, dy)) {
@@ -125,7 +125,7 @@ public class CollisionSystem {
         return dy - 1;
     }
 
-    private InternalRotateResponse rotationQuery(Integer entityId, RotationPair rotationPair, int baseDx, int baseDy) {
+    private InternalRotateResponse rotationQuery(int entityId, RotationPair rotationPair, int baseDx, int baseDy) {
         if (!world.has(entityId, Shape.class)) {
             return new InternalRotateResponse(false, 0, 0);
         }

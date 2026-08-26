@@ -18,7 +18,7 @@ public class BlockSpawnSystem {
         eventBus.subscribe(BlockPlaceEvent.class, event -> {
             world.remove(event.entityId());
 
-            Integer newEntityId = spawnBlock();
+            int newEntityId = spawnBlock();
             eventBus.publish(new BlockSpawnEvent(newEntityId));
         });
 

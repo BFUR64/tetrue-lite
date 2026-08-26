@@ -59,7 +59,7 @@ public class BlockPlaceSystem {
         eventBus.subscribe(LockTimerExpired.class, event -> placeBlock(event.entityId()));
     }
 
-    private void placeBlock(Integer entityId) {
+    private void placeBlock(int entityId) {
         Position position = world.get(entityId, Position.class);
         Rotation rotation = world.get(entityId, Rotation.class);
         Shape shape = world.get(entityId, Shape.class);
