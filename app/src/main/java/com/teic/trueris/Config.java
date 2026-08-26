@@ -84,7 +84,7 @@ public class Config {
 
     public static final Property<Integer> speedStep = Property.of(40)
         .require(value -> value >= 0, "Minimum of 0ms speed step")
-        .require(value -> value <= 5000, "Maximum of 500ms speed step")
+        .require(value -> value <= 500, "Maximum of 500ms speed step")
         .parser(Integer::parseInt).build();
 
     // =====================
