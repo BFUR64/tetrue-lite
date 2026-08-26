@@ -50,7 +50,7 @@ public class LockTimerSystem {
             else {
                 world.put(
                     entityId,
-                    new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos())
+                    new LockTimer(Duration.ofMillis(Config.lockDelay.get()).toNanos())
                 );
             }
         }

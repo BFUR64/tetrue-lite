@@ -30,9 +30,6 @@ public class Config {
             .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
             .parser(Integer::parseInt).build();
 
-    public static final Property<Integer> lockTimer = Property.of(500)
-            .parser(Integer::parseInt).build();
-
     public static final Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
             .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
             .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
@@ -68,9 +65,27 @@ public class Config {
     public static final Property<Boolean> showDebug = Property.of(false).build();
     public static final Property<Boolean> gravityEnabled = Property.of(true).build();
     public static final Property<Boolean> lockTimerEnabled = Property.of(true).build();
+    public static final Property<Boolean> dropInstantPlace = Property.of(true).build();
+    public static final Property<Boolean> moveInstantPlace = Property.of(false).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
 
-    public static final Property<Integer> targetFps = Property.of(60).parser(Integer::parseInt).build();
+    // =====================
+    // Game Modifiers
+    // =====================
+    public static final Property<Integer> targetFps = Property.of(60)
+        .require(value -> value >= 15, "Minimum of 15 FPS")
+        .require(value -> value <= 1000, "Maximum of 1000 FPS")
+        .parser(Integer::parseInt).build();
+
+    public static final Property<Integer> lockDelay = Property.of(500)
+        .require(value -> value >= 0, "Minimum of 0ms lock delay")
+        .require(value -> value <= 5000, "Maximum of 5000ms lock delay")
+        .parser(Integer::parseInt).build();
+
+    public static final Property<Integer> speedStep = Property.of(40)
+        .require(value -> value >= 0, "Minimum of 0ms speed step")
+        .require(value -> value <= 5000, "Maximum of 500ms speed step")
+        .parser(Integer::parseInt).build();
 
     // =====================
     // Control Switching

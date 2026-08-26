@@ -47,7 +47,7 @@ public class GravityTimerSystem {
                 return;
             }
 
-            gravity = Math.max(Config.GRAVITY_MIN, gravity - 40);
+            gravity = Math.max(Config.GRAVITY_MIN, gravity - Config.speedStep.get());
 
             eventBus.publish(new GravityChangeEvent(gravity));
         });

@@ -6,7 +6,6 @@ import com.teic.trueris.game.World;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.query.position.*;
 import com.teic.trueris.game.timer.GravityTimerExpired;
-import com.teic.trueris.game.timer.LockTimerExpired;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -55,8 +54,6 @@ public class BlockMovementSystem {
                 moveBlockDown(event.entityId());
             }
         });
-
-        eventBus.subscribe(LockTimerExpired.class, event -> moveBlockDown(event.entityId()));
     }
 
     public void moveBlockDown(Integer entityId) {

@@ -153,7 +153,7 @@ public class GameLoop {
             new LineBreak(),
             new StaticText("Score: " + score),
             new LineBreak(),
-            new StaticText("-- Statistics (Cleared Lines) --"),
+            new StaticText(" -- Statistics (Cleared Lines) --"),
             new LineBreak(),
             new StaticText("One   : " + oneClear),
             new StaticText("Two   : " + twoClear),

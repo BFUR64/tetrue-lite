@@ -83,6 +83,6 @@ public class BlockFactory {
         world.put(entityId, new OnGround(false));
         world.put(entityId, new HasGhost(null));
         world.put(entityId, new GravityTimer(Duration.ofMillis(gravity).toNanos()));
-        world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockTimer.get()).toNanos()));
+        world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockDelay.get()).toNanos()));
     }
 }
