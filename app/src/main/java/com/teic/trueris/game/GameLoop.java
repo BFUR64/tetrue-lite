@@ -22,8 +22,15 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class GameLoop {
     private static final int NANOSECOND = 1_000_000_000;
-    private static final long PARK_THRESHOLD = 8_000_000L;
-    private static final long PARK_MARGIN = 2_000_000L;
+
+    private static final boolean WINDOWS =
+            System.getProperty("os.name").toLowerCase().contains("win");
+
+    private static final long PARK_THRESHOLD =
+            WINDOWS ? 17_000_000L : 2_000_000L;
+
+    private static final long PARK_MARGIN =
+            WINDOWS ? 2_000_000L : 500_000L;
 
     private final Terminal terminal;
 
@@ -90,7 +97,7 @@ public class GameLoop {
                     break;
                 }
 
-                if (remaining > PARK_THRESHOLD) { // 8ms
+                if (remaining > PARK_THRESHOLD) {
                     LockSupport.parkNanos(remaining - PARK_MARGIN);
                 }
                 else {
