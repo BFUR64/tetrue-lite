@@ -15,7 +15,7 @@
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second and speeds up per line clear
 - Lock Grace - Allows adjustment before it gets placed
-- SRS Rotation - Based on the SRS Table (Not Implemented on V3.0.0)
+- SRS Rotation - Based on the SRS Table
 - Movement - Move blocks left and right
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
@@ -192,7 +192,7 @@ sequenceDiagram
   - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 3.2.1 (Lanterna-like Abstraction Library for JLine4 and Lanterna)
   - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.9.2 (Personal Composite-based Menu Management)
   - [MicroSound](https://github.com/BFUR64/MicroSound) 0.2.0 (Personal Minimal Sound Manager)
-- Build Tools: Gradle 9.7.0
+- Build Tools: Gradle 9.7.1
 
 ## Version Releasing
 MAJOR . MINOR . PATCH
