@@ -52,9 +52,7 @@ public class CollisionSystem {
             eventBus.publish(new MoveDownResponse(event.entityId(), valid));
         });
 
-        eventBus.subscribe(DropDownQuery.class, event -> {
-            eventBus.publish(new DropDownResponse(event.entityId(), dropDisplacement(event.entityId())));
-        });
+        eventBus.subscribe(DropDownQuery.class, event -> eventBus.publish(new DropDownResponse(event.entityId(), dropDisplacement(event.entityId()))));
 
         eventBus.subscribe(GroundCheckQuery.class, event -> {
             boolean clear = isValid(event.entityId(), 0, 1);

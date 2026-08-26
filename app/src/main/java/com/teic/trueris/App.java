@@ -14,7 +14,6 @@ import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.interfaces.TerminalRuntime;
 import org.jspecify.annotations.NullMarked;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
