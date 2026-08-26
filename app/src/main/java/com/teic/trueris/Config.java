@@ -22,10 +22,10 @@ public class Config {
     private static final int GRID_WIDTH_MAX = 100;
 
     public static void saveState() {
-        gravityDef = gravity.get();
+        gravityDef = gravityMs.get();
     }
 
-    public static final Property<Integer> gravity = Property.of(gravityDef)
+    public static final Property<Integer> gravityMs = Property.of(gravityDef)
             .require(threshold -> threshold >= GRAVITY_MIN, "Time should be more than " + GRAVITY_MIN + " ms")
             .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
             .parser(Integer::parseInt).build();

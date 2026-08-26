@@ -34,7 +34,7 @@ public class GameRenderer {
 
     private int score;
     private List<Integer> blockQueueIds = new LinkedList<>();
-    private int gravity = Config.gravity.get();
+    private int gravity = Config.gravityMs.get();
 
     @SuppressFBWarnings(
         value = "EI2",

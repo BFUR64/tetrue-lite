@@ -18,7 +18,7 @@ public class BlockFactory {
     private final World world;
 
     private int nextBlockId = 0;
-    private int gravity = Config.gravity.get();
+    private int gravity = Config.gravityMs.get();
 
     private final int BLOCK_X_OFFSET = (Config.gridWidth.get() / 2) - 2;
 

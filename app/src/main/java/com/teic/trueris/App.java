@@ -133,7 +133,7 @@ public class App {
             new StaticText(" -- Gravity --"),
             new LineBreak(),
             new ToggleItem("Gravity Enabled", Config.gravityEnabled),
-            new InputItem<>("Starting Gravity", ": ", Config.gravity, "ms"),
+            new InputItem<>("Starting Gravity", ": ", Config.gravityMs, "ms"),
             new InputItem<>("Speed Step", ": ", Config.speedStep, "ms"),
             new LineBreak(),
             new StaticText(" -- Lock Delay --"),
