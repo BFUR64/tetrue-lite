@@ -14,6 +14,7 @@ import io.github.bfur64.terminal.Terminal;
 import io.github.bfur64.terminal.interfaces.TerminalRuntime;
 import org.jspecify.annotations.NullMarked;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -63,6 +64,7 @@ public class App {
             new LineBreak(),
             new ActionItem("[ New Game ]", this::runNewGame),
             new ActionItem("[ Options ] ", this::runOptions),
+            new ActionItem("[ Credits ]", this::runCredits),
             new ActionItem("[ About ]", this::runAbout),
             new ActionItem("[ Exit ]", true),
             new LineBreak(),
@@ -78,6 +80,29 @@ public class App {
     private void runNewGame() {
         GameLoop gameLoop = new GameLoop(terminal);
         gameLoop.run();
+    }
+
+    private void runCredits() {
+        MenuManager menu = new MenuManager(terminal, List.of(
+                new LineBreak(),
+                new StaticText("<< Credits >>"),
+                new LineBreak(),
+                new StaticText(" -- SFX --"),
+                new LineBreak(),
+                new StaticText("\"Block Lock\": Pixel Explosion - Lumaro_Studios"),
+                new StaticText("\"Line Clear\": Pixel Jump - Lumaro_Studios"),
+                new LineBreak(),
+                new StaticText("Background Music: Pixel Song #12 - freesound_community"),
+                new LineBreak(),
+                new LineBreak(),
+                new StaticText(" -- Sources --"),
+                new LineBreak(),
+                new StaticText("* https://pixabay.com"),
+                new LineBreak(),
+                new ActionItem("[ Return ]", Config::saveState, true)
+        ));
+
+        menu.start();
     }
 
     private void runAbout() {
