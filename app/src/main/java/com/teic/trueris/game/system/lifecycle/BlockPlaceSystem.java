@@ -37,7 +37,7 @@ public class BlockPlaceSystem {
         this.eventBus = eventBus;
 
         eventBus.subscribe(DropDownResponse.class, event -> {
-            if (!Config.dropInstantPlace.get()) {
+            if (!Config.hardDropLock.get()) {
                 return;
             }
 
@@ -47,7 +47,7 @@ public class BlockPlaceSystem {
         });
 
         eventBus.subscribe(MoveDownResponse.class, event -> {
-            if (!Config.moveInstantPlace.get()) {
+            if (!Config.softDropLock.get()) {
                 return;
             }
 

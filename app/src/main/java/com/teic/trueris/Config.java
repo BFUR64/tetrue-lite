@@ -65,8 +65,8 @@ public class Config {
     public static final Property<Boolean> showDebug = Property.of(false).build();
     public static final Property<Boolean> gravityEnabled = Property.of(true).build();
     public static final Property<Boolean> lockTimerEnabled = Property.of(true).build();
-    public static final Property<Boolean> dropInstantPlace = Property.of(true).build();
-    public static final Property<Boolean> moveInstantPlace = Property.of(false).build();
+    public static final Property<Boolean> hardDropLock = Property.of(true).build();
+    public static final Property<Boolean> softDropLock = Property.of(false).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
 
     // =====================
