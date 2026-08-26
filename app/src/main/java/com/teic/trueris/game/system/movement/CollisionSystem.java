@@ -5,6 +5,7 @@ import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
 import com.teic.trueris.game.block.Direction;
 import com.teic.trueris.game.cell.CellType;
+import com.teic.trueris.game.component.IsGhost;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
@@ -52,14 +53,7 @@ public class CollisionSystem {
         });
 
         eventBus.subscribe(DropDownQuery.class, event -> {
-            int dy = 0;
-
-            while (isValid(event.entityId(), 0, dy)) {
-                dy++;
-            }
-            dy--;
-
-            eventBus.publish(new DropDownResponse(event.entityId(), dy));
+            eventBus.publish(new DropDownResponse(event.entityId(), dropDisplacement(event.entityId())));
         });
 
         eventBus.subscribe(GroundCheckQuery.class, event -> {
@@ -113,6 +107,22 @@ public class CollisionSystem {
 
             eventBus.publish(new Rotate180Response(event.entityId(), isValid, direction, dx, dy));
         });
+
+        eventBus.subscribe(GhostPositionQuery.class, event -> {
+            if (world.has(event.entityId(), IsGhost.class)) {
+                eventBus.publish(new GhostPositionResponse(event.entityId(), dropDisplacement(event.entityId())));
+            }
+        });
+    }
+
+    private Integer dropDisplacement(Integer entityId) {
+        int dy = 0;
+
+        while (isValid(entityId, 0, dy)) {
+            dy++;
+        }
+
+        return dy - 1;
     }
 
     private InternalRotateResponse rotationQuery(Integer entityId, RotationPair rotationPair, int baseDx, int baseDy) {
@@ -197,8 +207,8 @@ public class CollisionSystem {
 
     private boolean isOutOfBounds(int gridRow, int gridCol) {
         return (
-                gridRow < 0 || gridRow >= height
-                        || gridCol < 0 || gridCol >= width
+            gridRow < 0 || gridRow >= height
+            || gridCol < 0 || gridCol >= width
         );
     }
 
