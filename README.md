@@ -3,20 +3,19 @@
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal Abstraction Library</h3>
 
 <div align="center">
-  <img width="726" height="523" alt="image" src="https://github.com/user-attachments/assets/f4197ad3-7d01-472a-9ae7-a3ff4feb6d16" />
+  <img width="530" height="418" alt="Falling blocks" src="https://github.com/user-attachments/assets/9e495f8b-df6b-446d-8467-bfea240f98e2" />
 </div>
 
 ## Demo
 
-<img width="748" height="524" alt="ezgif-71000bef1676a9a9" src="https://github.com/user-attachments/assets/77b5f3d7-73dc-4f48-9db0-9fa68d2bd674" />
-
+<img width="760" height="528" alt="Falling blocks" src="https://github.com/user-attachments/assets/8100680b-b7fc-48ec-84d7-353e0287062e" />
 
 ## Features
 
 - Falling Blocks - Standard falling tetrominoes
 - Gravity - Drops move down per second and speeds up per line clear
 - Lock Grace - Allows adjustment before it gets placed
-- SRS Rotation - Based on the SRS Table (Not Implemented on V3.0.0)
+- SRS Rotation - Based on the SRS Table
 - Movement - Move blocks left and right
 - Hard Drop - Instantly drop a tetromino to the bottom row
 - Scoring - Tracks points for cleared lines
@@ -193,7 +192,7 @@ sequenceDiagram
   - [Tetrue Terminal](https://github.com/BFUR64/tetrue-terminal) 3.2.1 (Lanterna-like Abstraction Library for JLine4 and Lanterna)
   - [Menu Manager](https://github.com/BFUR64/menu-manager) 0.9.2 (Personal Composite-based Menu Management)
   - [MicroSound](https://github.com/BFUR64/MicroSound) 0.2.0 (Personal Minimal Sound Manager)
-- Build Tools: Gradle 9.7.0
+- Build Tools: Gradle 9.7.1
 
 ## Version Releasing
 MAJOR . MINOR . PATCH
