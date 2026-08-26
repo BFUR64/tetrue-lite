@@ -3,13 +3,12 @@
 <h3 align="center">An open-source Tetris clone for the terminal, built in Java using the Tetrue Terminal Abstraction Library</h3>
 
 <div align="center">
-  <img width="530" height="418" alt="image" src="https://github.com/user-attachments/assets/9e495f8b-df6b-446d-8467-bfea240f98e2" />
+  <img width="530" height="418" alt="Falling blocks" src="https://github.com/user-attachments/assets/9e495f8b-df6b-446d-8467-bfea240f98e2" />
 </div>
 
 ## Demo
 
-<img width="748" height="524" alt="ezgif-71000bef1676a9a9" src="https://github.com/user-attachments/assets/77b5f3d7-73dc-4f48-9db0-9fa68d2bd674" />
-
+<img width="760" height="528" alt="Falling blocks" src="https://github.com/user-attachments/assets/8100680b-b7fc-48ec-84d7-353e0287062e" />
 
 ## Features
 
