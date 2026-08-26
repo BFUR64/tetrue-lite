@@ -27,7 +27,12 @@ public class GameLoop {
 
     private final Terminal terminal;
 
-    private int score = 0;
+    private int score;
+
+    private int oneClear;
+    private int twoClear;
+    private int threeClear;
+    private int fourClear;
 
     private final EventBus eventBus;
     private final GameRenderer gameRenderer;
@@ -54,7 +59,14 @@ public class GameLoop {
         this.nsPerFrame = NANOSECOND / targetFps;
 
         eventBus.subscribe(GameOverEvent.class, event -> running = false);
-        eventBus.subscribe(ScoreChangeEvent.class, event -> score = event.score());
+        eventBus.subscribe(ScoreChangeEvent.class, event -> {
+            score = event.score();
+
+            oneClear = event.oneClear();
+            twoClear = event.twoClear();
+            threeClear = event.threeClear();
+            fourClear = event.fourClear();
+        });
     }
 
     public void run() {
@@ -140,6 +152,13 @@ public class GameLoop {
             new StaticText("Game Over!"),
             new LineBreak(),
             new StaticText("Score: " + score),
+            new LineBreak(),
+            new StaticText("-- Statistics (Cleared Lines) --"),
+            new LineBreak(),
+            new StaticText("One   : " + oneClear),
+            new StaticText("Two   : " + twoClear),
+            new StaticText("Three : " + threeClear),
+            new StaticText("Four  : " + fourClear),
             new LineBreak(),
             new ActionItem("[ Return ] ", true)
         );

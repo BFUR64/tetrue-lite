@@ -9,11 +9,16 @@ import org.jspecify.annotations.NullMarked;
 public class ScoreTrackerSystem {
     private int score;
 
+    private int oneClear;
+    private int twoClear;
+    private int threeClear;
+    private int fourClear;
+
     public ScoreTrackerSystem(EventBus eventBus) {
         eventBus.subscribe(LineClearEvent.class, event -> {
             updateScore(event.rowsFilled());
 
-            eventBus.publish(new ScoreChangeEvent(score));
+            eventBus.publish(new ScoreChangeEvent(score, oneClear, twoClear, threeClear, fourClear));
         });
     }
 
@@ -29,10 +34,22 @@ public class ScoreTrackerSystem {
         }
 
         score += switch (totalFilledRows) {
-            case 1 -> 100;
-            case 2 -> 300;
-            case 3 -> 600;
-            case 4 -> 1500;
+            case 1 -> {
+                oneClear++;
+                yield 100;
+            }
+            case 2 -> {
+                twoClear++;
+                yield 300;
+            }
+            case 3 -> {
+                threeClear++;
+                yield 600;
+            }
+            case 4 -> {
+                fourClear++;
+                yield 1500;
+            }
             default -> 0;
         };
     }
