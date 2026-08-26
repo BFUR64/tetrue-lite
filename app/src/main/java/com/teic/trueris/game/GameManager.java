@@ -100,7 +100,7 @@ public class GameManager {
     }
 
     public void rotate180() {
-//        blockRotationSystem.rotate180(activeBlockId);
+        blockRotationSystem.rotate180(activeBlockId);
     }
 
     public void holdBlock() {

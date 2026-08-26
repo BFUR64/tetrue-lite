@@ -3,17 +3,21 @@ package com.teic.trueris.game.system.movement;
 import com.teic.trueris.Config;
 import com.teic.trueris.game.EventBus;
 import com.teic.trueris.game.World;
+import com.teic.trueris.game.block.Direction;
 import com.teic.trueris.game.cell.CellType;
-import com.teic.trueris.game.component.IsGhost;
 import com.teic.trueris.game.component.Position;
 import com.teic.trueris.game.component.Rotation;
 import com.teic.trueris.game.component.Shape;
-import com.teic.trueris.game.query.position.*;
-import com.teic.trueris.game.query.rotation.MoveRotationQuery;
-import com.teic.trueris.game.query.rotation.MoveRotationResponse;
 import com.teic.trueris.game.grid.GridReader;
+import com.teic.trueris.game.query.position.*;
+import com.teic.trueris.game.query.rotation.Rotate180Query;
+import com.teic.trueris.game.query.rotation.Rotate180Response;
+import com.teic.trueris.game.query.rotation.RotateQuery;
+import com.teic.trueris.game.query.rotation.RotateResponse;
 import com.teic.trueris.game.utils.Offset;
 import com.teic.trueris.game.utils.RotationHelper;
+import com.teic.trueris.game.utils.RotationPair;
+import com.teic.trueris.game.utils.SrsData;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -22,7 +26,6 @@ import java.util.List;
 
 import static com.teic.trueris.game.utils.CellGrid.getCell;
 
-@NullMarked
 public class CollisionSystem {
     private final GridReader gridReader;
     private final World world;
@@ -31,124 +34,136 @@ public class CollisionSystem {
     private final int width = Config.gridWidth.get();
 
     @SuppressFBWarnings(
-        value = "EI2",
-        justification = "World and EventBus is intentionally shared between systems."
+            value = "EI2",
+            justification = "World and EventBus is intentionally shared between systems."
     )
     public CollisionSystem(GridReader gridReader, World world, EventBus eventBus) {
         this.gridReader = gridReader;
         this.world = world;
 
         eventBus.subscribe(MoveXQuery.class, event -> {
-            Boolean valid = isValid(event.entityId(), event.dx(), 0);
-
-            if (valid != null) {
-                eventBus.publish(new MoveXResponse(event.entityId(), valid, event.dx()));
-            }
+            boolean valid = isValid(event.entityId(), event.dx(), 0);
+            eventBus.publish(new MoveXResponse(event.entityId(), valid, event.dx()));
         });
 
         eventBus.subscribe(MoveDownQuery.class, event -> {
-            Boolean valid = isValid(event.entityId(), 0, 1);
-
-            if (valid != null) {
-                eventBus.publish(new MoveDownResponse(event.entityId(), valid));
-            }
+            boolean valid = isValid(event.entityId(), 0, 1);
+            eventBus.publish(new MoveDownResponse(event.entityId(), valid));
         });
 
         eventBus.subscribe(DropDownQuery.class, event -> {
-            Integer entityId = event.entityId();
-            Integer dropDisplacement = dropDisplacement(entityId);
-
-            if (dropDisplacement != null) {
-                eventBus.publish(new DropDownResponse(entityId, dropDisplacement));
-            }
-        });
-
-        eventBus.subscribe(GroundCheckQuery.class, event -> {
-            Boolean clear = isValid(event.entityId(), 0, 1);
-
-            if (clear != null) {
-                eventBus.publish(new GroundCheckResponse(event.entityId(), clear));
-            }
-        });
-
-        eventBus.subscribe(PositionValidQuery.class, event -> {
-            Boolean valid = isValid(event.entityId(), 0, 0);
-
-            if (valid != null) {
-                eventBus.publish(new PositionValidResponse(event.entityId(), valid));
-            }
-        });
-
-        eventBus.subscribe(MoveRotationQuery.class, event -> {
-            Integer entityId = event.entityId();
-
-            if (world.has(entityId, Position.class, Shape.class)) {
-                Position position = world.get(entityId, Position.class);
-                Shape shape = world.get(entityId, Shape.class);
-
-                int direction = event.direction().ordinal();
-
-                List<Offset> offsets = event.offsets();
-
-                int dx = 0;
-                int dy = 0;
-                boolean isValid = false;
-
-                for (int offsetIndex = 0; offsetIndex < offsets.size() && !isValid; offsetIndex++) {
-                    dx = offsets.get(offsetIndex).x();
-                    dy = offsets.get(offsetIndex).y();
-
-                    isValid = isValid(position, direction, shape, dx, dy);
-                }
-
-                eventBus.publish(new MoveRotationResponse(entityId, isValid, direction, dx, dy));
-            }
-        });
-
-        eventBus.subscribe(GhostPositionQuery.class, event -> {
-            Integer entityId = event.entityId();
-
-            if (world.has(entityId, IsGhost.class)) {
-                Integer dropDisplacement = dropDisplacement(entityId);
-
-                if (dropDisplacement != null) {
-                    eventBus.publish(new GhostPositionResponse(entityId, dropDisplacement));
-                }
-            }
-        });
-    }
-
-    private @Nullable Integer dropDisplacement(int entityId) {
-        if (world.has(entityId, Position.class, Rotation.class, Shape.class)) {
-            Position position = world.get(entityId, Position.class);
-            Rotation rotation = world.get(entityId, Rotation.class);
-            Shape shape = world.get(entityId, Shape.class);
-
             int dy = 0;
-            while (isValid(position, rotation, shape, 0, dy)) {
+
+            while (isValid(event.entityId(), 0, dy)) {
                 dy++;
             }
             dy--;
 
-            return dy;
-        }
+            eventBus.publish(new DropDownResponse(event.entityId(), dy));
+        });
 
-        return null;
+        eventBus.subscribe(GroundCheckQuery.class, event -> {
+            boolean clear = isValid(event.entityId(), 0, 1);
+            eventBus.publish(new GroundCheckResponse(event.entityId(), clear));
+        });
+
+        eventBus.subscribe(PositionValidQuery.class, event -> {
+            boolean valid = isValid(event.entityId(), 0, 0);
+            eventBus.publish(new PositionValidResponse(event.entityId(), valid));
+        });
+
+        eventBus.subscribe(RotateQuery.class, event -> {
+            InternalRotateResponse internalRotateResponse = rotationQuery(event.entityId(), event.rotationPair(), 0, 0);
+            eventBus.publish(new RotateResponse(
+                event.entityId(),
+                internalRotateResponse.isValid,
+                event.rotationPair().second(),
+                internalRotateResponse.dx,
+                internalRotateResponse.dy
+            ));
+        });
+
+        eventBus.subscribe(Rotate180Query.class, event -> {
+            boolean isValid = false;
+            Direction direction = Direction.UP;
+            int dx = 0;
+            int dy = 0;
+
+            if (world.has(event.entityId(), Rotation.class)) {
+                Rotation rotation = world.get(event.entityId(), Rotation.class);
+                direction = rotation.direction();
+                Direction ninetyDirection = RotationHelper.rotateRight(direction);
+                RotationPair rotationPair = new RotationPair(direction, ninetyDirection);
+
+                InternalRotateResponse first = rotationQuery(event.entityId(), rotationPair, 0, 0);
+                if (first.isValid) {
+                    dx = first.dx;
+                    dy = first.dy;
+
+                    Direction oneEightyDirection = RotationHelper.rotateRight(ninetyDirection);
+                    rotationPair = new RotationPair(ninetyDirection, oneEightyDirection);
+
+                    InternalRotateResponse second = rotationQuery(event.entityId(), rotationPair, dx, dy);
+                    isValid = second.isValid;
+                    direction = oneEightyDirection;
+                    dx += second.dx;
+                    dy += second.dy;
+                }
+            }
+
+            eventBus.publish(new Rotate180Response(event.entityId(), isValid, direction, dx, dy));
+        });
     }
 
-    private @Nullable Boolean isValid(int entityId, int dx, int dy) {
+    private InternalRotateResponse rotationQuery(Integer entityId, RotationPair rotationPair, int baseDx, int baseDy) {
+        if (!world.has(entityId, Shape.class)) {
+            return new InternalRotateResponse(false, 0, 0);
+        }
+
+        Shape shape = world.get(entityId, Shape.class);
+        int size = shape.blockTemplate().size();
+
+        List<Offset> offsets;
+        if (size <= 3) {
+            offsets = SrsData.getThreeTable().get(rotationPair);
+        }
+        else {
+            offsets = SrsData.getITable().get(rotationPair);
+        }
+
+        int dx = 0;
+        int dy = 0;
+        boolean isValid = false;
+
+        for (int offsetIndex = 0; offsetIndex < offsets.size() && !isValid; offsetIndex++) {
+            dx = offsets.get(offsetIndex).x();
+            dy = offsets.get(offsetIndex).y();
+
+            isValid = isValid(entityId, shape, rotationPair.second().ordinal(), baseDx + dx, baseDy + dy);
+        }
+
+        return new InternalRotateResponse(isValid, dx, dy);
+    }
+
+    private boolean isValid(int entityId, Shape shape, int direction, int dx, int dy) {
+        if (!world.has(entityId, Position.class)) {
+            return false;
+        }
+
+        Position position = world.get(entityId, Position.class);
+
+        return isValid(position, direction, shape, dx, dy);
+    }
+
+    private boolean isValid(int entityId, int dx, int dy) {
         if (!world.has(entityId, Position.class, Rotation.class, Shape.class)) {
-            return null;
+            return false;
         }
 
         Position position = world.get(entityId, Position.class);
         Rotation rotation = world.get(entityId, Rotation.class);
         Shape shape = world.get(entityId, Shape.class);
 
-        return isValid(position, rotation, shape, dx, dy);
-    }
-
-    public boolean isValid(Position position, Rotation rotation, Shape shape, int dx, int dy) {
         return isValid(position, rotation.direction().ordinal(), shape, dx, dy);
     }
 
@@ -172,7 +187,6 @@ public class CollisionSystem {
                     isOutOfBounds(gridRow, gridCol)
                     || isColliding(gridRow, gridCol)
                 ) {
-
                     return false;
                 }
             }
@@ -183,12 +197,15 @@ public class CollisionSystem {
 
     private boolean isOutOfBounds(int gridRow, int gridCol) {
         return (
-            gridRow < 0 || gridRow >= height
-            || gridCol < 0 || gridCol >= width
+                gridRow < 0 || gridRow >= height
+                        || gridCol < 0 || gridCol >= width
         );
     }
 
     private boolean isColliding(int gridRow, int gridCol) {
         return gridReader.getCell(gridCol, gridRow) != null;
     }
+
+    @NullMarked
+    private record InternalRotateResponse(boolean isValid, int dx, int dy) {}
 }
