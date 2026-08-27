@@ -92,11 +92,11 @@ public class GameRenderer {
     }
 
     private void writeGhostBlocks() {
-        List<Integer> ghostIds = world.query(Position.class, io.github.bfur64.tetrue.game.component.Rotation.class, Shape.class, IsGhost.class);
+        List<Integer> ghostIds = world.query(Position.class, Rotation.class, Shape.class, IsGhost.class);
 
         for (int ghostId : ghostIds) {
             Position position = world.get(ghostId, Position.class);
-            io.github.bfur64.tetrue.game.component.Rotation rotation = world.get(ghostId, io.github.bfur64.tetrue.game.component.Rotation.class);
+            Rotation rotation = world.get(ghostId, Rotation.class);
             Shape shape = world.get(ghostId, Shape.class);
 
             int direction = rotation.direction().ordinal();
@@ -114,13 +114,13 @@ public class GameRenderer {
     }
 
     private void writeActiveBlocks() {
-        List<Integer> blockIds = world.query(Position.class, io.github.bfur64.tetrue.game.component.Rotation.class, Shape.class);
+        List<Integer> blockIds = world.query(Position.class, Rotation.class, Shape.class);
 
         for (int blockId : blockIds) {
             if (world.has(blockId, IsGhost.class)) continue;
 
             Position position = world.get(blockId, Position.class);
-            io.github.bfur64.tetrue.game.component.Rotation rotation = world.get(blockId, io.github.bfur64.tetrue.game.component.Rotation.class);
+            Rotation rotation = world.get(blockId, Rotation.class);
             Shape shape = world.get(blockId, Shape.class);
 
             int direction = rotation.direction().ordinal();
