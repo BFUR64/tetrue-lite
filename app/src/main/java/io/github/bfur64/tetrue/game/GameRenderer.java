@@ -8,6 +8,8 @@ import io.github.bfur64.tetrue.game.event.BlockQueueChangeEvent;
 import io.github.bfur64.tetrue.game.event.GravityChangeEvent;
 import io.github.bfur64.tetrue.game.event.ScoreChangeEvent;
 import io.github.bfur64.tetrue.game.grid.GridReader;
+import io.github.bfur64.tetrue.game.timer.GravityTimer;
+import io.github.bfur64.tetrue.game.timer.LockTimer;
 import io.github.bfur64.tetrue.game.utils.RotationHelper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.terminal.Terminal;
@@ -15,6 +17,7 @@ import io.github.bfur64.terminal.output.TextColor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,6 +86,10 @@ public class GameRenderer {
             showDebug(delta, gameBorderHeight + 1);
         }
 
+        if (Config.showDebug.get()) {
+            writeDebugBlocks();
+        }
+
         terminal.flush();
     }
 
@@ -134,6 +141,35 @@ public class GameRenderer {
                 rotatedCells,
                 SOLID
             );
+        }
+    }
+
+    private void writeDebugBlocks() {
+        List<Integer> blockIds = world.query(Position.class, Rotation.class, Shape.class);
+
+        for (int blockId : blockIds) {
+            if (world.has(blockId, IsGhost.class)) continue;
+
+            Position position = world.get(blockId, Position.class);
+            Rotation rotation = world.get(blockId, Rotation.class);
+            Shape shape = world.get(blockId, Shape.class);
+
+            LockTimer lockTimer = world.get(blockId, LockTimer.class);
+            GravityTimer gravityTimer = world.get(blockId, GravityTimer.class);
+
+            OnGround onGround = world.get(blockId, OnGround.class);
+
+            int size = shape.blockTemplate().size();
+
+            int padding = 1;
+            int debugOffsetX = (position.x() + BORDER_OFFSET + size + padding) * 2;
+            int debugOffsetY = position.y() + BORDER_OFFSET;
+
+            terminal.put(debugOffsetX, debugOffsetY, " Lock Timer: " + Duration.ofNanos(lockTimer.duration()).toMillis() + "ms ");
+            terminal.put(debugOffsetX, ++debugOffsetY, " Gravity Timer: " + Duration.ofNanos(gravityTimer.duration()).toMillis() + "ms ");
+            terminal.put(debugOffsetX, ++debugOffsetY, " Grounded: " + onGround.onGround() + " ");
+
+            terminal.put(debugOffsetX, debugOffsetY + 2, " Direction: " + rotation.direction() + " ");
         }
     }
 
