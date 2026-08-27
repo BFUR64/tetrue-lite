@@ -31,7 +31,7 @@ java {
 }
 
 application {
-    mainClass = "com.teic.trueris.App"
+    mainClass = "io.github.bfur64.tetrue.App"
 }
 
 val projectName = project.name
