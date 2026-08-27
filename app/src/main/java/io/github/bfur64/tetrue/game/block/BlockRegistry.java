@@ -1,0 +1,110 @@
+package io.github.bfur64.tetrue.game.block;
+
+import io.github.bfur64.tetrue.game.cell.CellType;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+@NullMarked
+public class BlockRegistry {
+    private static final Map<CellType, BlockTemplate> BLOCK_MAP = new HashMap<>();
+
+    static {
+        BLOCK_MAP.put(
+            CellType.O,
+            new BlockTemplate(
+                2,
+                Arrays.asList(
+                    CellType.O, CellType.O,
+                    CellType.O, CellType.O
+                ),
+                CellType.O
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.J,
+            new BlockTemplate(
+            3,
+                Arrays.asList(
+                    CellType.J, null,       null,
+                    CellType.J, CellType.J, CellType.J,
+                    null,       null,       null
+                ),
+                CellType.J
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.L,
+            new BlockTemplate(
+            3,
+                Arrays.asList(
+                    null,       null,       CellType.L,
+                    CellType.L, CellType.L, CellType.L,
+                    null,       null,       null
+                ),
+                CellType.L
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.S,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    null,       CellType.S, CellType.S,
+                    CellType.S, CellType.S, null,
+                    null,       null,       null
+                ),
+                CellType.S
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.Z,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    CellType.Z, CellType.Z, null,
+                    null,       CellType.Z, CellType.Z,
+                    null,       null,       null
+                ),
+                CellType.Z
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.T,
+            new BlockTemplate(
+                3,
+                Arrays.asList(
+                    null,       CellType.T, null,
+                    CellType.T, CellType.T, CellType.T,
+                    null,       null,       null
+                ),
+                CellType.T
+            )
+        );
+
+        BLOCK_MAP.put(
+            CellType.I,
+            new BlockTemplate(
+                4,
+                Arrays.asList(
+                    null,       null,       null,       null,
+                    CellType.I, CellType.I, CellType.I, CellType.I,
+                    null,       null,       null,       null,
+                    null,       null,       null,       null
+                ),
+                CellType.I
+            )
+        );
+    }
+
+    public static BlockTemplate getBlock(CellType cellType) {
+        return BLOCK_MAP.get(cellType);
+    }
+}

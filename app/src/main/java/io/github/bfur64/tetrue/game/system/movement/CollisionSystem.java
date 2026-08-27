@@ -1,0 +1,202 @@
+package io.github.bfur64.tetrue.game.system.movement;
+
+import io.github.bfur64.tetrue.Config;
+import io.github.bfur64.tetrue.game.EventBus;
+import io.github.bfur64.tetrue.game.World;
+import io.github.bfur64.tetrue.game.block.Direction;
+import io.github.bfur64.tetrue.game.cell.CellType;
+import io.github.bfur64.tetrue.game.component.Position;
+import io.github.bfur64.tetrue.game.component.Rotation;
+import io.github.bfur64.tetrue.game.component.Shape;
+import io.github.bfur64.tetrue.game.grid.GridReader;
+import io.github.bfur64.tetrue.game.query.position.*;
+import io.github.bfur64.tetrue.game.query.rotation.Rotate180Query;
+import io.github.bfur64.tetrue.game.query.rotation.Rotate180Response;
+import io.github.bfur64.tetrue.game.query.rotation.RotateQuery;
+import io.github.bfur64.tetrue.game.query.rotation.RotateResponse;
+import io.github.bfur64.tetrue.game.utils.Offset;
+import io.github.bfur64.tetrue.game.utils.RotationHelper;
+import io.github.bfur64.tetrue.game.utils.RotationPair;
+import io.github.bfur64.tetrue.game.utils.SrsData;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+
+import static io.github.bfur64.tetrue.game.utils.CellGrid.getCell;
+
+public class CollisionSystem {
+    private final GridReader gridReader;
+    private final World world;
+
+    private final int height = Config.gridHeight.get();
+    private final int width = Config.gridWidth.get();
+
+    @SuppressFBWarnings(
+            value = "EI2",
+            justification = "World and EventBus is intentionally shared between systems."
+    )
+    public CollisionSystem(GridReader gridReader, World world, EventBus eventBus) {
+        this.gridReader = gridReader;
+        this.world = world;
+
+        eventBus.subscribe(MoveXQuery.class, event -> {
+            boolean valid = isValid(event.entityId(), event.dx(), 0);
+            eventBus.publish(new MoveXResponse(event.entityId(), valid, event.dx()));
+        });
+
+        eventBus.subscribe(MoveDownQuery.class, event -> {
+            boolean valid = isValid(event.entityId(), 0, 1);
+            eventBus.publish(new MoveDownResponse(event.entityId(), valid));
+        });
+
+        eventBus.subscribe(DropDownQuery.class, event -> eventBus.publish(new DropDownResponse(event.entityId(), dropDisplacement(event.entityId()))));
+
+        eventBus.subscribe(GroundCheckQuery.class, event -> {
+            boolean clear = isValid(event.entityId(), 0, 1);
+            eventBus.publish(new GroundCheckResponse(event.entityId(), clear));
+        });
+
+        eventBus.subscribe(PositionValidQuery.class, event -> {
+            boolean valid = isValid(event.entityId(), 0, 0);
+            eventBus.publish(new PositionValidResponse(event.entityId(), valid));
+        });
+
+        eventBus.subscribe(RotateQuery.class, event -> {
+            InternalRotateResponse internalRotateResponse = rotationQuery(event.entityId(), event.rotationPair(), 0, 0);
+            eventBus.publish(new RotateResponse(
+                event.entityId(),
+                internalRotateResponse.isValid,
+                event.rotationPair().second(),
+                internalRotateResponse.dx,
+                internalRotateResponse.dy
+            ));
+        });
+
+        eventBus.subscribe(Rotate180Query.class, event -> {
+            boolean isValid = false;
+            Direction direction = Direction.UP;
+            int dx = 0;
+            int dy = 0;
+
+            Rotation rotation = world.get(event.entityId(), Rotation.class);
+            direction = rotation.direction();
+            Direction ninetyDirection = RotationHelper.rotateRight(direction);
+            RotationPair rotationPair = new RotationPair(direction, ninetyDirection);
+
+            InternalRotateResponse first = rotationQuery(event.entityId(), rotationPair, 0, 0);
+            if (first.isValid) {
+                dx = first.dx;
+                dy = first.dy;
+
+                Direction oneEightyDirection = RotationHelper.rotateRight(ninetyDirection);
+                rotationPair = new RotationPair(ninetyDirection, oneEightyDirection);
+
+                InternalRotateResponse second = rotationQuery(event.entityId(), rotationPair, dx, dy);
+                isValid = second.isValid;
+                direction = oneEightyDirection;
+                dx += second.dx;
+                dy += second.dy;
+            }
+
+            eventBus.publish(new Rotate180Response(event.entityId(), isValid, direction, dx, dy));
+        });
+
+        eventBus.subscribe(GhostPositionQuery.class, event -> {
+            eventBus.publish(new GhostPositionResponse(event.entityId(), dropDisplacement(event.entityId())));
+        });
+    }
+
+    private int dropDisplacement(int entityId) {
+        int dy = 0;
+
+        while (isValid(entityId, 0, dy)) {
+            dy++;
+        }
+
+        return dy - 1;
+    }
+
+    private InternalRotateResponse rotationQuery(int entityId, RotationPair rotationPair, int baseDx, int baseDy) {
+        Shape shape = world.get(entityId, Shape.class);
+        int size = shape.blockTemplate().size();
+
+        List<Offset> offsets;
+        if (size <= 3) {
+            offsets = SrsData.getThreeTable().get(rotationPair);
+        }
+        else {
+            offsets = SrsData.getITable().get(rotationPair);
+        }
+
+        int dx = 0;
+        int dy = 0;
+        boolean isValid = false;
+
+        for (int offsetIndex = 0; offsetIndex < offsets.size() && !isValid; offsetIndex++) {
+            dx = offsets.get(offsetIndex).x();
+            dy = offsets.get(offsetIndex).y();
+
+            isValid = isValid(entityId, shape, rotationPair.second().ordinal(), baseDx + dx, baseDy + dy);
+        }
+
+        return new InternalRotateResponse(isValid, dx, dy);
+    }
+
+    private boolean isValid(int entityId, Shape shape, int direction, int dx, int dy) {
+        Position position = world.get(entityId, Position.class);
+
+        return isValid(position, direction, shape, dx, dy);
+    }
+
+    private boolean isValid(int entityId, int dx, int dy) {
+        Position position = world.get(entityId, Position.class);
+        Rotation rotation = world.get(entityId, Rotation.class);
+        Shape shape = world.get(entityId, Shape.class);
+
+        return isValid(position, rotation.direction().ordinal(), shape, dx, dy);
+    }
+
+    public boolean isValid(Position position, int direction, Shape shape, int dx, int dy) {
+        List<@Nullable CellType> rotatedCells = RotationHelper.rotateBlockNTimes(direction, shape.blockTemplate());
+
+        int size = shape.blockTemplate().size();
+
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                CellType cell = getCell(rotatedCells, size, col, row);
+
+                if (cell == null) {
+                    continue;
+                }
+
+                int gridRow = position.y() + dy + row;
+                int gridCol = position.x() + dx + col;
+
+                if (
+                    isOutOfBounds(gridRow, gridCol)
+                    || isColliding(gridRow, gridCol)
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isOutOfBounds(int gridRow, int gridCol) {
+        return (
+            gridRow < 0 || gridRow >= height
+            || gridCol < 0 || gridCol >= width
+        );
+    }
+
+    private boolean isColliding(int gridRow, int gridCol) {
+        return gridReader.getCell(gridCol, gridRow) != null;
+    }
+
+    @NullMarked
+    private record InternalRotateResponse(boolean isValid, int dx, int dy) {}
+}
