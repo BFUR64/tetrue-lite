@@ -81,35 +81,31 @@ public class CollisionSystem {
             int dx = 0;
             int dy = 0;
 
-            if (world.has(event.entityId(), Rotation.class)) {
-                Rotation rotation = world.get(event.entityId(), Rotation.class);
-                direction = rotation.direction();
-                Direction ninetyDirection = RotationHelper.rotateRight(direction);
-                RotationPair rotationPair = new RotationPair(direction, ninetyDirection);
+            Rotation rotation = world.get(event.entityId(), Rotation.class);
+            direction = rotation.direction();
+            Direction ninetyDirection = RotationHelper.rotateRight(direction);
+            RotationPair rotationPair = new RotationPair(direction, ninetyDirection);
 
-                InternalRotateResponse first = rotationQuery(event.entityId(), rotationPair, 0, 0);
-                if (first.isValid) {
-                    dx = first.dx;
-                    dy = first.dy;
+            InternalRotateResponse first = rotationQuery(event.entityId(), rotationPair, 0, 0);
+            if (first.isValid) {
+                dx = first.dx;
+                dy = first.dy;
 
-                    Direction oneEightyDirection = RotationHelper.rotateRight(ninetyDirection);
-                    rotationPair = new RotationPair(ninetyDirection, oneEightyDirection);
+                Direction oneEightyDirection = RotationHelper.rotateRight(ninetyDirection);
+                rotationPair = new RotationPair(ninetyDirection, oneEightyDirection);
 
-                    InternalRotateResponse second = rotationQuery(event.entityId(), rotationPair, dx, dy);
-                    isValid = second.isValid;
-                    direction = oneEightyDirection;
-                    dx += second.dx;
-                    dy += second.dy;
-                }
+                InternalRotateResponse second = rotationQuery(event.entityId(), rotationPair, dx, dy);
+                isValid = second.isValid;
+                direction = oneEightyDirection;
+                dx += second.dx;
+                dy += second.dy;
             }
 
             eventBus.publish(new Rotate180Response(event.entityId(), isValid, direction, dx, dy));
         });
 
         eventBus.subscribe(GhostPositionQuery.class, event -> {
-            if (world.has(event.entityId(), IsGhost.class)) {
-                eventBus.publish(new GhostPositionResponse(event.entityId(), dropDisplacement(event.entityId())));
-            }
+            eventBus.publish(new GhostPositionResponse(event.entityId(), dropDisplacement(event.entityId())));
         });
     }
 
@@ -124,10 +120,6 @@ public class CollisionSystem {
     }
 
     private InternalRotateResponse rotationQuery(int entityId, RotationPair rotationPair, int baseDx, int baseDy) {
-        if (!world.has(entityId, Shape.class)) {
-            return new InternalRotateResponse(false, 0, 0);
-        }
-
         Shape shape = world.get(entityId, Shape.class);
         int size = shape.blockTemplate().size();
 
@@ -154,20 +146,12 @@ public class CollisionSystem {
     }
 
     private boolean isValid(int entityId, Shape shape, int direction, int dx, int dy) {
-        if (!world.has(entityId, Position.class)) {
-            return false;
-        }
-
         Position position = world.get(entityId, Position.class);
 
         return isValid(position, direction, shape, dx, dy);
     }
 
     private boolean isValid(int entityId, int dx, int dy) {
-        if (!world.has(entityId, Position.class, Rotation.class, Shape.class)) {
-            return false;
-        }
-
         Position position = world.get(entityId, Position.class);
         Rotation rotation = world.get(entityId, Rotation.class);
         Shape shape = world.get(entityId, Shape.class);

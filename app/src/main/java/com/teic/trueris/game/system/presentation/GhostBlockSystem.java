@@ -29,14 +29,12 @@ public class GhostBlockSystem {
         eventBus.subscribe(GhostPositionResponse.class, event -> {
             int entityId = event.entityId();
 
-            if (world.has(entityId, Position.class)) {
-                Position oldPosition = world.get(entityId, Position.class);
+            Position oldPosition = world.get(entityId, Position.class);
 
-                world.put(entityId, new Position(
-                    oldPosition.x(),
-                    oldPosition.y() + event.dy()
-                ));
-            }
+            world.put(entityId, new Position(
+                oldPosition.x(),
+                oldPosition.y() + event.dy()
+            ));
         });
     }
 
@@ -60,10 +58,6 @@ public class GhostBlockSystem {
 
             if (world.has(parentId, Held.class) || !world.exists(parentId)) {
                 world.remove(ghostEntityId);
-                continue;
-            }
-
-            if (!world.has(parentId, Position.class, Rotation.class)) {
                 continue;
             }
 

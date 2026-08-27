@@ -26,9 +26,7 @@ public class OnGroundSystem {
         eventBus.subscribe(GroundCheckResponse.class, event -> {
             int entityId = event.entityId();
 
-            if (world.has(entityId, OnGround.class)) {
-                world.put(entityId, new OnGround(!event.isClear()));
-            }
+            world.put(entityId, new OnGround(!event.isClear()));
         });
     }
 

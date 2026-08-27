@@ -30,7 +30,7 @@ public class BlockRotationSystem {
         eventBus.subscribe(RotateResponse.class, event -> {
             int entityId = event.entityId();
 
-            if (event.isValid() && world.has(entityId, Position.class, Rotation.class)) {
+            if (event.isValid()) {
                 Position oldPosition = world.get(entityId, Position.class);
 
                 world.put(entityId, new Position(
@@ -45,7 +45,7 @@ public class BlockRotationSystem {
         eventBus.subscribe(Rotate180Response.class, event -> {
             int entityId = event.entityId();
 
-            if (event.isValid() && world.has(entityId, Position.class, Rotation.class)) {
+            if (event.isValid()) {
                 Position oldPosition = world.get(entityId, Position.class);
 
                 world.put(entityId, new Position(
@@ -71,17 +71,15 @@ public class BlockRotationSystem {
     }
 
     private void rotate(int entityId, boolean rightTurn) {
-        if (world.has(entityId, Position.class, Rotation.class)) {
-            Rotation rotation = world.get(entityId, Rotation.class);
+        Rotation rotation = world.get(entityId, Rotation.class);
 
-            Direction direction = rotation.direction();
-            Direction newDirection = rightTurn ?
-                RotationHelper.rotateRight(rotation.direction())
-                : RotationHelper.rotateLeft(rotation.direction());
+        Direction direction = rotation.direction();
+        Direction newDirection = rightTurn ?
+            RotationHelper.rotateRight(rotation.direction())
+            : RotationHelper.rotateLeft(rotation.direction());
 
-            RotationPair rotationPair = new RotationPair(direction, newDirection);
+        RotationPair rotationPair = new RotationPair(direction, newDirection);
 
-            eventBus.publish(new RotateQuery(entityId, rotationPair));
-        }
+        eventBus.publish(new RotateQuery(entityId, rotationPair));
     }
 }

@@ -190,7 +190,7 @@ public class GameRenderer {
 
         int counter = 0;
         for (int blockQueueId : blockQueueIds) {
-            if (world.has(blockQueueId, Shape.class) && counter < blocksShown) {
+            if (counter < blocksShown) {
                 Shape shape = world.get(blockQueueId, Shape.class);
 
                 int size = shape.blockTemplate().size();

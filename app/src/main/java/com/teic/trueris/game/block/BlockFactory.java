@@ -43,15 +43,13 @@ public class BlockFactory {
     public int createGhostBlock(int parentId) {
         int id = nextBlockId++;
 
-        if (world.has(parentId, Position.class, Rotation.class, Shape.class, HasGhost.class)) {
-            Rotation rotation = world.get(parentId, Rotation.class);
-            Shape shape = world.get(parentId, Shape.class);
+        Rotation rotation = world.get(parentId, Rotation.class);
+        Shape shape = world.get(parentId, Shape.class);
 
-            world.put(id, new Position(BLOCK_X_OFFSET, 0));
-            world.put(id, new Rotation(rotation.direction()));
-            world.put(id, new Shape(BlockRegistry.getBlock(shape.blockTemplate().cellType())));
-            world.put(id, new IsGhost(parentId));
-        }
+        world.put(id, new Position(0, 0));
+        world.put(id, new Rotation(rotation.direction()));
+        world.put(id, new Shape(BlockRegistry.getBlock(shape.blockTemplate().cellType())));
+        world.put(id, new IsGhost(parentId));
 
         return id;
     }

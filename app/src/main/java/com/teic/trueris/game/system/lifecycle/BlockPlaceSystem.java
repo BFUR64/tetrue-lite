@@ -41,9 +41,7 @@ public class BlockPlaceSystem {
                 return;
             }
 
-            if (world.has(event.entityId(), Position.class, Rotation.class, Shape.class)) {
-                placeBlock(event.entityId());
-            }
+            placeBlock(event.entityId());
         });
 
         eventBus.subscribe(MoveDownResponse.class, event -> {
@@ -51,9 +49,7 @@ public class BlockPlaceSystem {
                 return;
             }
 
-            if (!event.canDrop() && world.has(event.entityId(), Position.class, Rotation.class, Shape.class)) {
-                placeBlock(event.entityId());
-            }
+            placeBlock(event.entityId());
         });
 
         eventBus.subscribe(LockTimerExpired.class, event -> placeBlock(event.entityId()));

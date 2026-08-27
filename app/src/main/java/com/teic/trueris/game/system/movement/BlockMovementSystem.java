@@ -46,7 +46,6 @@ public class BlockMovementSystem {
                     oldPosition.y() + event.dy()
                 ));
             }
-
         });
 
         eventBus.subscribe(GravityTimerExpired.class, event -> {

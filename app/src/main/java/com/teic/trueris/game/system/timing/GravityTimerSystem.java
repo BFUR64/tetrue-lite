@@ -36,11 +36,7 @@ public class GravityTimerSystem {
             }
 
             if (event.canDrop()) {
-                int entityId = event.entityId();
-
-                if (world.has(entityId, GravityTimer.class)) {
-                    setNewGravityMs(entityId, gravityMs);
-                }
+                setNewGravityMs(event.entityId(), gravityMs);
             }
         });
 
