@@ -121,26 +121,6 @@ flowchart LR
     System --> Movement
     System --> Presentation
     System --> Timing
-
-    Gameplay --> GameOverSystem
-    Gameplay --> LineClearSystem
-    Gameplay --> ScoreTrackerSystem
-
-    Lifecycle --> BlockHoldSystem
-    Lifecycle --> BlockPlaceSystem
-    Lifecycle --> BlockQueueSystem
-    Lifecycle --> BlockSpawnSystem
-
-    Movement --> BlockMovementSystem
-    Movement --> BlockRotationSystem
-    Movement --> CollisionSystem
-    Movement --> OnGroundSystem
-
-    Presentation --> GhostBlockSystem
-	  Presentation --> SoundSystem
-
-	  Timing --> GravityTimerSystem
-	  Timing --> LockTimerSystem
 ```
 
 ### Inter-System Communication
