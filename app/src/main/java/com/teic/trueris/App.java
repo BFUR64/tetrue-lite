@@ -83,22 +83,22 @@ public class App {
 
     private void runCredits() {
         MenuManager menu = new MenuManager(terminal, List.of(
-                new LineBreak(),
-                new StaticText("<< Credits >>"),
-                new LineBreak(),
-                new StaticText(" -- SFX --"),
-                new LineBreak(),
-                new StaticText("\"Block Lock\": Pixel Explosion - Lumaro_Studios"),
-                new StaticText("\"Line Clear\": Pixel Jump - Lumaro_Studios"),
-                new LineBreak(),
-                new StaticText("Background Music: Pixel Song #12 - freesound_community"),
-                new LineBreak(),
-                new LineBreak(),
-                new StaticText(" -- Sources --"),
-                new LineBreak(),
-                new StaticText("* https://pixabay.com"),
-                new LineBreak(),
-                new ActionItem("[ Return ]", Config::saveState, true)
+            new LineBreak(),
+            new StaticText("<< Credits >>"),
+            new LineBreak(),
+            new StaticText(" -- SFX --"),
+            new LineBreak(),
+            new StaticText("\"Block Lock\": Pixel Explosion - Lumaro_Studios"),
+            new StaticText("\"Line Clear\": Pixel Jump - Lumaro_Studios"),
+            new LineBreak(),
+            new StaticText("Background Music: Pixel Song #12 - freesound_community"),
+            new LineBreak(),
+            new LineBreak(),
+            new StaticText(" -- Sources --"),
+            new LineBreak(),
+            new StaticText("* https://pixabay.com"),
+            new LineBreak(),
+            new ActionItem("[ Return ]", true)
         ));
 
         menu.start();
@@ -141,7 +141,7 @@ public class App {
             new LineBreak(),
             new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
             new LineBreak(),
-            new ActionItem("[ Save & Return ]", Config::saveState, true)
+            new ActionItem("[ Save & Return ]", true)
         ));
 
         menu.start();
@@ -176,7 +176,7 @@ public class App {
             new LineBreak(),
             new ToggleItem("Sound Enabled", Config.soundEnabled),
             new LineBreak(),
-            new ActionItem("[ Return ]", Config::saveState, true)
+            new ActionItem("[ Return ]", true)
         ));
 
         menu.start();
@@ -198,7 +198,7 @@ public class App {
             new KeyInputItem("Rotate 180", Config.rotate180Key),
             new KeyInputItem("Hold Block", Config.holdKey),
             new LineBreak(),
-            new ActionItem("[ Return ]", Config::saveState, true)
+            new ActionItem("[ Return ]", true)
         ));
 
         menu.start();
@@ -214,7 +214,7 @@ public class App {
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
             new LineBreak(),
-            new ActionItem("[ Return ]", Config::saveState, true)
+            new ActionItem("[ Return ]", true)
         ));
 
         menu.start();

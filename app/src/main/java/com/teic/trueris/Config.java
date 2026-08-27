@@ -10,7 +10,7 @@ public class Config {
     public static final String GAME_VERSION = "v3.3.1";
 
     // milliseconds
-    private static int gravityDef = 500;
+    private static final int gravityDef = 500;
     public static final int GRAVITY_MIN = 40;
     private static final int GRAVITY_MAX = 5000;
 
@@ -21,24 +21,20 @@ public class Config {
     private static final int GRID_WIDTH_MIN_DEF = 10;
     private static final int GRID_WIDTH_MAX = 100;
 
-    public static void saveState() {
-        gravityDef = gravityMs.get();
-    }
-
     public static final Property<Integer> gravityMs = Property.of(gravityDef)
-            .require(threshold -> threshold >= GRAVITY_MIN, "Time should be more than " + GRAVITY_MIN + " ms")
-            .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
-            .parser(Integer::parseInt).build();
+        .require(threshold -> threshold >= GRAVITY_MIN, "Time should be more than " + GRAVITY_MIN + " ms")
+        .require(threshold -> threshold <= GRAVITY_MAX, "Time should be less than " + GRAVITY_MAX +  " ms")
+        .parser(Integer::parseInt).build();
 
     public static final Property<Integer> gridHeight = Property.of(GRID_HEIGHT_MIN)
-            .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
-            .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
-            .parser(Integer::parseInt).build();
+        .require(value -> value >= GRID_HEIGHT_MIN, "Height must be at least " + GRID_HEIGHT_MIN + " cells")
+        .require(value -> value <= GRID_HEIGHT_MAX, "...? Why?")
+        .parser(Integer::parseInt).build();
 
     public static final Property<Integer> gridWidth = Property.of(GRID_WIDTH_MIN_DEF)
-            .require(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
-            .require(value -> value <= GRID_WIDTH_MAX, "...? Why?")
-            .parser(Integer::parseInt).build();
+        .require(value -> value >= GRID_WIDTH_MIN, "Width must be at least " + GRID_WIDTH_MIN + " cells")
+        .require(value -> value <= GRID_WIDTH_MAX, "...? Why?")
+        .parser(Integer::parseInt).build();
 
     // =====================
     // Gameplay Buttons
