@@ -62,9 +62,9 @@ public class App {
             new StaticText("<< Tetrue Lite " + Config.GAME_VERSION + " >>"),
             new LineBreak(),
             new ActionItem("[ New Game ]", this::runNewGame),
-            new ActionItem("[ Options ] ", this::runOptions),
-            new ActionItem("[ Credits ]", this::runCredits),
-            new ActionItem("[ About ]", this::runAbout),
+            new ListItem("[ Options ] ", this::runOptions),
+            new ListItem("[ Credits ]", this::runCredits),
+            new ListItem("[ About ]", this::runAbout),
             new ActionItem("[ Exit ]", true),
             new LineBreak(),
             new StaticText("  [TIP] Use the `UP` and `DOWN` keys to move"),
@@ -81,8 +81,8 @@ public class App {
         gameLoop.run();
     }
 
-    private void runCredits() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runCredits() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Credits >>"),
             new LineBreak(),
@@ -99,19 +99,18 @@ public class App {
             new StaticText("* https://pixabay.com"),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runAbout() {
-        List<Item> items = List.of(
+    private List<Item> runAbout() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< About >>"),
             new LineBreak(),
             new StaticText("A simple Tetrue clone made by TEIC."),
             new LineBreak(),
-            new StaticText("| Rendering | "),
+            new LineBreak(),
+            new StaticText(" -- Rendering -- "),
             new LineBreak(),
             new StaticText("Abstraction Library: " + terminal.libraryInfo()),
             new StaticText("Renderer: " + terminal.terminalInfo()),
@@ -119,36 +118,32 @@ public class App {
             new DynamicText<>("Column: ", terminal::xSize),
             new DynamicText<>("Row: ", terminal::ySize),
             new LineBreak(),
-            new StaticText("| Menu |"),
+            new LineBreak(),
+            new StaticText(" -- Menu --"),
             new LineBreak(),
             new StaticText("Menu Manager: " + MenuManager.getVersion()),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
         );
-
-        MenuManager menu = new MenuManager(terminal, items);
-        menu.start();
     }
 
-    private void runOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Options >>"),
             new LineBreak(),
-            new ActionItem("[ Game Options ]", this::runGameOptions),
+            new ListItem("[ Game Options ]", this::runGameOptions),
             new LineBreak(),
-            new ActionItem("[ Key Binds ]", this::runKeyBinds),
+            new ListItem("[ Key Binds ]", this::runKeyBinds),
             new LineBreak(),
-            new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
+            new ListItem("[ Advanced Options ]", this::runAdvancedOptions),
             new LineBreak(),
             new ActionItem("[ Save & Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runGameOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runGameOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Game Options >>"),
             new LineBreak(),
@@ -177,13 +172,11 @@ public class App {
             new ToggleItem("Sound Enabled", Config.soundEnabled),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runKeyBinds() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runKeyBinds() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Key Binds >>"),
             new LineBreak(),
@@ -199,13 +192,11 @@ public class App {
             new KeyInputItem("Hold Block", Config.holdKey),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runAdvancedOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runAdvancedOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Advanced Options >>"),
             new LineBreak(),
@@ -215,8 +206,6 @@ public class App {
             new ToggleItem("Show Debug", Config.showDebug),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 }
