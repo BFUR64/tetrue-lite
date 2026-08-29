@@ -1,5 +1,6 @@
 package io.github.bfur64.tetrue;
 
+import io.github.bfur64.menu.Event;
 import io.github.bfur64.tetrue.game.GameLoop;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
@@ -73,6 +74,9 @@ public class App {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
+        Event event = menu.getEvent();
+        new MenuSound(event);
+
         menu.start();
     }
 
