@@ -39,7 +39,7 @@ public class Config {
     // =====================
     // Gameplay Buttons
     // =====================
-    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
+    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(' ')).build();
 
     public static final Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
 
@@ -109,7 +109,7 @@ public class Config {
         .build();
 
     private static void mobileControls() {
-        hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
+        hardDropKey.set(new KeyStroke(' '));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));

@@ -34,7 +34,7 @@
 
 ## Usage / Controls
 
-- UP Arrow Key - Hard drop
+- Space Key - Hard drop
 - DOWN Arrow Key - Move tetromino down
 - LEFT / RIGHT Arrow Keys - Move tetromino left / right within the grid
 - Z Key - Rotate tetromino counter-clockwise
