@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class Config {
-    public static final String GAME_VERSION = "v3.3.1";
+    public static final String GAME_VERSION = "v3.4.0";
 
     // milliseconds
     private static final int gravityDef = 500;
