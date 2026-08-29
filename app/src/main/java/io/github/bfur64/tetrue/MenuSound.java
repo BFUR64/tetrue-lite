@@ -9,7 +9,7 @@ import io.github.bfur64.menu.event.ItemSelectEvent;
 public final class MenuSound {
     private static final MicroSound sound;
 
-    private final static Sound buttonClick;
+    private static final Sound buttonClick;
     private static final Sound cursorChange;
 
     static {
