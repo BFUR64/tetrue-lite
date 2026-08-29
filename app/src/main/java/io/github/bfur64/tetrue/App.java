@@ -1,5 +1,7 @@
 package io.github.bfur64.tetrue;
 
+import io.github.bfur64.menu.Event;
+import io.github.bfur64.tetrue.game.FakeLoadingDisplay;
 import io.github.bfur64.tetrue.game.GameLoop;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
@@ -62,27 +64,35 @@ public class App {
             new StaticText("<< Tetrue Lite " + Config.GAME_VERSION + " >>"),
             new LineBreak(),
             new ActionItem("[ New Game ]", this::runNewGame),
-            new ActionItem("[ Options ] ", this::runOptions),
-            new ActionItem("[ Credits ]", this::runCredits),
-            new ActionItem("[ About ]", this::runAbout),
+            new ListItem("[ Options ] ", this::runOptions),
+            new ListItem("[ Credits ]", this::runCredits),
+            new ListItem("[ About ]", this::runAbout),
             new ActionItem("[ Exit ]", true),
             new LineBreak(),
             new StaticText("  [TIP] Use the `UP` and `DOWN` keys to move"),
-            new StaticText("  [TIP] Press `ENTER` to select an item"),
-            new StaticText("  [TIP] Press `ESC` to close the menu")
+            new StaticText("  [TIP] Press `ENTER` or `SPACE` to select an item"),
+            new StaticText("  [TIP] Press `ESC` or `BACKSPACE` to close the menu")
         );
 
         MenuManager menu = new MenuManager(terminal, items);
+        Event event = menu.getEvent();
+        MenuSound.registerSounds(event);
+
         menu.start();
     }
 
     private void runNewGame() {
+        if (Config.enableFld.get()) {
+            FakeLoadingDisplay fld = new FakeLoadingDisplay(terminal);
+            fld.startFakeLoadingDisplay();
+        }
+
         GameLoop gameLoop = new GameLoop(terminal);
         gameLoop.run();
     }
 
-    private void runCredits() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runCredits() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Credits >>"),
             new LineBreak(),
@@ -90,6 +100,8 @@ public class App {
             new LineBreak(),
             new StaticText("\"Block Lock\": Pixel Explosion - Lumaro_Studios"),
             new StaticText("\"Line Clear\": Pixel Jump - Lumaro_Studios"),
+            new StaticText("\"Button Click\": UI Sound 134 - Film & Special Effects"),
+            new StaticText("\"Cursor Change\": Click - Film & Special Effects"),
             new LineBreak(),
             new StaticText("Background Music: Pixel Song #12 - freesound_community"),
             new LineBreak(),
@@ -99,19 +111,18 @@ public class App {
             new StaticText("* https://pixabay.com"),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runAbout() {
-        List<Item> items = List.of(
+    private List<Item> runAbout() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< About >>"),
             new LineBreak(),
             new StaticText("A simple Tetrue clone made by TEIC."),
             new LineBreak(),
-            new StaticText("| Rendering | "),
+            new LineBreak(),
+            new StaticText(" -- Rendering -- "),
             new LineBreak(),
             new StaticText("Abstraction Library: " + terminal.libraryInfo()),
             new StaticText("Renderer: " + terminal.terminalInfo()),
@@ -119,36 +130,32 @@ public class App {
             new DynamicText<>("Column: ", terminal::xSize),
             new DynamicText<>("Row: ", terminal::ySize),
             new LineBreak(),
-            new StaticText("| Menu |"),
+            new LineBreak(),
+            new StaticText(" -- Menu --"),
             new LineBreak(),
             new StaticText("Menu Manager: " + MenuManager.getVersion()),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
         );
-
-        MenuManager menu = new MenuManager(terminal, items);
-        menu.start();
     }
 
-    private void runOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Options >>"),
             new LineBreak(),
-            new ActionItem("[ Game Options ]", this::runGameOptions),
+            new ListItem("[ Game Options ]", this::runGameOptions),
             new LineBreak(),
-            new ActionItem("[ Key Binds ]", this::runKeyBinds),
+            new ListItem("[ Key Binds ]", this::runKeyBinds),
             new LineBreak(),
-            new ActionItem("[ Advanced Options ]", this::runAdvancedOptions),
+            new ListItem("[ Advanced Options ]", this::runAdvancedOptions),
             new LineBreak(),
-            new ActionItem("[ Save & Return ]", true)
-        ));
-
-        menu.start();
+            new ActionItem("[ Return ]", true)
+        );
     }
 
-    private void runGameOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runGameOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Game Options >>"),
             new LineBreak(),
@@ -177,13 +184,11 @@ public class App {
             new ToggleItem("Sound Enabled", Config.soundEnabled),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runKeyBinds() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runKeyBinds() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Key Binds >>"),
             new LineBreak(),
@@ -199,13 +204,11 @@ public class App {
             new KeyInputItem("Hold Block", Config.holdKey),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 
-    private void runAdvancedOptions() {
-        MenuManager menu = new MenuManager(terminal, List.of(
+    private List<Item> runAdvancedOptions() {
+        return List.of(
             new LineBreak(),
             new StaticText("<< Advanced Options >>"),
             new LineBreak(),
@@ -214,9 +217,9 @@ public class App {
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
             new LineBreak(),
+            new ToggleItem("Enable Fake Loading Display™️ (FLD)", Config.enableFld),
+            new LineBreak(),
             new ActionItem("[ Return ]", true)
-        ));
-
-        menu.start();
+        );
     }
 }

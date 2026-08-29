@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class Config {
-    public static final String GAME_VERSION = "v3.3.1";
+    public static final String GAME_VERSION = "v3.4.0";
 
     // milliseconds
     private static final int gravityDef = 500;
@@ -39,7 +39,7 @@ public class Config {
     // =====================
     // Gameplay Buttons
     // =====================
-    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(KeyType.ARROW_UP)).build();
+    public static final Property<KeyStroke> hardDropKey = Property.of(new KeyStroke(' ')).build();
 
     public static final Property<KeyStroke> softDropKey = Property.of(new KeyStroke(KeyType.ARROW_DOWN)).build();
 
@@ -64,6 +64,7 @@ public class Config {
     public static final Property<Boolean> hardDropLock = Property.of(true).build();
     public static final Property<Boolean> softDropLock = Property.of(false).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
+    public static final Property<Boolean> enableFld = Property.of(true).build();
 
     // =====================
     // Game Modifiers
@@ -109,7 +110,7 @@ public class Config {
         .build();
 
     private static void mobileControls() {
-        hardDropKey.set(new KeyStroke(KeyType.ARROW_UP));
+        hardDropKey.set(new KeyStroke(' '));
         softDropKey.set(new KeyStroke(KeyType.ARROW_DOWN));
         moveLeftKey.set(new KeyStroke(KeyType.ARROW_LEFT));
         moveRightKey.set(new KeyStroke(KeyType.ARROW_RIGHT));
