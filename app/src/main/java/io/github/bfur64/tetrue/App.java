@@ -217,7 +217,7 @@ public class App {
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
             new LineBreak(),
-            new ToggleItem("Enable Fake Loading Display™️ (FDL)", Config.enableFld),
+            new ToggleItem("Enable Fake Loading Display™️ (FLD)", Config.enableFld),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
         );
