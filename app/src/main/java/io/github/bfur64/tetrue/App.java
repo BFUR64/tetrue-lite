@@ -75,7 +75,7 @@ public class App {
 
         MenuManager menu = new MenuManager(terminal, items);
         Event event = menu.getEvent();
-        new MenuSound(event);
+        MenuSound.registerSounds(event);
 
         menu.start();
     }

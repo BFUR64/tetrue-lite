@@ -3,7 +3,9 @@ package io.github.bfur64.tetrue.game;
 import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 
+import io.github.bfur64.menu.Event;
 import io.github.bfur64.tetrue.Config;
+import io.github.bfur64.tetrue.MenuSound;
 import io.github.bfur64.tetrue.game.event.GameOverEvent;
 import io.github.bfur64.tetrue.game.event.ScoreChangeEvent;
 import io.github.bfur64.tetrue.game.grid.GridData;
@@ -171,6 +173,9 @@ public class GameLoop {
         );
 
         MenuManager menu = new MenuManager(terminal, items);
+        Event event = menu.getEvent();
+        MenuSound.registerSounds(event);
+
         menu.start();
     }
 }

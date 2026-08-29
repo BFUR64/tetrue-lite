@@ -6,14 +6,23 @@ import io.github.bfur64.menu.Event;
 import io.github.bfur64.menu.event.CursorChangeEvent;
 import io.github.bfur64.menu.event.ItemSelectEvent;
 
-public class MenuSound {
-    public MenuSound(Event event) {
-        MicroSound sound = new MicroSound();
+public final class MenuSound {
+    private static final MicroSound sound;
 
-        Sound buttonClick = sound.load("/buttonClick.wav");
-        Sound cursorChange = sound.load("/cursorChange.wav");
+    private final static Sound buttonClick;
+    private static final Sound cursorChange;
 
-        event.subscribe(ItemSelectEvent.class, e -> sound.play(buttonClick, false));
-        event.subscribe(CursorChangeEvent.class, e -> sound.play(cursorChange, false));
+    static {
+        sound = new MicroSound();
+        buttonClick = sound.load("/buttonClick.wav");
+        cursorChange = sound.load("/cursorChange.wav");
+    }
+
+    public static void registerSounds(Event event) {
+        event.subscribe(ItemSelectEvent.class,
+                e -> sound.play(buttonClick, false));
+
+        event.subscribe(CursorChangeEvent.class,
+                e -> sound.play(cursorChange, false));
     }
 }
