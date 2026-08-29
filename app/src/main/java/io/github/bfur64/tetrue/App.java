@@ -94,6 +94,8 @@ public class App {
             new LineBreak(),
             new StaticText("\"Block Lock\": Pixel Explosion - Lumaro_Studios"),
             new StaticText("\"Line Clear\": Pixel Jump - Lumaro_Studios"),
+            new StaticText("\"Button Click\": UI Sound 134 - Film & Special Effects"),
+            new StaticText("\"Cursor Change\": Click - Film & Special Effects"),
             new LineBreak(),
             new StaticText("Background Music: Pixel Song #12 - freesound_community"),
             new LineBreak(),
