@@ -19,10 +19,7 @@ public final class MenuSound {
     }
 
     public static void registerSounds(Event event) {
-        event.subscribe(ItemSelectEvent.class,
-                e -> sound.play(buttonClick, false));
-
-        event.subscribe(CursorChangeEvent.class,
-                e -> sound.play(cursorChange, false));
+        event.subscribe(ItemSelectEvent.class, e -> sound.play(buttonClick, false));
+        event.subscribe(CursorChangeEvent.class, e -> sound.play(cursorChange, false));
     }
 }
