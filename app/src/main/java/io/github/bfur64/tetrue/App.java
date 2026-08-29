@@ -1,6 +1,7 @@
 package io.github.bfur64.tetrue;
 
 import io.github.bfur64.menu.Event;
+import io.github.bfur64.tetrue.game.FakeLoadingDisplay;
 import io.github.bfur64.tetrue.game.GameLoop;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.bfur64.menu.MenuManager;
@@ -81,6 +82,11 @@ public class App {
     }
 
     private void runNewGame() {
+        if (Config.enableFld.get()) {
+            FakeLoadingDisplay fld = new FakeLoadingDisplay(terminal);
+            fld.startFakeLoadingDisplay();
+        }
+
         GameLoop gameLoop = new GameLoop(terminal);
         gameLoop.run();
     }
@@ -210,6 +216,8 @@ public class App {
             new InputItem<>("Grid Width", ": ", Config.gridWidth, "Cells"),
             new LineBreak(),
             new ToggleItem("Show Debug", Config.showDebug),
+            new LineBreak(),
+            new ToggleItem("Enable Fake Loading Display™️ (FDL)", Config.enableFld),
             new LineBreak(),
             new ActionItem("[ Return ]", true)
         );

@@ -64,6 +64,7 @@ public class Config {
     public static final Property<Boolean> hardDropLock = Property.of(true).build();
     public static final Property<Boolean> softDropLock = Property.of(false).build();
     public static final Property<Boolean> soundEnabled = Property.of(true).build();
+    public static final Property<Boolean> enableFld = Property.of(true).build();
 
     // =====================
     // Game Modifiers
