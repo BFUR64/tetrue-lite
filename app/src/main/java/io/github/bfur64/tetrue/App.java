@@ -150,7 +150,7 @@ public class App {
             new LineBreak(),
             new ListItem("[ Advanced Options ]", this::runAdvancedOptions),
             new LineBreak(),
-            new ActionItem("[ Save & Return ]", true)
+            new ActionItem("[ Return ]", true)
         );
     }
 
