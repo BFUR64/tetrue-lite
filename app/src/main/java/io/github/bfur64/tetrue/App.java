@@ -70,8 +70,8 @@ public class App {
             new ActionItem("[ Exit ]", true),
             new LineBreak(),
             new StaticText("  [TIP] Use the `UP` and `DOWN` keys to move"),
-            new StaticText("  [TIP] Press `ENTER` to select an item"),
-            new StaticText("  [TIP] Press `ESC` to close the menu")
+            new StaticText("  [TIP] Press `ENTER` or `SPACE` to select an item"),
+            new StaticText("  [TIP] Press `ESC` or `BACKSPACE` to close the menu")
         );
 
         MenuManager menu = new MenuManager(terminal, items);
