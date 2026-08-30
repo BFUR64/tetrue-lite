@@ -5,6 +5,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public interface GridReader {
+public sealed interface GridReader permits GridData {
     @Nullable CellType getCell(int x, int y);
 }

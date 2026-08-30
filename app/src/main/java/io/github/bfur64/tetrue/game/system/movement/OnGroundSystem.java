@@ -11,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public class OnGroundSystem {
+public final class OnGroundSystem {
     private final World world;
     private final EventBus eventBus;
 

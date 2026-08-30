@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class GridData implements  GridReader, GridWriter{
+public final class GridData implements  GridReader, GridWriter{
     private final @Nullable CellType[] grid;
     private final int width;
 

@@ -12,7 +12,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlockFactory {
+public final class BlockFactory {
     private final World world;
 
     private int nextBlockId = 0;

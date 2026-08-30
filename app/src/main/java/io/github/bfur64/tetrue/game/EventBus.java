@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @NullMarked
-public class EventBus {
+public final class EventBus {
     private final Map<Class<?>, List<EventListener<?>>> listeners = new HashMap<>();
 
     public <T> void subscribe(Class<T> eventType, EventListener<T> listener) {

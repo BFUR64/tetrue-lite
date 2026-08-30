@@ -15,7 +15,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlockRotationSystem {
+public final class BlockRotationSystem {
     private final World world;
     private final EventBus eventBus;
 

@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.concurrent.ThreadLocalRandom;
 
 @NullMarked
-public class FakeLoadingDisplay {
+public final class FakeLoadingDisplay {
     private static final String SOLID = "█";
     private static final String GHOST = "░";
 

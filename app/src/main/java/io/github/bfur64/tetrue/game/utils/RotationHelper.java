@@ -14,7 +14,7 @@ import static io.github.bfur64.tetrue.game.utils.CellGrid.getCell;
 import static io.github.bfur64.tetrue.game.utils.CellGrid.setCell;
 
 @NullMarked
-public class RotationHelper {
+public final class RotationHelper {
     public static List<@Nullable CellType> rotateBlockNTimes(int amount, BlockTemplate blockTemplate) {
         int size = blockTemplate.size();
 

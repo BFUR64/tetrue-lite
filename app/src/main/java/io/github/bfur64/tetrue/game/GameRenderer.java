@@ -24,7 +24,7 @@ import java.util.List;
 import static io.github.bfur64.tetrue.game.utils.CellGrid.getCell;
 
 @NullMarked
-public class GameRenderer {
+public final class GameRenderer {
     private static final String SOLID = "█";
     private static final String GHOST = "░";
 

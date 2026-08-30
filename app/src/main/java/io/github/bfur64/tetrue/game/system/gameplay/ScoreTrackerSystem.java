@@ -6,7 +6,7 @@ import io.github.bfur64.tetrue.game.event.ScoreChangeEvent;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class ScoreTrackerSystem {
+public final class ScoreTrackerSystem {
     private int score;
 
     private int oneClear;

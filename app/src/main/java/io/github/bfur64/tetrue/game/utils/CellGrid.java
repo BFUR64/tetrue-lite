@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public class CellGrid {
+public final class CellGrid {
     public static @Nullable CellType getCell(@Nullable CellType[] cells, int width, int x, int y) {
         return cells[y * width + x];
     }
