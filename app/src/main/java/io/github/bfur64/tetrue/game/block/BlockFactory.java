@@ -11,14 +11,12 @@ import io.github.bfur64.tetrue.game.timer.LockTimer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
-import java.time.Duration;
-
 @NullMarked
 public class BlockFactory {
     private final World world;
 
     private int nextBlockId = 0;
-    private int gravity = Config.gravityMs.get();
+    private double gravity = Config.gravityMs.get() / 1000.0;
 
     private final int BLOCK_X_OFFSET = (Config.gridWidth.get() / 2) - 2;
 
@@ -80,7 +78,7 @@ public class BlockFactory {
         world.put(entityId, new Rotation(Direction.UP));
         world.put(entityId, new OnGround(false));
         world.put(entityId, new HasGhost(null));
-        world.put(entityId, new GravityTimer(Duration.ofMillis(gravity).toNanos()));
-        world.put(entityId, new LockTimer(Duration.ofMillis(Config.lockDelay.get()).toNanos()));
+        world.put(entityId, new GravityTimer(gravity));
+        world.put(entityId, new LockTimer(gravity));
     }
 }

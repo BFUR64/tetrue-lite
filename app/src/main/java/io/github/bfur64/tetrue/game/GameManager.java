@@ -68,7 +68,7 @@ public class GameManager {
         new SoundSystem(eventBus);
     }
 
-    public void update(long delta) {
+    public void update(double delta) {
         onGroundSystem.update();
         gravityTimerSystem.update(delta);
         lockTimerSystem.update(delta);
