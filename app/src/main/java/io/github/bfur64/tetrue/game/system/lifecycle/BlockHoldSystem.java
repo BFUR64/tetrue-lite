@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class BlockHoldSystem {
+public final class BlockHoldSystem {
     private final BlockFactory blockFactory;
     private final EventBus eventBus;
 

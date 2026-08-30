@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @NullMarked
-public class App {
+public final class App {
     private final Terminal terminal;
 
     public static void main(String[] args) {

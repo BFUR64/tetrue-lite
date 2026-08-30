@@ -5,6 +5,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public interface GridWriter {
+public sealed interface GridWriter permits GridData {
     void setCell(int x, int y, @Nullable CellType cellType);
 }

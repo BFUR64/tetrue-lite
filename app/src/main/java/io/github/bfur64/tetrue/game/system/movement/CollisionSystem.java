@@ -26,7 +26,7 @@ import java.util.List;
 
 import static io.github.bfur64.tetrue.game.utils.CellGrid.getCell;
 
-public class CollisionSystem {
+public final class CollisionSystem {
     private final GridReader gridReader;
     private final World world;
 

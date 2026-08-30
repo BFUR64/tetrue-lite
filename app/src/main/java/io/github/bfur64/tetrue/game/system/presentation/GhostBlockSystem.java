@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public class GhostBlockSystem {
+public final class GhostBlockSystem {
     private final BlockFactory blockFactory;
     private final World world;
     private final EventBus eventBus;

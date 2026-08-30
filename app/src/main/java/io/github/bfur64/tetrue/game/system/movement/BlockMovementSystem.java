@@ -9,7 +9,7 @@ import io.github.bfur64.tetrue.game.timer.GravityTimerExpired;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlockMovementSystem {
+public final class BlockMovementSystem {
     private final EventBus eventBus;
 
     public BlockMovementSystem(World world, EventBus eventBus) {

@@ -6,7 +6,7 @@ import io.github.bfur64.terminal.input.KeyType;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class Config {
+public final class Config {
     public static final String GAME_VERSION = "v3.4.0";
 
     // milliseconds

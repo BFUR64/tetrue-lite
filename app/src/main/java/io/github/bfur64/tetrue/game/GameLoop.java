@@ -22,7 +22,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class GameLoop {
+public final class GameLoop {
     private static final int NANOSECOND = 1_000_000_000;
 
     private static final boolean WINDOWS =

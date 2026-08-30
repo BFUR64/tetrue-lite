@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public class GravityTimerSystem {
+public final class GravityTimerSystem {
     private final World world;
     private final EventBus eventBus;
 

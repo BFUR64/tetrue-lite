@@ -22,7 +22,7 @@ import java.util.List;
 import static io.github.bfur64.tetrue.game.utils.CellGrid.getCell;
 
 @NullMarked
-public class BlockPlaceSystem {
+public final class BlockPlaceSystem {
     private final GridWriter gridWriter;
     private final World world;
     private final EventBus eventBus;

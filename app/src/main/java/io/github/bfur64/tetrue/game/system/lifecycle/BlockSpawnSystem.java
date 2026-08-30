@@ -9,7 +9,7 @@ import io.github.bfur64.tetrue.game.event.BlockSwitchEvent;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlockSpawnSystem {
+public final class BlockSpawnSystem {
     private final BlockQueueSystem sevenBagSystem;
 
     public BlockSpawnSystem(BlockQueueSystem sevenBagSystem, World world, EventBus eventBus) {

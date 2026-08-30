@@ -19,7 +19,7 @@ import io.github.bfur64.tetrue.game.system.timing.LockTimerSystem;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class GameManager {
+public final class GameManager {
     private final GravityTimerSystem gravityTimerSystem;
     private final OnGroundSystem onGroundSystem;
     private final LockTimerSystem lockTimerSystem;

@@ -10,7 +10,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class LineClearSystem {
+public final class LineClearSystem {
     private final GridData gridData;
     private final EventBus eventBus;
 

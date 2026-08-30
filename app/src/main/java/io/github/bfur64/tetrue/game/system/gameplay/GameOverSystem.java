@@ -7,7 +7,7 @@ import io.github.bfur64.tetrue.game.query.position.PositionValidResponse;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class GameOverSystem {
+public final class GameOverSystem {
     public GameOverSystem(EventBus eventBus) {
         eventBus.subscribe(BlockSpawnEvent.class,
             event -> eventBus.publish(new PositionValidQuery(event.entityId()))

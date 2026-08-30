@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @NullMarked
-public class BlockRegistry {
+public final class BlockRegistry {
     private static final Map<CellType, BlockTemplate> BLOCK_MAP = new HashMap<>();
 
     static {

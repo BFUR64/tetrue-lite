@@ -5,7 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.*;
 
 @NullMarked
-public class World {
+public final class World {
     private final Map<Class<?>, Map<Integer, Object>> components = new HashMap<>();
 
     public void put(int entityId, Object component) {

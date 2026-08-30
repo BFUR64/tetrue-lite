@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class SoundSystem {
+public final class SoundSystem {
     private @Nullable Playback bgMusicPlayback;
 
     public SoundSystem(EventBus eventBus) {

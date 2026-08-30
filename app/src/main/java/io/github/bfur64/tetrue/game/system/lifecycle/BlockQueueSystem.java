@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @NullMarked
-public class BlockQueueSystem {
+public final class BlockQueueSystem {
     private static final int MIN_BLOCK_QUEUE_SIZE = 4;
     private final List<Integer> blockIdQueue = new LinkedList<>();
     private final BlockFactory blockFactory;

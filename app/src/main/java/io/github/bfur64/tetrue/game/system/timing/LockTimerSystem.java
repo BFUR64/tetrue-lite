@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.List;
 
 @NullMarked
-public class LockTimerSystem {
+public final class LockTimerSystem {
     private final World world;
     private final EventBus eventBus;
 
