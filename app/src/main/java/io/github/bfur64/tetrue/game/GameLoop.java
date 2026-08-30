@@ -87,7 +87,7 @@ public class GameLoop {
         while (running) {
             long frameStart = System.nanoTime();
 
-            update(delta);
+            update(delta / (double) NANOSECOND);
 
             long deadline = frameStart + nsPerFrame;
 
@@ -113,7 +113,7 @@ public class GameLoop {
         handleGameOver();
     }
 
-    private void update(long delta) {
+    private void update(double delta) {
         handleGameState(terminal.poll());
         gameManager.update(delta);
         gameRenderer.update(delta);

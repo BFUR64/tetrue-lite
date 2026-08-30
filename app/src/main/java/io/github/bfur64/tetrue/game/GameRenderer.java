@@ -37,7 +37,7 @@ public class GameRenderer {
 
     private int score;
     private List<Integer> blockQueueIds = new LinkedList<>();
-    private int gravity = Config.gravityMs.get();
+    private double gravity = Config.gravityMs.get() / 1000.0d;
 
     @SuppressFBWarnings(
         value = "EI2",
@@ -53,7 +53,7 @@ public class GameRenderer {
         eventBus.subscribe(GravityChangeEvent.class, event -> gravity = event.gravity());
     }
 
-    public void update(long delta) {
+    public void update(double delta) {
         terminal.clear();
 
         int gameBorderHeight = Config.gridHeight.get() + BORDER_PADDING;
@@ -69,7 +69,7 @@ public class GameRenderer {
         putString(leftPadding, 1, "Score: " + score);
 
         if (Config.gravityEnabled.get()) {
-            putString(leftPadding, 3, "Gravity: " + gravity + "ms");
+            putString(leftPadding, 3, "Gravity: " + Math.round(gravity * 1000.0d) + "ms");
         }
         else {
             putString(leftPadding, 3, "Gravity Disabled");
@@ -93,8 +93,8 @@ public class GameRenderer {
         terminal.flush();
     }
 
-    private void showDebug(long delta, int offset) {
-        terminal.put(0, offset, "FPS: " + Math.round(1_000_000_000.0d / delta));
+    private void showDebug(double delta, int offset) {
+        terminal.put(0, offset, "FPS: " + Math.round(1.0d / delta));
         terminal.put(0, ++offset, "Entities: " + world.query());
     }
 
@@ -165,8 +165,8 @@ public class GameRenderer {
             int debugOffsetX = (position.x() + BORDER_OFFSET + size + padding) * 2;
             int debugOffsetY = position.y() + BORDER_OFFSET;
 
-            terminal.put(debugOffsetX, debugOffsetY, " Lock Timer: " + Duration.ofNanos(lockTimer.duration()).toMillis() + "ms ");
-            terminal.put(debugOffsetX, ++debugOffsetY, " Gravity Timer: " + Duration.ofNanos(gravityTimer.duration()).toMillis() + "ms ");
+            terminal.put(debugOffsetX, debugOffsetY, " Lock Timer: " + Math.round(lockTimer.duration() * 1000) + "ms ");
+            terminal.put(debugOffsetX, ++debugOffsetY, " Gravity Timer: " + Math.round(gravityTimer.duration() * 1000) + "ms ");
             terminal.put(debugOffsetX, ++debugOffsetY, " Grounded: " + onGround.onGround() + " ");
 
             terminal.put(debugOffsetX, debugOffsetY + 2, " Direction: " + rotation.direction() + " ");

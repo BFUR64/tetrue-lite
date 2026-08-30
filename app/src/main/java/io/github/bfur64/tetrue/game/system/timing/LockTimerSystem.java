@@ -26,7 +26,7 @@ public class LockTimerSystem {
         this.eventBus = eventBus;
     }
 
-    public void update(long delta) {
+    public void update(double delta) {
         if (!Config.lockTimerEnabled.get()) {
             return;
         }
@@ -38,7 +38,7 @@ public class LockTimerSystem {
             LockTimer oldLockTimer = world.get(entityId, LockTimer.class);
 
             if (onGround) {
-                long newTime = oldLockTimer.duration() - delta;
+                double newTime = oldLockTimer.duration() - delta;
 
                 if (newTime <= 0) {
                     eventBus.publish(new LockTimerExpired(entityId));
@@ -50,7 +50,7 @@ public class LockTimerSystem {
             else {
                 world.put(
                     entityId,
-                    new LockTimer(Duration.ofMillis(Config.lockDelay.get()).toNanos())
+                    new LockTimer(Config.lockDelay.get() / 1000.0)
                 );
             }
         }

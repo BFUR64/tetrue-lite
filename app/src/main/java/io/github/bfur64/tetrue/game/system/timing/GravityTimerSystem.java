@@ -12,7 +12,6 @@ import io.github.bfur64.tetrue.game.query.position.MoveDownResponse;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jspecify.annotations.NullMarked;
 
-import java.time.Duration;
 import java.util.List;
 
 @NullMarked
@@ -20,7 +19,7 @@ public class GravityTimerSystem {
     private final World world;
     private final EventBus eventBus;
 
-    private int gravityMs = Config.gravityMs.get();
+    private double gravity = Config.gravityMs.get() / 1000.0d;
 
     @SuppressFBWarnings(
         value = "EI2",
@@ -36,7 +35,7 @@ public class GravityTimerSystem {
             }
 
             if (event.canDrop()) {
-                setNewGravityMs(event.entityId(), gravityMs);
+                setNewGravity(event.entityId(), gravity);
             }
         });
 
@@ -45,13 +44,13 @@ public class GravityTimerSystem {
                 return;
             }
 
-            gravityMs = Math.max(Config.GRAVITY_MIN, gravityMs - Config.speedStep.get());
+            gravity = Math.max(Config.GRAVITY_MIN / 1000.0d, gravity - Config.speedStep.get() / 1000.0d);
 
-            eventBus.publish(new GravityChangeEvent(gravityMs));
+            eventBus.publish(new GravityChangeEvent(gravity));
         });
     }
 
-    public void update(long delta) {
+    public void update(double delta) {
         if (!Config.gravityEnabled.get()) {
             return;
         }
@@ -63,27 +62,23 @@ public class GravityTimerSystem {
 
             if (!onGround) {
                 GravityTimer oldGravity = world.get(entityId, GravityTimer.class);
-                long newGravityDuration = oldGravity.duration() - delta;
+                double newGravityDuration = oldGravity.duration() - delta;
 
                 if (newGravityDuration <= 0) {
                     eventBus.publish(new GravityTimerExpired(entityId));
-                    setNewGravityMs(entityId, gravityMs);
+                    setNewGravity(entityId, gravity);
                 }
                 else {
-                    setNewGravityNs(entityId, newGravityDuration);
+                    setNewGravity(entityId, newGravityDuration);
                 }
             }
             else {
-                setNewGravityMs(entityId, gravityMs);
+                setNewGravity(entityId, gravity);
             }
         }
     }
 
-    private void setNewGravityMs(int entityId, int gravityMs) {
-        world.put(entityId, new GravityTimer(Duration.ofMillis(gravityMs).toNanos()));
-    }
-
-    private void setNewGravityNs(int entityId, long gravityNs) {
-        world.put(entityId, new GravityTimer(gravityNs));
+    private void setNewGravity(int entityId, double gravity) {
+        world.put(entityId, new GravityTimer(gravity));
     }
 }
