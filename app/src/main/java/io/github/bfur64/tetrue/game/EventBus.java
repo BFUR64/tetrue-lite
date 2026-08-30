@@ -10,24 +10,23 @@ import java.util.Map;
 
 @NullMarked
 public final class EventBus {
-    private final Map<Class<?>, List<EventListener<?>>> listeners = new HashMap<>();
+    private final Map<Class<?>, List<Dispatcher<?>>> listeners = new HashMap<>();
 
     public <T> void subscribe(Class<T> eventType, EventListener<T> listener) {
         listeners
             .computeIfAbsent(eventType, ignore -> new ArrayList<>())
-            .add(listener);
+            .add(new Dispatcher<>(eventType, listener));
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> void publish(T event) {
-        List<EventListener<?>> listenersForEvent = listeners.get(event.getClass());
+    public void publish(Object event) {
+        List<Dispatcher<?>> listenersForEvent = listeners.get(event.getClass());
 
         if (listenersForEvent == null) {
             return;
         }
 
-        for (EventListener<?> listener : listenersForEvent) {
-            ((EventListener<T>) listener).onEvent(event);
+        for (Dispatcher<?> listener : listenersForEvent) {
+            listener.dispatch(event);
         }
     }
 }
